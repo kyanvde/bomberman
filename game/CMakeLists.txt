@@ -1,5 +1,6 @@
 SET(SRC main.cpp
 	Game.cpp
+	StateManager.cpp
 )
 
 ADD_EXECUTABLE(bomberman ${SRC})
