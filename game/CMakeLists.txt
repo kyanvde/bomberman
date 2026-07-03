@@ -1,4 +1,6 @@
-SET(SRC main.cpp)
+SET(SRC main.cpp
+	Game.cpp
+)
 
 ADD_EXECUTABLE(bomberman ${SRC})
 
