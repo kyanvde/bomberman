@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <SFML/Graphics.hpp>
+#include <vector>
 
 class StateManager;
 
@@ -11,6 +12,8 @@ protected:
     std::shared_ptr<sf::RenderWindow> window;
 
     StateManager& stateManager;
+
+    std::vector<std::unique_ptr<sf::Drawable>> drawables;
 public:
     State(std::shared_ptr<sf::RenderWindow> window, StateManager& stateManager) 
         : window(window), stateManager(stateManager) {};

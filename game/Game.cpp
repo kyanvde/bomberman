@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "states/MenuState.h"
 
 void Game::processEvents() {
     sf::Event event;
@@ -33,7 +34,9 @@ void Game::render() {
     window->display();
 }
 
-Game::Game() : window(std::make_shared<sf::RenderWindow>(sf::VideoMode(800, 600), "Bomberman")), stateManager(window) {}
+Game::Game() : window(std::make_shared<sf::RenderWindow>(sf::VideoMode(800, 600), "Bomberman")), stateManager(window) {
+    stateManager.pushState(std::make_unique<MenuState>(window, stateManager));
+}
 
 void Game::run() {
     while (window->isOpen()) {

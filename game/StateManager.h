@@ -6,8 +6,7 @@
 #include <SFML/Graphics.hpp>
 #include <stack>
 
-class StateManager
-{
+class StateManager {
 private:
     std::shared_ptr<sf::RenderWindow> window;
 
@@ -22,7 +21,7 @@ public:
     void update();
 
     void render();
-    
+
     StateManager(std::shared_ptr<sf::RenderWindow> window);
 };
 
