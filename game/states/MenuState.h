@@ -9,12 +9,17 @@ class MenuState : public State {
 private:
     sf::Font font;
     sf::Text title;
+    sf::Text playButton;
+
+    unsigned int baseWindowHeight = 0;
 
     unsigned int baseTitleCharacterSize = 100;
     float baseTitleOutlineThickness = 5.f;
-    unsigned int baseWindowHeight = 0;
 
-    void layoutTitle(const sf::Vector2u& newSize);
+    unsigned int basePlayButtonCharacterSize = 60;
+    float basePlayButtonOutlineThickness = 4.f;
+
+    void layout(const sf::Vector2u& size);
 public:
     void processEvent(const sf::Event& event) override;
 
@@ -26,4 +31,5 @@ public:
 
     MenuState(std::shared_ptr<sf::RenderWindow> window, StateManager& stateManager);
 };
+
 #endif // BOMBERMAN_GAME_STATES_MENUSTATE_H
