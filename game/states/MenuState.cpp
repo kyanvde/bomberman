@@ -1,7 +1,7 @@
 #include "MenuState.h"
 #include <stdio.h>
 #include "GameState.h"
-#include "../StateManager.h"
+#include "StateManager.h"
 
 MenuState::MenuState(std::shared_ptr<sf::RenderWindow> window, StateManager& stateManager)
     : State(window, stateManager)

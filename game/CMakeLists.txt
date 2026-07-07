@@ -7,6 +7,11 @@ SET(SRC main.cpp
 
 ADD_EXECUTABLE(bomberman ${SRC})
 
+target_include_directories(bomberman PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${PROJECT_SOURCE_DIR}/core
+)
+
 INCLUDE(FetchContent)
 
 set(SFML_BUILD_AUDIO OFF CACHE BOOL "" FORCE)

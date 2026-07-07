@@ -1,7 +1,7 @@
 #ifndef BOMBERMAN_GAME_STATES_MENUSTATE_H
 #define BOMBERMAN_GAME_STATES_MENUSTATE_H
 
-#include "../State.h"
+#include "State.h"
 #include <memory>
 #include <SFML/Graphics.hpp>
 

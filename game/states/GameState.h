@@ -1,13 +1,14 @@
 #ifndef BOMBERMAN_GAME_STATES_GAMESTATE_H
 #define BOMBERMAN_GAME_STATES_GAMESTATE_H
 
-#include "../State.h"
+#include "State.h"
 #include <memory>
 #include <SFML/Graphics.hpp>
+#include "World.h"
 
 class GameState : public State {
 private:
-    
+    core::World world;    
 public:
     void processEvent(const sf::Event& event) override;
 
