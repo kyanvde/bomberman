@@ -11,6 +11,7 @@ void Game::processEvents() {
         }
 
         if (event.type == sf::Event::Resized) {
+            const sf::Vector2u previousSize = window->getSize();
             sf::FloatRect visibleArea(
                 0,
                 0, 
@@ -19,6 +20,7 @@ void Game::processEvents() {
             );
 
             window->setView(sf::View(visibleArea));
+            stateManager.onResize(previousSize, window->getSize());
         }
     }
 }

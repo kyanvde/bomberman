@@ -20,6 +20,12 @@ void StateManager::processEvent(const sf::Event& event) {
     }
 }
 
+void StateManager::onResize(const sf::Vector2u& previousSize, const sf::Vector2u& newSize) {
+    if (!states.empty()) {
+        states.top()->onResize(previousSize, newSize);
+    }
+}
+
 void StateManager::update() {
     if (!states.empty()) {
         states.top()->update();

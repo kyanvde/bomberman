@@ -13,7 +13,6 @@ protected:
 
     StateManager& stateManager;
 
-    std::vector<std::unique_ptr<sf::Drawable>> drawables;
 public:
     State(std::shared_ptr<sf::RenderWindow> window, StateManager& stateManager) 
         : window(window), stateManager(stateManager) {};
@@ -21,6 +20,8 @@ public:
     virtual ~State() = default;
 
     virtual void processEvent(const sf::Event& event) = 0;
+
+    virtual void onResize(const sf::Vector2u& previousSize, const sf::Vector2u& newSize) {}
 
     virtual void update() = 0;
 

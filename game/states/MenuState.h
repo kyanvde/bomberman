@@ -6,8 +6,19 @@
 #include <SFML/Graphics.hpp>
 
 class MenuState : public State {
+private:
+    sf::Font font;
+    sf::Text title;
+
+    unsigned int baseTitleCharacterSize = 100;
+    float baseTitleOutlineThickness = 5.f;
+    unsigned int baseWindowHeight = 0;
+
+    void layoutTitle(const sf::Vector2u& newSize);
 public:
     void processEvent(const sf::Event& event) override;
+
+    void onResize(const sf::Vector2u& previousSize, const sf::Vector2u& newSize) override;
 
     void update() override;
 

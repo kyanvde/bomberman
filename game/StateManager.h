@@ -18,6 +18,8 @@ public:
 
     void processEvent(const sf::Event& event);
 
+    void onResize(const sf::Vector2u& previousSize, const sf::Vector2u& newSize);
+
     void update();
 
     void render();
