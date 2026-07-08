@@ -5,6 +5,7 @@ SET(SRC
     entities/Character.cpp
     entities/PowerUp.cpp
     entities/Wall.cpp
+    Stopwatch.cpp
 )
 
 ADD_LIBRARY(core STATIC ${SRC})
