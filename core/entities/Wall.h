@@ -7,7 +7,7 @@ namespace core {
 
 class Wall : public EntityModel {
 public:
-    Wall(const Vector2& pos, const Vector2& size);
+    Wall(const Vector2& pos, const Vector2& size, bool destructible = false);
     
 };
 

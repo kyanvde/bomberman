@@ -1,5 +1,10 @@
 SET(SRC
     World.cpp
+    WorldLoader.cpp
+    entities/Bomb.cpp
+    entities/Character.cpp
+    entities/PowerUp.cpp
+    entities/Wall.cpp
 )
 
 ADD_LIBRARY(core STATIC ${SRC})

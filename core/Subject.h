@@ -13,9 +13,17 @@ protected:
 public:
     virtual ~Subject() = default;
 
-    virtual void attach(std::shared_ptr<Observer>& observer) = 0;
+    virtual void attach(std::shared_ptr<Observer>& observer) {
+        observers.push_back(observer);
+    }
     
-    virtual void notify() = 0;
+    virtual void notify() {
+        for (const auto& observer : observers) {
+            if (observer) {
+                observer->update();
+            }
+        }
+    }
 };
 
 } // namespace core
