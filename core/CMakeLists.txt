@@ -6,6 +6,7 @@ SET(SRC
     entities/PowerUp.cpp
     entities/Wall.cpp
     Stopwatch.cpp
+    Random.cpp
 )
 
 ADD_LIBRARY(core STATIC ${SRC})
