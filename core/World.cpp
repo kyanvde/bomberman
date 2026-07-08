@@ -9,6 +9,14 @@ namespace core {
         std::cout << "Entity added. Total entities: " << entities.size() << std::endl;
     }
 
+    void World::render(Renderer& renderer) const {
+        for (const auto& entity : entities) {
+            if (entity) {
+                entity->render(renderer);
+            }
+        }
+    }
+
     World::World(std::shared_ptr<AbstractFactory> factory, const std::string& filename) : factory(factory) {
         WorldLoader::loadFromFile(filename, *this, factory);
     }

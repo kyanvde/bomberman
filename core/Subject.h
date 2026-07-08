@@ -13,7 +13,7 @@ protected:
 public:
     virtual ~Subject() = default;
 
-    virtual void attach(std::shared_ptr<Observer>& observer) {
+    virtual void attach(const std::shared_ptr<Observer>& observer) {
         observers.push_back(observer);
     }
     
@@ -21,6 +21,14 @@ public:
         for (const auto& observer : observers) {
             if (observer) {
                 observer->update();
+            }
+        }
+    }
+
+    virtual void render(Renderer& renderer) const {
+        for (const auto& observer : observers) {
+            if (observer) {
+                observer->render(renderer);
             }
         }
     }
