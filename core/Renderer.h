@@ -24,23 +24,9 @@ struct SpriteFrame {
         : texturePath(texturePath), cellSize(cellSize), cell(cell), margin(margin), spacing(spacing) {}
 };
 
-struct Color {
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
-    unsigned char a;
-
-    Color() : r(0), g(0), b(0), a(255) {}
-
-    Color(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255)
-        : r(red), g(green), b(blue), a(alpha) {}
-};
-
 class Renderer {
 public:
     virtual ~Renderer() = default;
-
-    virtual void drawRectangle(const Vector2& position, const Vector2& size, const Color& color) = 0;
 
     virtual void drawSprite(const Vector2& position, const Vector2& size, const SpriteFrame& sprite) = 0;
 };

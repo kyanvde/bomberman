@@ -13,7 +13,7 @@ std::unique_ptr<core::EntityModel> ConcreteFactory::createCharacter(const core::
     return character;
 }
 
-std::unique_ptr<core::EntityModel> ConcreteFactory::createWall(const core::Vector2& position, const core::Vector2& size, bool destructible = false) {
+std::unique_ptr<core::EntityModel> ConcreteFactory::createWall(const core::Vector2& position, const core::Vector2& size, bool destructible) {
     std::unique_ptr<core::EntityModel> wall = std::make_unique<core::Wall>(position, size, destructible);
     const core::Vector2 spriteSheetLocation = destructible ? core::Vector2(12.f, 0.f) : core::Vector2(11.f, 0.f);
     wall->attach(std::make_shared<WallView>(position, size, frameFor(spriteSheetLocation)));

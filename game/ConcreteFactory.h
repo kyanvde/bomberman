@@ -25,7 +25,7 @@ private:
     core::SpriteFrame frameFor(const core::Vector2& cell) const;
 
  public:
-    ConcreteFactory(const std::string& spritesheetPath, const core::Vector2& cellSize, const core::Vector2& margin, const core::Vector2& spacing);
+    ConcreteFactory(const std::string& spritesheetPath, const core::Vector2& cellSize, const core::Vector2& margin = core::Vector2(), const core::Vector2& spacing = core::Vector2());
 
     std::unique_ptr<core::EntityModel> createCharacter(const core::Vector2& position, const core::Vector2& size) override;
 
