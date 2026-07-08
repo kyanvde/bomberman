@@ -12,6 +12,8 @@ public:
     virtual std::unique_ptr<EntityModel> createCharacter(const Vector2& pos, const Vector2& size) = 0;
 
     virtual std::unique_ptr<EntityModel> createWall(const Vector2& pos, const Vector2& size, bool destructible = false) = 0;
+
+    virtual std::unique_ptr<EntityModel> createGrass(const Vector2& pos, const Vector2& size) = 0;
     
     virtual std::unique_ptr<EntityModel> createPowerUp(const Vector2& pos, const Vector2& size) = 0;
     

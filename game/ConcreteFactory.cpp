@@ -20,6 +20,12 @@ std::unique_ptr<core::EntityModel> ConcreteFactory::createWall(const core::Vecto
     return wall;
 }
 
+std::unique_ptr<core::EntityModel> ConcreteFactory::createGrass(const core::Vector2& position, const core::Vector2& size) {
+    std::unique_ptr<core::EntityModel> grass = std::make_unique<core::Grass>(position, size);
+    grass->attach(std::make_shared<GrassView>(position, size, frameFor(core::Vector2(15.f, 4.f))));
+    return grass;
+}
+
 std::unique_ptr<core::EntityModel> ConcreteFactory::createPowerUp(const core::Vector2& position, const core::Vector2& size) {
     std::unique_ptr<core::EntityModel> powerUp = std::make_unique<core::PowerUp>(position, size);
     powerUp->attach(std::make_shared<PowerUpView>(position, size, frameFor(core::Vector2(1.f, 1.f))));

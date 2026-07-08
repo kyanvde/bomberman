@@ -68,6 +68,8 @@ void WorldLoader::loadFromFile(const std::string& filename, World& world, std::s
                     result = Random::getInstance().getRandomNumber(0, 1);
                     if (result < 0.75) {
                         world.addEntity(factory->createWall(position, size, true));
+                    } else {
+                        world.addEntity(factory->createGrass(position, size));
                     }
                     break;
                 default:

@@ -5,11 +5,13 @@
 #include "EntityModel.h"
 #include "entities/Bomb.h"
 #include "entities/Character.h"
+#include "entities/Grass.h"
 #include "entities/PowerUp.h"
 #include "entities/Wall.h"
 #include "Vector2.h"
 #include "views/BombView.h"
 #include "views/CharacterView.h"
+#include "views/GrassView.h"
 #include "views/PowerUpView.h"
 #include "views/WallView.h"
 
@@ -30,6 +32,8 @@ private:
     std::unique_ptr<core::EntityModel> createCharacter(const core::Vector2& position, const core::Vector2& size) override;
 
     std::unique_ptr<core::EntityModel> createWall(const core::Vector2& position, const core::Vector2& size, bool destructible = false) override;
+
+    std::unique_ptr<core::EntityModel> createGrass(const core::Vector2& position, const core::Vector2& size) override;
 
     std::unique_ptr<core::EntityModel> createPowerUp(const core::Vector2& position, const core::Vector2& size) override;
 
