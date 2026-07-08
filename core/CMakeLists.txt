@@ -8,6 +8,7 @@ SET(SRC
     entities/Wall.cpp
     Stopwatch.cpp
     Random.cpp
+    Subject.cpp
 )
 
 ADD_LIBRARY(core STATIC ${SRC})
