@@ -3,6 +3,7 @@ SET(SRC main.cpp
 	StateManager.cpp
     states/MenuState.cpp
     states/GameState.cpp
+    ConcreteFactory.cpp
 )
 
 ADD_EXECUTABLE(bomberman ${SRC})

@@ -22,42 +22,18 @@ private:
     core::Vector2 margin;
     core::Vector2 spacing;
 
-    core::SpriteFrame frameFor(const core::Vector2& cell) const {
-        return core::SpriteFrame(spritesheetPath, cellSize, cell, margin, spacing);
-    }
+    core::SpriteFrame frameFor(const core::Vector2& cell) const;
 
  public:
-    ConcreteFactory(
-        const std::string& spritesheetPath = "assets/sprites/bomberman.png",
-        const core::Vector2& cellSize = core::Vector2(8.f, 8.f),
-        const core::Vector2& margin = core::Vector2(),
-        const core::Vector2& spacing = core::Vector2())
-        : spritesheetPath(spritesheetPath), cellSize(cellSize), margin(margin), spacing(spacing) {}
+    ConcreteFactory(const std::string& spritesheetPath, const core::Vector2& cellSize, const core::Vector2& margin, const core::Vector2& spacing);
 
-    std::unique_ptr<core::EntityModel> createCharacter(const core::Vector2& position, const core::Vector2& size) override {
-        std::unique_ptr<core::EntityModel> character = std::make_unique<core::Character>(position, size);
-        character->attach(std::make_shared<CharacterView>(position, size, frameFor(core::Vector2(2.f, 0.f))));
-        return character;
-    }
+    std::unique_ptr<core::EntityModel> createCharacter(const core::Vector2& position, const core::Vector2& size) override;
 
-    std::unique_ptr<core::EntityModel> createWall(const core::Vector2& position, const core::Vector2& size, bool destructible = false) override {
-        std::unique_ptr<core::EntityModel> wall = std::make_unique<core::Wall>(position, size, destructible);
-        const core::Vector2 cell = destructible ? core::Vector2(12.f, 0.f) : core::Vector2(11.f, 0.f);
-        wall->attach(std::make_shared<WallView>(position, size, frameFor(cell)));
-        return wall;
-    }
+    std::unique_ptr<core::EntityModel> createWall(const core::Vector2& position, const core::Vector2& size, bool destructible = false) override;
 
-    std::unique_ptr<core::EntityModel> createPowerUp(const core::Vector2& position, const core::Vector2& size) override {
-        std::unique_ptr<core::EntityModel> powerUp = std::make_unique<core::PowerUp>(position, size);
-        powerUp->attach(std::make_shared<PowerUpView>(position, size, frameFor(core::Vector2(1.f, 1.f))));
-        return powerUp;
-    }
+    std::unique_ptr<core::EntityModel> createPowerUp(const core::Vector2& position, const core::Vector2& size) override;
 
-    std::unique_ptr<core::EntityModel> createBomb(const core::Vector2& position, const core::Vector2& size) override {
-        std::unique_ptr<core::EntityModel> bomb = std::make_unique<core::Bomb>(position, size);
-        bomb->attach(std::make_shared<BombView>(position, size, frameFor(core::Vector2(2.f, 1.f))));
-        return bomb;
-    }
+    std::unique_ptr<core::EntityModel> createBomb(const core::Vector2& position, const core::Vector2& size) override;
 };
 
 #endif // BOMBERMAN_GAME_CONCRETEFACTORY_H
