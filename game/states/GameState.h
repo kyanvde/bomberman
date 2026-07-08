@@ -5,10 +5,12 @@
 #include <memory>
 #include <SFML/Graphics.hpp>
 #include "World.h"
+#include "SfmlRenderer.h"
 
 class GameState : public State {
 private:
-    core::World world;    
+    core::World world;
+    SfmlRenderer renderer;    
 public:
     void processEvent(const sf::Event& event) override;
 

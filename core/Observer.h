@@ -1,12 +1,15 @@
 #ifndef BOMBERMAN_CORE_OBSERVER_H
 #define BOMBERMAN_CORE_OBSERVER_H
 
+#include "Renderer.h"
+
 namespace core {
 
 class Observer {
 public:
     virtual ~Observer() = default;
     virtual void update() = 0;
+    virtual void render(Renderer& renderer) const = 0;
 };
 
 } // namespace core

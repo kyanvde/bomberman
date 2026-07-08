@@ -3,8 +3,12 @@ SET(SRC
     WorldLoader.cpp
     entities/Bomb.cpp
     entities/Character.cpp
+    entities/Grass.cpp
     entities/PowerUp.cpp
     entities/Wall.cpp
+    Stopwatch.cpp
+    Random.cpp
+    Subject.cpp
 )
 
 ADD_LIBRARY(core STATIC ${SRC})

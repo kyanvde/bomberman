@@ -1,6 +1,7 @@
 #include "WorldLoader.h"
 
 #include <fstream>
+#include "Random.h"
 
 namespace {
     
@@ -54,6 +55,7 @@ void WorldLoader::loadFromFile(const std::string& filename, World& world, std::s
             char cell = line[x];
             Vector2 position(-1.f + x * cellSize.x, -1.f + y * cellSize.y);
             Vector2 size(cellSize.x, cellSize.y);
+            double result = 0;
 
             switch (cell) {
                 case 'C':
@@ -63,8 +65,12 @@ void WorldLoader::loadFromFile(const std::string& filename, World& world, std::s
                     world.addEntity(factory->createWall(position, size));
                     break;
                 case '_':
-                    // TODO MAKE IT NOT ALWAYS SPAWN A DESTRUCTIBLE WALL, SOMETIMES EMPTY
-                    world.addEntity(factory->createWall(position, size, true));
+                    result = Random::getInstance().getRandomNumber(0, 1);
+                    if (result < 0.75) {
+                        world.addEntity(factory->createWall(position, size, true));
+                    } else {
+                        world.addEntity(factory->createGrass(position, size));
+                    }
                     break;
                 default:
                     throw std::runtime_error("Unknown cell type: " + std::string(1, cell));

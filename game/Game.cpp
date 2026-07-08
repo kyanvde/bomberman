@@ -1,5 +1,7 @@
 #include "Game.h"
+
 #include "states/MenuState.h"
+#include "Stopwatch.h"
 
 void Game::processEvents() {
     sf::Event event;
@@ -26,7 +28,7 @@ void Game::processEvents() {
 }
 
 void Game::update() {
-    // TODO: Start new game tick
+    core::Stopwatch::getInstance().tick();
     stateManager.update();
 }
 
