@@ -6,8 +6,8 @@
 
 class PowerUpView : public EntityView {
 public:
-    PowerUpView(const core::Vector2& position, const core::Vector2& size, const core::SpriteFrame& sprite)
-    : EntityView(position, size, sprite) {}
+    PowerUpView(const core::EntityModel& model, const core::SpriteFrame& sprite)
+    : EntityView(model, sprite) {}
 };
 
 #endif // BOMBERMAN_GAME_VIEWS_POWERUPVIEW_H

@@ -5,8 +5,8 @@
 
 class CharacterView : public EntityView {
 public:
-    CharacterView(const core::Vector2& position, const core::Vector2& size, const core::SpriteFrame& sprite)
-    : EntityView(position, size, sprite) {}
+    CharacterView(const core::EntityModel& model, const core::SpriteFrame& sprite)
+    : EntityView(model, sprite) {}
 };
 
 #endif // BOMBERMAN_GAME_VIEWS_CHARACTERVIEW_H

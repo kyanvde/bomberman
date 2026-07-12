@@ -1,5 +1,11 @@
 #include "SfmlRenderer.h"
 
+namespace {
+    core::Vector2 toVector2(const sf::Vector2u& size) {
+        return core::Vector2(static_cast<float>(size.x), static_cast<float>(size.y));
+    }
+}
+
 const sf::Texture& SfmlRenderer::getTexture(const std::string& texturePath) const {
     auto existing = textures.find(texturePath);
     if (existing != textures.end()) {
@@ -15,10 +21,13 @@ const sf::Texture& SfmlRenderer::getTexture(const std::string& texturePath) cons
     return inserted.first->second;
 }
 
-SfmlRenderer::SfmlRenderer(sf::RenderWindow& window) : window(window) {}
+SfmlRenderer::SfmlRenderer(sf::RenderWindow& window) : window(window), camera(toVector2(window.getSize())) {}
+
+void SfmlRenderer::setViewportSize(const core::Vector2& viewportSize) {
+    camera.setViewportSize(viewportSize);
+}
 
 void SfmlRenderer::drawSprite(const core::Vector2& position, const core::Vector2& size, const core::SpriteFrame& sprite) {
-    const sf::Vector2u windowSize = window.getSize();
     const sf::Texture& texture = getTexture(sprite.texturePath);
 
     sf::Sprite sfSprite(texture);
@@ -30,14 +39,14 @@ void SfmlRenderer::drawSprite(const core::Vector2& position, const core::Vector2
 
     sfSprite.setTextureRect(sf::IntRect(left, top, width, height));
 
-    sfSprite.setPosition(
-        (position.x + 1.f) * 0.5f * static_cast<float>(windowSize.x),
-        (position.y + 1.f) * 0.5f * static_cast<float>(windowSize.y)
-    );
+    const core::Vector2 projectedPosition = camera.projectPosition(position);
+    const core::Vector2 projectedSize = camera.projectSize(size);
+
+    sfSprite.setPosition(projectedPosition.x, projectedPosition.y);
 
     sfSprite.setScale(
-        (size.x * 0.5f * static_cast<float>(windowSize.x)) / static_cast<float>(width),
-        (size.y * 0.5f * static_cast<float>(windowSize.y)) / static_cast<float>(height)
+        projectedSize.x / static_cast<float>(width),
+        projectedSize.y / static_cast<float>(height)
     );
 
     window.draw(sfSprite);

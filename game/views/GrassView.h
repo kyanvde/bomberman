@@ -5,8 +5,8 @@
 
 class GrassView : public EntityView {
 public:
-    GrassView(const core::Vector2& position, const core::Vector2& size, const core::SpriteFrame& sprite)
-        : EntityView(position, size, sprite) {}
+    GrassView(const core::EntityModel& model, const core::SpriteFrame& sprite)
+        : EntityView(model, sprite) {}
 };
 
 #endif // BOMBERMAN_GAME_VIEWS_GRASSVIEW_H

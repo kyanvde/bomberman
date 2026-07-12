@@ -8,6 +8,8 @@ namespace core {
 class Wall : public EntityModel {
 public:
     Wall(const Vector2& pos, const Vector2& size, bool destructible = false);
+
+    [[nodiscard]] bool blocksCharacterMovement(const Character& character, const Vector2& position, const Vector2& size) const override;
     
 };
 
