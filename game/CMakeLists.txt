@@ -1,4 +1,4 @@
-SET(SRC main.cpp
+SET(BOMBERMAN_SOURCES main.cpp
 	Game.cpp
 	StateManager.cpp
     states/MenuState.cpp
@@ -7,7 +7,7 @@ SET(SRC main.cpp
     SfmlRenderer.cpp
 )
 
-ADD_EXECUTABLE(bomberman ${SRC})
+ADD_EXECUTABLE(bomberman ${BOMBERMAN_SOURCES})
 
 target_include_directories(bomberman PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -33,6 +33,24 @@ FetchContent_MakeAvailable(SFML)
 TARGET_LINK_LIBRARIES(bomberman PRIVATE
 	core
 	sfml-graphics
+)
+
+add_custom_command(TARGET bomberman POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different
+		$<TARGET_FILE:sfml-graphics>
+		$<TARGET_FILE_DIR:bomberman>
+
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different
+		$<TARGET_FILE:sfml-window>
+		$<TARGET_FILE_DIR:bomberman>
+
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different
+		$<TARGET_FILE:sfml-system>
+		$<TARGET_FILE_DIR:bomberman>
+
+		COMMAND ${CMAKE_COMMAND} -E copy_directory
+		${PROJECT_SOURCE_DIR}/assets
+		$<TARGET_FILE_DIR:bomberman>/assets
 )
 
 INSTALL(TARGETS bomberman DESTINATION bin)
