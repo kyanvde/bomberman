@@ -13,3 +13,26 @@ SET(CMAKE_CXX_FLAGS "-Wall -Werror")
 
 ADD_SUBDIRECTORY(game)
 ADD_SUBDIRECTORY(core)
+
+# Documentation
+find_package(Doxygen)
+
+if(Doxygen_FOUND)
+    set(DOXYGEN_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/docs")
+
+    set(DOXYGEN_PROJECT_NAME "Bomberman")
+    set(DOXYGEN_PROJECT_VERSION "1.0")
+    set(DOXYGEN_PROJECT_DESCRIPTION "Bomberman game")
+
+    set(DOXYGEN_GENERATE_HTML YES)
+    set(DOXYGEN_GENERATE_LATEX NO)
+
+    doxygen_add_docs(
+            documentation
+            ${PROJECT_SOURCE_DIR}/game
+            ${PROJECT_SOURCE_DIR}/core
+            COMMENT "Generating API documentation"
+    )
+else()
+    message(WARNING "Doxygen not found - documentation target unavailable")
+endif()

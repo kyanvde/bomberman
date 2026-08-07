@@ -1,6 +1,7 @@
 # Project-specific ignores
 build
 .DS_Store
+docs
 
 # Visual Studio Code
 .vscode/*
