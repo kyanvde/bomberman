@@ -4,7 +4,7 @@
 #include "Stopwatch.h"
 
 void Game::processEvents() {
-    sf::Event event;
+    sf::Event event{};
     while (window->pollEvent(event)) {
         stateManager.processEvent(event);
 

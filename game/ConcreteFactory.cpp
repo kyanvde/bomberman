@@ -1,11 +1,23 @@
 #include "ConcreteFactory.h"
 
+#include <entities/Bomb.h>
+#include <entities/Grass.h>
+#include <entities/PowerUp.h>
+#include <entities/Wall.h>
+
+#include <utility>
+#include <entities/Character.h>
+#include <views/CharacterView.h>
+#include <views/WallView.h>
+#include <views/PowerUpView.h>
+#include <views/BombView.h>
+
 core::SpriteFrame ConcreteFactory::frameFor(const core::Vector2& cell) const {
-    return core::SpriteFrame(spritesheetPath, cellSize, cell, margin, spacing);
+    return {spriteSheetPath, cellSize, cell, margin, spacing};
 }
 
-ConcreteFactory::ConcreteFactory(const std::string& spritesheetPath, const core::Vector2& cellSize, const core::Vector2& margin, const core::Vector2& spacing)
-    : spritesheetPath(spritesheetPath), cellSize(cellSize), margin(margin), spacing(spacing) {}
+ConcreteFactory::ConcreteFactory(std::string spritesheetPath, const core::Vector2& cellSize, const core::Vector2& margin, const core::Vector2& spacing)
+    : spriteSheetPath(std::move(spritesheetPath)), cellSize(cellSize), margin(margin), spacing(spacing) {}
 
 std::unique_ptr<core::EntityModel> ConcreteFactory::createCharacter(const core::Vector2& position, const core::Vector2& size) {
     std::unique_ptr<core::EntityModel> character = std::make_unique<core::Character>(position, size);

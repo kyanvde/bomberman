@@ -4,11 +4,11 @@
 #include "SfmlRenderer.h"
 #include "Stopwatch.h"
 
-GameState::GameState(std::shared_ptr<sf::RenderWindow> window, StateManager& stateManager)
+GameState::GameState(const std::shared_ptr<sf::RenderWindow>& window, StateManager& stateManager)
     : State(window, stateManager),
       world(std::make_shared<ConcreteFactory>("assets/sprites/bomberman.png", core::Vector2(8.f, 8.f)), "assets/worlds/main.txt"),
       renderer(*window) {
-        renderer.setViewportSize(core::Vector2(static_cast<float>(window->getSize().x), static_cast<float>(window->getSize().y)));
+    renderer.setViewportSize(core::Vector2(static_cast<float>(window->getSize().x), static_cast<float>(window->getSize().y)));
 }
 
 void GameState::processEvent(const sf::Event& event) {
@@ -28,13 +28,12 @@ void GameState::processEvent(const sf::Event& event) {
 
     world.movePlayer(direction, core::Stopwatch::getInstance().getDeltaTime());
 }
+
 void GameState::onResize(const sf::Vector2u& previousSize, const sf::Vector2u& newSize) {
     renderer.setViewportSize(core::Vector2(static_cast<float>(newSize.x), static_cast<float>(newSize.y)));
 }
 
-
 void GameState::update() {}
-
 
 void GameState::render() {
     world.render(renderer);

@@ -1,11 +1,12 @@
 #include "MenuState.h"
-#include <stdio.h>
+
+#include <cmath>
+
 #include "GameState.h"
 #include "StateManager.h"
 
-MenuState::MenuState(std::shared_ptr<sf::RenderWindow> window, StateManager& stateManager)
-    : State(window, stateManager)
-{
+MenuState::MenuState(const std::shared_ptr<sf::RenderWindow>& window, StateManager& stateManager)
+    : State(window, stateManager) {
     if (!font.loadFromFile("assets/fonts/arcadeclassic.ttf")) {
         printf("Failed to load font\n");
     }
@@ -28,18 +29,14 @@ MenuState::MenuState(std::shared_ptr<sf::RenderWindow> window, StateManager& sta
 }
 
 
-void MenuState::layout(const sf::Vector2u& size)
-{
-    float scale = static_cast<float>(size.y) / static_cast<float>(baseWindowHeight);
+void MenuState::layout(const sf::Vector2u& size) {
+    const float scale = static_cast<float>(size.y) / static_cast<float>(baseWindowHeight);
     
     // Title
-    title.setCharacterSize(
-        static_cast<unsigned int>(baseTitleCharacterSize * scale));
+    title.setCharacterSize(std::lround(static_cast<float>(baseTitleCharacterSize) * scale));
+    title.setOutlineThickness(baseTitleOutlineThickness * scale);
 
-    title.setOutlineThickness(
-        baseTitleOutlineThickness * scale);
-
-    sf::FloatRect titleBounds = title.getLocalBounds();
+    const sf::FloatRect titleBounds = title.getLocalBounds();
 
     title.setOrigin(
         titleBounds.left + titleBounds.width * 0.5f,
@@ -47,16 +44,15 @@ void MenuState::layout(const sf::Vector2u& size)
     );
 
     title.setPosition(
-        size.x * 0.5f,
-        size.y * 0.25f
+        static_cast<float>(size.x) * 0.5f,
+        static_cast<float>(size.y) * 0.25f
     );
 
     // Play button
-    playButton.setCharacterSize(static_cast<unsigned int>(basePlayButtonCharacterSize * scale));
-
+    playButton.setCharacterSize(std::lround(static_cast<float>(basePlayButtonCharacterSize) * scale));
     playButton.setOutlineThickness(basePlayButtonOutlineThickness * scale);
 
-    sf::FloatRect playBounds = playButton.getLocalBounds();
+    const sf::FloatRect playBounds = playButton.getLocalBounds();
 
     playButton.setOrigin(
         playBounds.left + playBounds.width * 0.5f,
@@ -64,8 +60,8 @@ void MenuState::layout(const sf::Vector2u& size)
     );
 
     playButton.setPosition(
-        size.x * 0.5f,
-        size.y * 0.8f
+        static_cast<float>(size.x) * 0.5f,
+        static_cast<float>(size.y) * 0.8f
     );
 }
 
@@ -77,7 +73,7 @@ void MenuState::processEvent(const sf::Event& event) {
     if (event.mouseButton.button != sf::Mouse::Left)
         return;
 
-    sf::Vector2f mousePos(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y));
+    const sf::Vector2f mousePos(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y));
     if (playButton.getGlobalBounds().contains(mousePos)) {
         stateManager.pushState(std::make_unique<GameState>(window, stateManager));
     }

@@ -2,7 +2,7 @@
 
 namespace {
     core::Vector2 toVector2(const sf::Vector2u& size) {
-        return core::Vector2(static_cast<float>(size.x), static_cast<float>(size.y));
+        return {static_cast<float>(size.x), static_cast<float>(size.y)};
     }
 }
 

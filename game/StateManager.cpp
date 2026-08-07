@@ -1,5 +1,7 @@
 #include "StateManager.h"
 
+#include <utility>
+
 void StateManager::pushState(std::unique_ptr<State> state) {
     states.push(std::move(state));
 }
@@ -38,4 +40,4 @@ void StateManager::render() {
     }
 }
 
-StateManager::StateManager(std::shared_ptr<sf::RenderWindow> window) : window(window) {}
+StateManager::StateManager(std::shared_ptr<sf::RenderWindow> window) : window(std::move(window)) {}
