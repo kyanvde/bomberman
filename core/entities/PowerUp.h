@@ -5,8 +5,17 @@
 
 namespace core {
 
-class PowerUp : public EntityModel {
+/**
+ * @brief The PowerUp class represents a power-up entity in the game world.
+ * It inherits from EntityModel and provides specific behavior for power-up entities.
+ */
+class PowerUp final : public EntityModel {
 public:
+    /**
+     * @brief Constructs a new PowerUp object with the specified position and size.
+     * @param pos The position of the power-up in world coordinates.
+     * @param size The size of the power-up in world coordinates.
+     */
     PowerUp(const Vector2& pos, const Vector2& size);
     
 };

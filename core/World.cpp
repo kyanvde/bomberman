@@ -15,7 +15,6 @@ namespace core {
         }
 
         entities.push_back(std::move(entity));
-        std::cout << "Entity added. Total entities: " << entities.size() << std::endl;
     }
 
     bool World::collidesWithBlockingEntity(const std::size_t moverIndex, const Vector2& position, const Vector2& size) const {
@@ -34,12 +33,12 @@ namespace core {
         return false;
     }
 
-    bool World::insideWorldBounds(const Vector2& position, const Vector2& size) const {
+    bool World::insideWorldBounds(const Vector2& position, const Vector2& size) {
         return position.x >= -1.f && position.y >= -1.f &&
                position.x + size.x <= 1.f && position.y + size.y <= 1.f;
     }
 
-    void World::movePlayer(const Vector2& direction, float deltaTime) {
+    void World::movePlayer(const Vector2& direction, float deltaTime) const {
         if (!playerIndex.has_value() || deltaTime <= 0.f) {
             return;
         }

@@ -1,5 +1,6 @@
 #include "WorldLoader.h"
 
+#include <algorithm>
 #include <fstream>
 #include "Random.h"
 
@@ -25,12 +26,9 @@ namespace {
         }
 
         unsigned int lineLength = lines[0].length();
-        for (const auto& line : lines) {
-            if (line.length() != lineLength) {
-                return false;
-            }
-        }
-
+        std::all_of(lines.begin(), lines.end(), [lineLength](const std::string& line) {
+            return line.length() == lineLength;
+        });
         return true;
     }
 
@@ -39,15 +37,15 @@ namespace {
 namespace core {
 
 void WorldLoader::loadFromFile(const std::string& filename, World& world, std::shared_ptr<AbstractFactory>& factory) {
-    std::vector<std::string> lines = getLinesFromFile(filename);
+    const std::vector<std::string> lines = getLinesFromFile(filename);
 
     if (!verifyFileFormat(lines)) {
         throw std::runtime_error("Invalid world format: " + filename);
     }
 
-    Vector2 worldSize(static_cast<float>(lines[0].length()), static_cast<float>(lines.size()));
+    const Vector2 worldSize(static_cast<float>(lines[0].length()), static_cast<float>(lines.size()));
 
-    Vector2 cellSize(2.f / worldSize.x, 2.f / worldSize.y);
+    const Vector2 cellSize(2.f / worldSize.x, 2.f / worldSize.y);
 
     for (unsigned int y = 0; y < lines.size(); ++y) {
         const std::string& line = lines[y];

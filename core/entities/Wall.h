@@ -5,10 +5,28 @@
 
 namespace core {
 
-class Wall : public EntityModel {
+/**
+ * @brief The Wall class represents a wall entity in the game world.
+ * It inherits from EntityModel and provides specific behavior for wall entities,
+ * including collision detection with characters.
+ */
+class Wall final : public EntityModel {
 public:
+    /**
+     * @brief Constructs a new Wall object with the specified position, size, and destructibility.
+     * @param pos The position of the wall in world coordinates.
+     * @param size The size of the wall in world coordinates.
+     * @param destructible A boolean indicating whether the wall is destructible (default is false).
+     */
     Wall(const Vector2& pos, const Vector2& size, bool destructible = false);
 
+    /**
+     * @brief Checks if the wall blocks the movement of a character at a given position and size.
+     * @param character The character to check for collision with the wall.
+     * @param position The position of the character in world coordinates.
+     * @param size The size of the character in world coordinates.
+     * @return True if the wall blocks the character's movement, false otherwise.
+     */
     [[nodiscard]] bool blocksCharacterMovement(const Character& character, const Vector2& position, const Vector2& size) const override;
     
 };
