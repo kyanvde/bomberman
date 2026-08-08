@@ -50,7 +50,7 @@ struct SpriteFrame {
      * @param margin The margin around the sprites in the spritesheet (default is (0, 0)).
      * @param spacing The spacing between sprites in the spritesheet (default is (0, 0)).
      */
-    SpriteFrame(std::string  texturePath,
+    SpriteFrame(std::string texturePath,
                 const Vector2& cellSize,
                 const Vector2& cell,
                 const Vector2& margin = Vector2(),
@@ -59,15 +59,15 @@ struct SpriteFrame {
 };
 
 /**
- * @brief The Renderer class is an abstract base class that defines the interface for rendering sprites.
+ * @brief The AbstractRenderer class is an abstract base class that defines the interface for rendering sprites.
  * It provides a pure virtual function for drawing a sprite at a specified position and size.
  */
-class Renderer {
+class AbstractRenderer {
 public:
     /**
-     * @brief Virtual destructor for the Renderer class.
+     * @brief Virtual destructor for the AbstractRenderer class.
      */
-    virtual ~Renderer() = default;
+    virtual ~AbstractRenderer() = default;
 
     /**
      * @brief Draws a sprite at the specified position and size using the provided SpriteFrame.

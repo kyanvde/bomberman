@@ -1,7 +1,7 @@
 #include "GameState.h"
 
 #include "ConcreteFactory.h"
-#include "SfmlRenderer.h"
+#include "ConcreteRenderer.h"
 #include "Stopwatch.h"
 
 GameState::GameState(const std::shared_ptr<sf::RenderWindow>& window, StateManager& stateManager)

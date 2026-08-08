@@ -1,7 +1,7 @@
 #ifndef BOMBERMAN_CORE_OBSERVER_H
 #define BOMBERMAN_CORE_OBSERVER_H
 
-#include "Renderer.h"
+#include "AbstractRenderer.h"
 
 namespace core {
 
@@ -27,7 +27,7 @@ public:
      * This method should be implemented by derived classes to define how they are rendered.
      * @param renderer A reference to the Renderer used for rendering.
      */
-    virtual void render(Renderer& renderer) const = 0;
+    virtual void render(AbstractRenderer& renderer) const = 0;
 };
 
 } // namespace core

@@ -2,15 +2,15 @@
 #define BOMBERMAN_GAME_SFMLRENDERER_H
 
 #include "Camera.h"
-#include "Renderer.h"
+#include "AbstractRenderer.h"
 #include <SFML/Graphics.hpp>
 #include <unordered_map>
 
 /**
- * @brief The SfmlRenderer class is a concrete implementation of the core::Renderer interface using SFML for rendering.
+ * @brief The ConcreteRenderer class is a concrete implementation of the core::Renderer interface using SFML for rendering.
  * It provides functionality to draw sprites on an SFML RenderWindow, manage textures, and handle camera projection.
  */
-class SfmlRenderer final : public core::Renderer {
+class ConcreteRenderer final : public core::AbstractRenderer {
     /**
      * @brief A reference to the SFML RenderWindow used for rendering the game.
      */
@@ -38,10 +38,10 @@ class SfmlRenderer final : public core::Renderer {
 
 public:
     /**
-     * @brief Constructs a new SfmlRenderer object with the specified SFML RenderWindow.
+     * @brief Constructs a new ConcreteRenderer object with the specified SFML RenderWindow.
      * @param window A reference to the SFML RenderWindow used for rendering the game.
      */
-    explicit SfmlRenderer(sf::RenderWindow& window);
+    explicit ConcreteRenderer(sf::RenderWindow& window);
 
     /**
      * @brief Sets the viewport size for the camera, allowing it to project world coordinates to screen coordinates correctly.

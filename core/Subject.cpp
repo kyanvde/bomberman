@@ -14,7 +14,7 @@ namespace core {
         }
     }
 
-    void Subject::render(Renderer& renderer) const {
+    void Subject::render(AbstractRenderer& renderer) const {
         for (const auto& observer : observers) {
             if (observer) {
                 observer->render(renderer);

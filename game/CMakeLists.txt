@@ -4,7 +4,7 @@ SET(BOMBERMAN_SOURCES main.cpp
     states/MenuState.cpp
     states/GameState.cpp
     ConcreteFactory.cpp
-    SfmlRenderer.cpp
+    ConcreteRenderer.cpp
 )
 
 ADD_EXECUTABLE(bomberman ${BOMBERMAN_SOURCES})

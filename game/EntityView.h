@@ -3,7 +3,7 @@
 
 #include "EntityModel.h"
 #include "Observer.h"
-#include "Renderer.h"
+#include "AbstractRenderer.h"
 
 #include <functional>
 
@@ -56,7 +56,7 @@ public:
      * @brief Renders the entity view using the specified renderer.
      * @param renderer The renderer used to draw the entity on the screen.
      */
-    void render(core::Renderer& renderer) const override {
+    void render(core::AbstractRenderer& renderer) const override {
         renderer.drawSprite(position, size, sprite);
     }
 };

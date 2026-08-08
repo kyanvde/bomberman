@@ -38,7 +38,7 @@ public:
      * @brief Renders the subject using the provided renderer.
      * @param renderer A reference to the Renderer used for rendering.
      */
-    virtual void render(Renderer& renderer) const;
+    virtual void render(AbstractRenderer& renderer) const;
 };
 
 } // namespace core

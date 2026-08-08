@@ -70,7 +70,7 @@ namespace core {
         player.setPosition(nextPosition);
     }
 
-    void World::render(Renderer& renderer) const {
+    void World::render(AbstractRenderer& renderer) const {
         for (const auto& entity : entities) {
             if (entity) {
                 entity->render(renderer);

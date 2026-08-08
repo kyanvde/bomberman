@@ -1,11 +1,12 @@
 #ifndef BOMBERMAN_GAME_STATES_GAMESTATE_H
 #define BOMBERMAN_GAME_STATES_GAMESTATE_H
 
+#include <ConcreteRenderer.h>
+
 #include "State.h"
 #include <memory>
 #include <SFML/Graphics.hpp>
 #include "World.h"
-#include "SfmlRenderer.h"
 
 /**
  * @brief The GameState class represents the main game state of the application.
@@ -20,7 +21,7 @@ class GameState final : public State {
     /**
      * @brief The SFML renderer used for rendering the game world.
      */
-    SfmlRenderer renderer;    
+    ConcreteRenderer renderer;
 public:
     /**
      * @brief Processes an event and handles it within the game state.

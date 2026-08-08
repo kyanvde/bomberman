@@ -1,4 +1,4 @@
-#include "SfmlRenderer.h"
+#include "ConcreteRenderer.h"
 
 namespace {
     core::Vector2 toVector2(const sf::Vector2u& size) {
@@ -6,9 +6,8 @@ namespace {
     }
 }
 
-const sf::Texture& SfmlRenderer::getTexture(const std::string& texturePath) const {
-    auto existing = textures.find(texturePath);
-    if (existing != textures.end()) {
+const sf::Texture& ConcreteRenderer::getTexture(const std::string& texturePath) const {
+    if (const auto existing = textures.find(texturePath); existing != textures.end()) {
         return existing->second;
     }
 
@@ -21,13 +20,13 @@ const sf::Texture& SfmlRenderer::getTexture(const std::string& texturePath) cons
     return inserted.first->second;
 }
 
-SfmlRenderer::SfmlRenderer(sf::RenderWindow& window) : window(window), camera(toVector2(window.getSize())) {}
+ConcreteRenderer::ConcreteRenderer(sf::RenderWindow& window) : window(window), camera(toVector2(window.getSize())) {}
 
-void SfmlRenderer::setViewportSize(const core::Vector2& viewportSize) {
+void ConcreteRenderer::setViewportSize(const core::Vector2& viewportSize) {
     camera.setViewportSize(viewportSize);
 }
 
-void SfmlRenderer::drawSprite(const core::Vector2& position, const core::Vector2& size, const core::SpriteFrame& sprite) {
+void ConcreteRenderer::drawSprite(const core::Vector2& position, const core::Vector2& size, const core::SpriteFrame& sprite) {
     const sf::Texture& texture = getTexture(sprite.texturePath);
 
     sf::Sprite sfSprite(texture);

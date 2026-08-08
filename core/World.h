@@ -8,7 +8,7 @@
 #include <vector>
 #include "AbstractFactory.h"
 #include "EntityModel.h"
-#include "Renderer.h"
+#include "AbstractRenderer.h"
 
 namespace core {
 
@@ -67,7 +67,7 @@ public:
      * @brief Renders the world and its entities using the provided Renderer.
      * @param renderer The Renderer used to draw the world and entities.
      */
-    void render(Renderer& renderer) const;
+    void render(AbstractRenderer& renderer) const;
 
     /**
      * @brief Constructs a new World object using the specified factory and loads the world data from the given file.
