@@ -5,6 +5,7 @@
 
 #include "State.h"
 #include <memory>
+#include <set>
 #include <SFML/Graphics.hpp>
 #include "World.h"
 
@@ -22,6 +23,11 @@ class GameState final : public State {
      * @brief The SFML renderer used for rendering the game world.
      */
     ConcreteRenderer renderer;
+
+    /**
+     * @brief A set of currently held keyboard keys for smooth continuous movement.
+     */
+    std::set<sf::Keyboard::Key> heldKeys;
 public:
     /**
      * @brief Processes an event and handles it within the game state.

@@ -6,7 +6,7 @@
 
 namespace core {
     namespace {
-        constexpr float kPlayerSpeed = 10.0f;
+        constexpr float kPlayerSpeed = 0.75f;
     }
 
     void World::addEntity(std::unique_ptr<EntityModel> entity) {

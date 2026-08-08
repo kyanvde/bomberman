@@ -69,7 +69,7 @@ void WorldLoader::loadFromFile(const std::string& filename, World& world, const 
                     world.addEntity(factory->createWall(position, size));
                     break;
                 case '_':
-                    if (result < 0.75) {
+                    if (result > 0.75) {
                         world.addEntity(factory->createWall(position, size, true));
                     } else {
                         world.addEntity(factory->createGrass(position, size));

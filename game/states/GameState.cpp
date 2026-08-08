@@ -12,28 +12,34 @@ GameState::GameState(const std::shared_ptr<sf::RenderWindow>& window, StateManag
 }
 
 void GameState::processEvent(const sf::Event& event) {
-    core::Vector2 direction(0.f, 0.f);
-    
     if (event.type == sf::Event::KeyPressed) {
-        if (event.key.code == sf::Keyboard::Left || event.key.code == sf::Keyboard::A) {
-            direction.x -= 1.f;
-        } else if (event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::D) {
-            direction.x += 1.f;
-        } else if (event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::W) {
-            direction.y -= 1.f;
-        } else if (event.key.code == sf::Keyboard::Down || event.key.code == sf::Keyboard::S) {
-            direction.y += 1.f;
-        }
+        heldKeys.insert(event.key.code);
+    } else if (event.type == sf::Event::KeyReleased) {
+        heldKeys.erase(event.key.code);
     }
-
-    world.movePlayer(direction, core::Stopwatch::getInstance().getDeltaTime());
 }
 
 void GameState::onResize(const sf::Vector2u&, const sf::Vector2u& newSize) {
     renderer.setViewportSize(core::Vector2(static_cast<float>(newSize.x), static_cast<float>(newSize.y)));
 }
 
-void GameState::update() {}
+void GameState::update() {
+    core::Vector2 direction(0.f, 0.f);
+    
+    for (const auto& key : heldKeys) {
+        if (key == sf::Keyboard::Left || key == sf::Keyboard::A) {
+            direction.x -= 1.f;
+        } else if (key == sf::Keyboard::Right || key == sf::Keyboard::D) {
+            direction.x += 1.f;
+        } else if (key == sf::Keyboard::Up || key == sf::Keyboard::W) {
+            direction.y -= 1.f;
+        } else if (key == sf::Keyboard::Down || key == sf::Keyboard::S) {
+            direction.y += 1.f;
+        }
+    }
+    
+    world.movePlayer(direction, core::Stopwatch::getInstance().getDeltaTime());
+}
 
 void GameState::render() {
     world.render(renderer);
