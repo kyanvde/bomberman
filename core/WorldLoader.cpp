@@ -62,6 +62,7 @@ void WorldLoader::loadFromFile(const std::string& filename, World& world, const 
 
             switch (cell) {
                 case 'C':
+                    world.addEntity(factory->createGrass(position, size));
                     world.addEntity(factory->createCharacter(position, size));
                     break;
                 case 'W':

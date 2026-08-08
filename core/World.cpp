@@ -1,6 +1,7 @@
 #include "World.h"
 
 #include "WorldLoader.h"
+#include <algorithm>
 #include <cmath>
 
 namespace core {
@@ -70,10 +71,21 @@ namespace core {
     }
 
     void World::render(AbstractRenderer& renderer) const {
+        std::vector<const EntityModel*> renderOrder;
+        renderOrder.reserve(entities.size());
+
         for (const auto& entity : entities) {
             if (entity) {
-                entity->render(renderer);
+                renderOrder.push_back(entity.get());
             }
+        }
+
+        std::stable_sort(renderOrder.begin(), renderOrder.end(), [](const EntityModel* left, const EntityModel* right) {
+            return left->renderLayer() < right->renderLayer();
+        });
+
+        for (const EntityModel* entity : renderOrder) {
+            entity->render(renderer);
         }
     }
 

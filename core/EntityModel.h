@@ -65,6 +65,12 @@ public:
     [[nodiscard]] virtual bool isPlayerControlled() const noexcept { return false; }
 
     /**
+     * @brief Returns the rendering layer for this entity.
+     * Entities with a higher layer are drawn later.
+     */
+    [[nodiscard]] virtual int renderLayer() const noexcept { return 0; }
+
+    /**
      * @brief Determines if the entity blocks the movement of another entity.
      * @param mover The entity attempting to move.
      * @param moverPosition The position of the moving entity.

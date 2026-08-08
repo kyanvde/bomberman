@@ -26,6 +26,11 @@ public:
     [[nodiscard]] bool isPlayerControlled() const noexcept override { return true; }
 
     /**
+     * @brief Characters should render above the static world tiles.
+     */
+    [[nodiscard]] int renderLayer() const noexcept override { return 1; }
+
+    /**
      * @brief Checks if the character is blocked by a given obstacle at a specified position and size.
      * @param obstacle The obstacle entity to check for collision with the character.
      * @param position The position of the character in world coordinates.
