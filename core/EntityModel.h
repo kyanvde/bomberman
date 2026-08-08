@@ -82,7 +82,7 @@ public:
      * @param otherSize The size of the other entity.
      * @return True if this entity blocks the movement of the other entity, false otherwise.
      */
-    [[nodiscard]] virtual bool isBlockedBy(const EntityModel& other, const Vector2& otherPosition, const Vector2& otherSize) const { return false; }
+    [[nodiscard]] virtual bool isBlockedBy(const EntityModel&, const Vector2&, const Vector2&) const { return false; }
 
     /**
      * @brief Determines if this entity blocks the movement of a character based on their positions and sizes.
@@ -91,7 +91,7 @@ public:
      * @param characterSize The size of the character.
      * @return True if this entity blocks the movement of the character, false otherwise.
      */
-    [[nodiscard]] virtual bool blocksCharacterMovement(const Character& character, const Vector2& characterPosition, const Vector2& characterSize) const { return false; }
+    [[nodiscard]] virtual bool blocksCharacterMovement(const Character&, const Vector2&, const Vector2&) const { return false; }
 };
 
 } // namespace core

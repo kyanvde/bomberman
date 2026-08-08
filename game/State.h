@@ -47,7 +47,7 @@ public:
      * @param previousSize The previous size of the window before resizing.
      * @param newSize The new size of the window after resizing.
      */
-    virtual void onResize(const sf::Vector2u& previousSize, const sf::Vector2u& newSize) {}
+    virtual void onResize(const sf::Vector2u&, const sf::Vector2u&) {}
 
     /**
      * @brief Updates the state, allowing it to perform game logic and state transitions.

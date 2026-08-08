@@ -18,7 +18,7 @@ public:
      * @param size The size of the wall in world coordinates.
      * @param destructible A boolean indicating whether the wall is destructible (default is false).
      */
-    Wall(const Vector2& pos, const Vector2& size, bool destructible = false);
+    Wall(const Vector2& pos, const Vector2& size, [[maybe_unused]] bool destructible = false);
 
     /**
      * @brief Checks if the wall blocks the movement of a character at a given position and size.
@@ -27,7 +27,7 @@ public:
      * @param size The size of the character in world coordinates.
      * @return True if the wall blocks the character's movement, false otherwise.
      */
-    [[nodiscard]] bool blocksCharacterMovement(const Character& character, const Vector2& position, const Vector2& size) const override;
+    [[nodiscard]] bool blocksCharacterMovement(const Character&, const Vector2& characterPosition, const Vector2& characterSize) const override;
     
 };
 

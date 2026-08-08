@@ -9,9 +9,9 @@ namespace core {
         }
     }
 
-    Wall::Wall(const Vector2& pos, const Vector2& size, bool destructible) : EntityModel(pos, size) {}
+    Wall::Wall(const Vector2& pos, const Vector2& size, [[maybe_unused]] bool destructible) : EntityModel(pos, size) {}
 
-    bool Wall::blocksCharacterMovement(const Character&, const Vector2& position, const Vector2& size) const {
-        return intersects(position, size, getPosition(), getSize());
+    bool Wall::blocksCharacterMovement(const Character&, const Vector2& characterPosition, const Vector2& characterSize) const {
+        return intersects(characterPosition, characterSize, getPosition(), getSize());
     }
 } // namespace core

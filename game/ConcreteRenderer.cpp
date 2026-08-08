@@ -1,5 +1,7 @@
 #include "ConcreteRenderer.h"
 
+#include <stdexcept>
+
 namespace {
     core::Vector2 toVector2(const sf::Vector2u& size) {
         return {static_cast<float>(size.x), static_cast<float>(size.y)};

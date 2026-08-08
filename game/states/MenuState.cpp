@@ -1,6 +1,7 @@
 #include "MenuState.h"
 
 #include <cmath>
+#include <stdexcept>
 
 #include "GameState.h"
 #include "StateManager.h"
@@ -8,7 +9,7 @@
 MenuState::MenuState(const std::shared_ptr<sf::RenderWindow>& window, StateManager& stateManager)
     : State(window, stateManager) {
     if (!font.loadFromFile("assets/fonts/arcadeclassic.ttf")) {
-        printf("Failed to load font\n");
+        throw std::runtime_error("Failed to load font: assets/fonts/arcadeclassic.ttf");
     }
 
     // Title setup
@@ -80,7 +81,7 @@ void MenuState::processEvent(const sf::Event& event) {
 }
 
 
-void MenuState::onResize(const sf::Vector2u& previousSize, const sf::Vector2u& newSize) {
+void MenuState::onResize(const sf::Vector2u&, const sf::Vector2u& newSize) {
     layout(newSize);
 }
 

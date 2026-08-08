@@ -29,7 +29,7 @@ void GameState::processEvent(const sf::Event& event) {
     world.movePlayer(direction, core::Stopwatch::getInstance().getDeltaTime());
 }
 
-void GameState::onResize(const sf::Vector2u& previousSize, const sf::Vector2u& newSize) {
+void GameState::onResize(const sf::Vector2u&, const sf::Vector2u& newSize) {
     renderer.setViewportSize(core::Vector2(static_cast<float>(newSize.x), static_cast<float>(newSize.y)));
 }
 

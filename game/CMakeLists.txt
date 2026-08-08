@@ -35,6 +35,11 @@ TARGET_LINK_LIBRARIES(bomberman PRIVATE
 	sfml-graphics
 )
 
+target_compile_options(bomberman PRIVATE
+    $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
+    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror>
+)
+
 add_custom_command(TARGET bomberman POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different
 		$<TARGET_FILE:sfml-graphics>

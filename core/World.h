@@ -18,11 +18,6 @@ namespace core {
  */
 class World {
     /**
-     * @brief A shared pointer to an AbstractFactory used for creating game entities.
-     */
-    std::shared_ptr<AbstractFactory> factory;
-
-    /**
      * @brief A vector of unique pointers to EntityModel objects representing the entities in the world.
      */
     std::vector<std::unique_ptr<EntityModel>> entities;
@@ -48,7 +43,7 @@ class World {
      * @param size The size to check.
      * @return True if the position and size are within the world bounds, false otherwise.
      */
-    [[nodiscard]] static bool insideWorldBounds(const Vector2& position, const Vector2& size) ;
+    [[nodiscard]] static bool insideWorldBounds(const Vector2& position, const Vector2& size);
 public:
     /**
      * @brief Adds a new entity to the world.
@@ -74,7 +69,7 @@ public:
      * @param factory A shared pointer to an AbstractFactory used for creating game entities.
      * @param filename The path to the file containing the world data.
      */
-    World(std::shared_ptr<AbstractFactory> factory, const std::string& filename);
+    World(const std::shared_ptr<AbstractFactory>& factory, const std::string& filename);
 };
 
 } // namespace core

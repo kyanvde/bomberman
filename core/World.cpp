@@ -2,7 +2,6 @@
 
 #include "WorldLoader.h"
 #include <cmath>
-#include <iostream>
 
 namespace core {
     namespace {
@@ -38,7 +37,7 @@ namespace core {
                position.x + size.x <= 1.f && position.y + size.y <= 1.f;
     }
 
-    void World::movePlayer(const Vector2& direction, float deltaTime) const {
+    void World::movePlayer(const Vector2& direction, const float deltaTime) const {
         if (!playerIndex.has_value() || deltaTime <= 0.f) {
             return;
         }
@@ -78,7 +77,7 @@ namespace core {
         }
     }
 
-    World::World(std::shared_ptr<AbstractFactory> factory, const std::string& filename) : factory(factory) {
+    World::World(const std::shared_ptr<AbstractFactory>& factory, const std::string& filename) {
         WorldLoader::loadFromFile(filename, *this, factory);
     }
 } // namespace core

@@ -1,7 +1,9 @@
 #include "WorldLoader.h"
 
+#include <cstddef>
 #include <algorithm>
 #include <fstream>
+#include <stdexcept>
 #include "Random.h"
 
 namespace {
@@ -25,18 +27,21 @@ namespace {
             return false;
         }
 
-        unsigned int lineLength = lines[0].length();
-        std::all_of(lines.begin(), lines.end(), [lineLength](const std::string& line) {
+        const std::size_t lineLength = lines.front().length();
+        return std::all_of(lines.begin(), lines.end(), [lineLength](const std::string& line) {
             return line.length() == lineLength;
         });
-        return true;
     }
 
 } // namespace
 
 namespace core {
 
-void WorldLoader::loadFromFile(const std::string& filename, World& world, std::shared_ptr<AbstractFactory>& factory) {
+void WorldLoader::loadFromFile(const std::string& filename, World& world, const std::shared_ptr<AbstractFactory>& factory) {
+    if (!factory) {
+        throw std::runtime_error("World factory is null while loading: " + filename);
+    }
+
     const std::vector<std::string> lines = getLinesFromFile(filename);
 
     if (!verifyFileFormat(lines)) {
@@ -47,13 +52,13 @@ void WorldLoader::loadFromFile(const std::string& filename, World& world, std::s
 
     const Vector2 cellSize(2.f / worldSize.x, 2.f / worldSize.y);
 
-    for (unsigned int y = 0; y < lines.size(); ++y) {
+    for (std::size_t y = 0; y < lines.size(); ++y) {
         const std::string& line = lines[y];
-        for (unsigned int x = 0; x < line.length(); ++x) {
-            char cell = line[x];
-            Vector2 position(-1.f + x * cellSize.x, -1.f + y * cellSize.y);
-            Vector2 size(cellSize.x, cellSize.y);
-            double result = 0;
+        for (std::size_t x = 0; x < line.length(); ++x) {
+            const char cell = line[x];
+            const Vector2 position(-1.f + static_cast<float>(x) * cellSize.x, -1.f + static_cast<float>(y) * cellSize.y);
+            const Vector2 size(cellSize.x, cellSize.y);
+            const double result = Random::getInstance().getRandomNumber(0, 1);
 
             switch (cell) {
                 case 'C':
@@ -63,7 +68,6 @@ void WorldLoader::loadFromFile(const std::string& filename, World& world, std::s
                     world.addEntity(factory->createWall(position, size));
                     break;
                 case '_':
-                    result = Random::getInstance().getRandomNumber(0, 1);
                     if (result < 0.75) {
                         world.addEntity(factory->createWall(position, size, true));
                     } else {
