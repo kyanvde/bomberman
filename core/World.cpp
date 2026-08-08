@@ -6,7 +6,8 @@
 
 namespace core {
     namespace {
-        constexpr float kPlayerSpeed = 0.75f;
+        constexpr float playerSpeed = 0.75f;
+        constexpr float collisionMargin = 0.0002f;
     }
 
     void World::addEntity(std::unique_ptr<EntityModel> entity) {
@@ -19,13 +20,16 @@ namespace core {
 
     bool World::collidesWithBlockingEntity(const std::size_t moverIndex, const Vector2& position, const Vector2& size) const {
         const EntityModel& mover = *entities[moverIndex];
+        
+        const Vector2 collisionSize(size.x - collisionMargin * 2, size.y - collisionMargin * 2);
+        const Vector2 collisionPos(position.x + collisionMargin, position.y + collisionMargin);
 
         for (std::size_t i = 0; i < entities.size(); ++i) {
             if (i == moverIndex) {
                 continue;
             }
 
-            if (entities[i]->blocksMovementOf(mover, position, size)) {
+            if (entities[i]->blocksMovementOf(mover, collisionPos, collisionSize)) {
                 return true;
             }
         }
@@ -52,18 +56,23 @@ namespace core {
         }
 
         const Vector2 normalizedDirection(direction.x / length, direction.y / length);
-        const Vector2 delta(normalizedDirection.x * kPlayerSpeed * deltaTime, normalizedDirection.y * kPlayerSpeed * deltaTime);
+        const Vector2 delta(normalizedDirection.x * playerSpeed * deltaTime, normalizedDirection.y * playerSpeed * deltaTime);
         const Vector2 size = player.getSize();
 
         Vector2 nextPosition = player.getPosition();
 
         const Vector2 movedX(nextPosition.x + delta.x, nextPosition.y);
-        if (insideWorldBounds(movedX, size) && !collidesWithBlockingEntity(currentPlayerIndex, movedX, size)) {
-            nextPosition.x = movedX.x;
-        }
-
+        const bool canMoveX = insideWorldBounds(movedX, size) && !collidesWithBlockingEntity(currentPlayerIndex, movedX, size);
+        
         const Vector2 movedY(nextPosition.x, nextPosition.y + delta.y);
-        if (insideWorldBounds(movedY, size) && !collidesWithBlockingEntity(currentPlayerIndex, movedY, size)) {
+        const bool canMoveY = insideWorldBounds(movedY, size) && !collidesWithBlockingEntity(currentPlayerIndex, movedY, size);
+
+        if (canMoveX && canMoveY) {
+            nextPosition.x = movedX.x;
+            nextPosition.y = movedY.y;
+        } else if (canMoveX) {
+            nextPosition.x = movedX.x;
+        } else if (canMoveY) {
             nextPosition.y = movedY.y;
         }
 
