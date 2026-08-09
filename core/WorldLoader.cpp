@@ -7,7 +7,7 @@
 #include "Random.h"
 
 namespace {
-    
+
     std::vector<std::string> getLinesFromFile(const std::string& filename) {
         std::vector<std::string> lines;
         std::ifstream file(filename);
@@ -52,33 +52,46 @@ void WorldLoader::loadFromFile(const std::string& filename, World& world, const 
 
     const Vector2 cellSize(2.f / worldSize.x, 2.f / worldSize.y);
 
+    // Tracks which columns of the row above ended up being a wall,
+    // accounting for the random walls generated from '_' cells.
+    std::vector<bool> previousRowIsWall(lines[0].length(), false);
+
     for (std::size_t y = 0; y < lines.size(); ++y) {
         const std::string& line = lines[y];
+        std::vector<bool> currentRowIsWall(line.length(), false);
+
         for (std::size_t x = 0; x < line.length(); ++x) {
             const char cell = line[x];
             const Vector2 position(-1.f + static_cast<float>(x) * cellSize.x, -1.f + static_cast<float>(y) * cellSize.y);
             const Vector2 size(cellSize.x, cellSize.y);
             const double result = Random::getInstance().getRandomNumber(0, 1);
+            const bool shaded = previousRowIsWall[x];
 
             switch (cell) {
                 case 'C':
-                    world.addEntity(factory->createGrass(position, size));
+                    world.addEntity(factory->createGrass(position, size, shaded));
                     world.addEntity(factory->createCharacter(position, size));
+                    currentRowIsWall[x] = false;
                     break;
                 case 'W':
                     world.addEntity(factory->createWall(position, size, false));
+                    currentRowIsWall[x] = true;
                     break;
                 case '_':
                     if (result > 0.75) {
                         world.addEntity(factory->createWall(position, size, true));
+                        currentRowIsWall[x] = true;
                     } else {
-                        world.addEntity(factory->createGrass(position, size));
+                        world.addEntity(factory->createGrass(position, size, shaded));
+                        currentRowIsWall[x] = false;
                     }
                     break;
                 default:
                     throw std::runtime_error("Unknown cell type: " + std::string(1, cell));
             }
         }
+
+        previousRowIsWall = std::move(currentRowIsWall);
     }
 }
 

@@ -63,7 +63,7 @@ class ConcreteFactory final : public core::AbstractFactory {
      * @brief Creates a wall entity with the specified position, size, and destructibility.
      * @param position The position of the wall in world coordinates.
      * @param size The size of the wall in world coordinates.
-     * @param destructible A boolean indicating whether the wall is destructible (default is false).
+     * @param destructible A boolean indicating whether the wall is destructible.
      * @return A unique pointer to the created core::EntityModel representing the wall.
      */
     std::unique_ptr<core::EntityModel> createWall(const core::Vector2 &position, const core::Vector2 &size, bool destructible) override;
@@ -72,9 +72,10 @@ class ConcreteFactory final : public core::AbstractFactory {
      * @brief Creates a grass entity with the specified position and size.
      * @param position The position of the grass in world coordinates.
      * @param size The size of the grass in world coordinates.
+     * @param shaded A boolean indicating whether the grass is shaded.
      * @return A unique pointer to the created core::EntityModel representing the grass.
      */
-    std::unique_ptr<core::EntityModel> createGrass(const core::Vector2& position, const core::Vector2& size) override;
+    std::unique_ptr<core::EntityModel> createGrass(const core::Vector2& position, const core::Vector2& size, bool shaded) override;
 
     /**
      * @brief Creates a power-up entity with the specified position and size.

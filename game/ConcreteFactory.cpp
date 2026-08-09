@@ -35,9 +35,9 @@ std::unique_ptr<core::EntityModel> ConcreteFactory::createWall(const core::Vecto
     return wall;
 }
 
-std::unique_ptr<core::EntityModel> ConcreteFactory::createGrass(const core::Vector2& position, const core::Vector2& size) {
+std::unique_ptr<core::EntityModel> ConcreteFactory::createGrass(const core::Vector2& position, const core::Vector2& size, const bool shaded) {
     std::unique_ptr<core::EntityModel> grass = std::make_unique<core::Grass>(position, size);
-    grass->attach(std::make_shared<GrassView>(*grass, frameFor(core::Vector2(2.f, 0.f))));
+    grass->attach(std::make_shared<GrassView>(*grass, frameFor(shaded ? core::Vector2(3.f, 0.f) : core::Vector2(2.f, 0.f))));
     return grass;
 }
 
