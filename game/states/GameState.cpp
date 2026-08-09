@@ -6,7 +6,7 @@
 
 GameState::GameState(const std::shared_ptr<sf::RenderWindow>& window, StateManager& stateManager)
     : State(window, stateManager),
-      world(std::make_shared<ConcreteFactory>("assets/sprites/bomberman.png", core::Vector2(8.f, 8.f)), "assets/worlds/main.txt"),
+      world(std::make_shared<ConcreteFactory>("assets/sprites/spritesheet.png", core::Vector2(16.f, 16.f), core::Vector2(), core::Vector2(1, 1)), "assets/worlds/main.txt"),
       renderer(*window) {
     renderer.setViewportSize(core::Vector2(static_cast<float>(window->getSize().x), static_cast<float>(window->getSize().y)));
 }

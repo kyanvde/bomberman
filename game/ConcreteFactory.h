@@ -39,7 +39,7 @@ class ConcreteFactory final : public core::AbstractFactory {
      * @param cell The cell coordinates (x, y) in the spritesheet.
      * @return The corresponding core::SpriteFrame for the specified cell.
      */
-    core::SpriteFrame frameFor(const core::Vector2& cell) const;
+    [[nodiscard]] core::SpriteFrame frameFor(const core::Vector2& cell) const;
 
  public:
     /**
@@ -49,7 +49,7 @@ class ConcreteFactory final : public core::AbstractFactory {
      * @param margin The margin around the sprites in the spritesheet (default is (0, 0)).
      * @param spacing The spacing between sprites in the spritesheet (default is (0, 0)).
      */
-    ConcreteFactory(std::string  spritesheetPath, const core::Vector2& cellSize, const core::Vector2& margin = core::Vector2(), const core::Vector2& spacing = core::Vector2());
+    [[nodiscard]] ConcreteFactory(std::string  spritesheetPath, const core::Vector2& cellSize, const core::Vector2& margin = core::Vector2(), const core::Vector2& spacing = core::Vector2());
 
     /**
      * @brief Creates a character entity with the specified position and size.
@@ -66,7 +66,7 @@ class ConcreteFactory final : public core::AbstractFactory {
      * @param destructible A boolean indicating whether the wall is destructible (default is false).
      * @return A unique pointer to the created core::EntityModel representing the wall.
      */
-    std::unique_ptr<core::EntityModel> createWall(const core::Vector2& position, const core::Vector2& size, bool destructible = false) override;
+    std::unique_ptr<core::EntityModel> createWall(const core::Vector2 &position, const core::Vector2 &size, bool destructible) override;
 
     /**
      * @brief Creates a grass entity with the specified position and size.

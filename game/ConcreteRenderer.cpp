@@ -43,12 +43,12 @@ void ConcreteRenderer::drawSprite(const core::Vector2& position, const core::Vec
     const core::Vector2 projectedPosition = camera.projectPosition(position);
     const core::Vector2 projectedSize = camera.projectSize(size);
 
+    const float scale = projectedSize.x / static_cast<float>(width);
+    const float scaleY = projectedSize.y / static_cast<float>(height);
+
     sfSprite.setPosition(projectedPosition.x, projectedPosition.y);
 
-    sfSprite.setScale(
-        projectedSize.x / static_cast<float>(width),
-        projectedSize.y / static_cast<float>(height)
-    );
+    sfSprite.setScale(scale, scaleY);
 
     window.draw(sfSprite);
 }

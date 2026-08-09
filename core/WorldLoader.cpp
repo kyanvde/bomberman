@@ -66,7 +66,7 @@ void WorldLoader::loadFromFile(const std::string& filename, World& world, const 
                     world.addEntity(factory->createCharacter(position, size));
                     break;
                 case 'W':
-                    world.addEntity(factory->createWall(position, size));
+                    world.addEntity(factory->createWall(position, size, false));
                     break;
                 case '_':
                     if (result > 0.75) {

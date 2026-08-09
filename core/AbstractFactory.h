@@ -29,7 +29,7 @@ public:
      * @param destructible A boolean indicating whether the wall is destructible (default is false).
      * @return A unique pointer to the created EntityModel representing the wall.
      */
-    virtual std::unique_ptr<EntityModel> createWall(const Vector2& pos, const Vector2& size, bool destructible = false) = 0;
+    virtual std::unique_ptr<EntityModel> createWall(const Vector2 &pos, const Vector2 &size, bool destructible) = 0;
 
     /**
      * @brief Creates a grass entity with the specified position and size.
