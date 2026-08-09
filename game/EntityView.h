@@ -6,6 +6,7 @@
 #include "AbstractRenderer.h"
 
 #include <functional>
+#include <utility>
 
 /**
  * @brief The EntityView class represents the visual representation of an entity in the game.
@@ -40,8 +41,8 @@ public:
      * @param model A reference to the EntityModel that this view represents.
      * @param sprite The sprite frame used for rendering the entity.
      */
-    EntityView(const core::EntityModel& model, const core::SpriteFrame& sprite)
-        : model(model), position(model.getPosition()), size(model.getSize()), sprite(sprite) {}
+    EntityView(const core::EntityModel& model, core::SpriteFrame sprite)
+        : model(model), position(model.getPosition()), size(model.getSize()), sprite(std::move(sprite)) {}
 
     /**
      * @brief Updates the position and size of the entity view based on the associated EntityModel.

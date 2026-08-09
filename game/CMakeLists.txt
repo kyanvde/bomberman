@@ -5,6 +5,7 @@ SET(BOMBERMAN_SOURCES main.cpp
     states/GameState.cpp
     ConcreteFactory.cpp
     ConcreteRenderer.cpp
+	views/CharacterView.cpp
 )
 
 ADD_EXECUTABLE(bomberman ${BOMBERMAN_SOURCES})

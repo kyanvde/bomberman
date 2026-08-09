@@ -9,6 +9,7 @@ SET(SRC
     Stopwatch.cpp
     Random.cpp
     Subject.cpp
+		Animation.cpp
 )
 
 ADD_LIBRARY(core STATIC ${SRC})
