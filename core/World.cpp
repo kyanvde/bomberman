@@ -93,10 +93,18 @@ namespace core {
         player.setPosition(nextPosition);
     }
 
+    void World::update() {
+        for (const auto& entity : entities) {
+            if (entity) {
+                entity->notify();
+            }
+        }
+    }
+
     void World::render(AbstractRenderer& renderer) const {
         std::vector<const EntityModel*> renderOrder;
         renderOrder.reserve(entities.size());
-
+ 
         for (const auto& entity : entities) {
             if (entity) {
                 renderOrder.push_back(entity.get());

@@ -3,7 +3,12 @@
 namespace core {
 
     void Subject::attach(const std::shared_ptr<Observer>& observer) {
+        if (!observer) {
+            return;
+        }
+
         observers.push_back(observer);
+        observer->update();
     }
 
     void Subject::notify() {

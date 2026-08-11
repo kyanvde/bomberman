@@ -44,6 +44,7 @@ void GameState::update() {
         }
     }
     
+    world.update();
     world.movePlayer(direction, core::Stopwatch::getInstance().getDeltaTime());
 }
 

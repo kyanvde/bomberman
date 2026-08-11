@@ -78,6 +78,11 @@ public:
     void movePlayer(const Vector2& direction, float deltaTime) const;
 
     /**
+     * @brief Updates all entity views for the current frame.
+     */
+    void update();
+
+    /**
      * @brief Renders the world and its entities using the provided Renderer.
      * @param renderer The Renderer used to draw the world and entities.
      */

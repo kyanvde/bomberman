@@ -6,6 +6,7 @@
 #include "AbstractRenderer.h"
 
 #include <functional>
+#include <iostream>
 #include <utility>
 
 #include "Stopwatch.h"
