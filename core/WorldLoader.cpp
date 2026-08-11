@@ -53,6 +53,7 @@ void WorldLoader::loadFromFile(const std::string& filename, World& world, const 
     const Vector2 worldSize(static_cast<float>(lines[0].length()), static_cast<float>(lines.size()));
 
     const Vector2 cellSize(2.f / worldSize.x, 2.f / worldSize.y);
+    world.setCellSize(cellSize);
 
     // Tracks which columns of the row above ended up being a wall,
     // accounting for the random walls generated from '_' cells.

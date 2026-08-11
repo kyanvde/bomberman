@@ -4,10 +4,21 @@
 #include <algorithm>
 #include <cmath>
 
+#include "CharacterColor.h"
+
 namespace core {
     namespace {
         constexpr float playerSpeed = 0.75f;
         constexpr float collisionMargin = 0.0002f;
+    }
+
+    Vector2 World::snapToTileTopLeft(const Vector2 &position, const Vector2 &size) const {
+        const Vector2 center(position.x + size.x / 2.f, position.y + size.y / 2.f);
+
+        const float tileX = std::floor((center.x + 1.f) / cellSize.x);
+        const float tileY = std::floor((center.y + 1.f) / cellSize.y);
+
+        return Vector2(-1.f + tileX * cellSize.x, -1.f + tileY * cellSize.y);
     }
 
     void World::addEntity(std::unique_ptr<EntityModel> entity) {
@@ -101,7 +112,20 @@ namespace core {
         }
     }
 
-    World::World(const std::shared_ptr<AbstractFactory>& factory, const std::string& filename) {
+    World::World(const std::shared_ptr<AbstractFactory>& factory, const std::string& filename)
+    : factory(factory) {
         WorldLoader::loadFromFile(filename, *this, factory);
+    }
+
+    void World::spawnBombAt(const std::size_t entityIndex) {
+        const EntityModel& entity = *entities[entityIndex];
+        const Vector2 tilePosition = snapToTileTopLeft(entity.getPosition(), entity.getSize());
+        entities.push_back(factory->createBomb(tilePosition, cellSize));
+    }
+
+    void World::spawnBomb(const CharacterColor &color) {
+        if (color == CharacterColor::White && playerIndex.has_value()) {
+            spawnBombAt(*playerIndex);
+        }
     }
 } // namespace core

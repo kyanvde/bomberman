@@ -1,5 +1,6 @@
 #include "GameState.h"
 
+#include "CharacterColor.h"
 #include "ConcreteFactory.h"
 #include "ConcreteRenderer.h"
 #include "Stopwatch.h"
@@ -14,6 +15,11 @@ GameState::GameState(const std::shared_ptr<sf::RenderWindow>& window, StateManag
 void GameState::processEvent(const sf::Event& event) {
     if (event.type == sf::Event::KeyPressed) {
         heldKeys.insert(event.key.code);
+
+        if (event.key.code == sf::Keyboard::Space) {
+            world.spawnBomb(core::CharacterColor::White);
+        }
+
     } else if (event.type == sf::Event::KeyReleased) {
         heldKeys.erase(event.key.code);
     }

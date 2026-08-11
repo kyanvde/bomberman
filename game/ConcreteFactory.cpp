@@ -69,6 +69,6 @@ std::unique_ptr<core::EntityModel> ConcreteFactory::createPowerUp(const core::Ve
 
 std::unique_ptr<core::EntityModel> ConcreteFactory::createBomb(const core::Vector2& position, const core::Vector2& size) {
     std::unique_ptr<core::EntityModel> bomb = std::make_unique<core::Bomb>(position, size);
-    bomb->attach(std::make_shared<BombView>(*bomb, frameFor(core::Vector2(2.f, 1.f))));
+    bomb->attach(std::make_shared<BombView>(*bomb, frameFor(core::Vector2(6.f, 0.f))));
     return bomb;
 }
