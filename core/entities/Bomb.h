@@ -17,7 +17,8 @@ public:
      * @param size The size of the bomb in world coordinates.
      */
     Bomb(const Vector2& pos, const Vector2& size);
-    
+
+    [[nodiscard]] int renderLayer() const noexcept override;
 };
 
 }; // namespace core

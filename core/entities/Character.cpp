@@ -19,4 +19,8 @@ namespace core {
             setAnimationType(direction.y < 0.f ? AnimationType::WalkUp : AnimationType::WalkDown);
         }
     }
+
+    int Character::renderLayer() const noexcept {
+        return 2;
+    }
 } // namespace core

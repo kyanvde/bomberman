@@ -28,7 +28,7 @@ public:
     /**
      * @brief Characters should render above the static world tiles.
      */
-    [[nodiscard]] int renderLayer() const noexcept override { return 1; }
+    [[nodiscard]] int renderLayer() const noexcept override;
 
     /**
      * @brief Checks if the character is blocked by a given obstacle at a specified position and size.
