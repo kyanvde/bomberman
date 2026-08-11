@@ -6,7 +6,15 @@
 namespace core {
 
 struct SpriteFrame;
-    
+
+enum class AnimationType {
+    Idle,
+    WalkUp,
+    WalkDown,
+    WalkLeft,
+    WalkRight,
+};
+
 class Animation {
     std::vector<SpriteFrame> frames;
     float frameDuration;

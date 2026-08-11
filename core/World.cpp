@@ -52,10 +52,13 @@ namespace core {
 
         const float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
         if (length <= 0.f) {
+            player.onMovementAttempt(Vector2(0.f, 0.f));
             return;
         }
 
         const Vector2 normalizedDirection(direction.x / length, direction.y / length);
+        player.onMovementAttempt(normalizedDirection);
+
         const Vector2 delta(normalizedDirection.x * playerSpeed * deltaTime, normalizedDirection.y * playerSpeed * deltaTime);
         const Vector2 size = player.getSize();
 
@@ -63,7 +66,7 @@ namespace core {
 
         const Vector2 movedX(nextPosition.x + delta.x, nextPosition.y);
         const bool canMoveX = insideWorldBounds(movedX, size) && !collidesWithBlockingEntity(currentPlayerIndex, movedX, size);
-        
+
         const Vector2 movedY(nextPosition.x, nextPosition.y + delta.y);
         const bool canMoveY = insideWorldBounds(movedY, size) && !collidesWithBlockingEntity(currentPlayerIndex, movedY, size);
 

@@ -1,6 +1,7 @@
 #ifndef BOMBERMAN_CORE_ENTITYMODEL_H
 #define BOMBERMAN_CORE_ENTITYMODEL_H
 
+#include "Animation.h"
 #include "Subject.h"
 #include "Vector2.h"
 
@@ -24,6 +25,20 @@ protected:
      * @brief The size of the entity in world coordinates.
      */
     Vector2 size;
+
+    /**
+     * @brief The current animation type of the entity (default is Idle).
+     */
+    AnimationType animationType = AnimationType::Idle;
+
+    /**
+     * @brief Sets the activate animation type of the entity.
+     * @param newAnimationType The new AnimationType of the entity.
+     */
+    void setAnimationType(const AnimationType newAnimationType) {
+        this->animationType = newAnimationType;
+        notify();
+    }
 public:
     /**
      * @brief Constructs a new EntityModel object with the specified position and size.
@@ -98,6 +113,19 @@ public:
      * @return True if this entity blocks the movement of the character, false otherwise.
      */
     [[nodiscard]] virtual bool blocksCharacterMovement(const Character&, const Vector2&, const Vector2&) const { return false; }
+
+    /**
+     * @brief Called when movement in a given direction is attempted, so the entity
+     * can update its animation state accordingly. Default implementation does nothing.
+     * @param direction The attempted movement direction (not necessarily normalized to a successful move).
+     */
+    virtual void onMovementAttempt(const Vector2&) {}
+
+    /**
+     * @brief Returns the active animation type of the entity.
+     * @return The active AnimationType of the entity.
+     */
+    [[nodiscard]] AnimationType getAnimationType() const { return animationType; }
 };
 
 } // namespace core
