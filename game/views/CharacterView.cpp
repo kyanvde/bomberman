@@ -30,23 +30,23 @@ CharacterView::CharacterView(const core::EntityModel& model, const core::SpriteF
         core::SpriteFrame(sprite.texturePath, core::Vector2(16.f, 24.f), basePosition - core::Vector2(1.f, 0.f), sprite.margin, sprite.spacing),
         core::SpriteFrame(sprite.texturePath, core::Vector2(16.f, 24.f), basePosition, sprite.margin, sprite.spacing),
         core::SpriteFrame(sprite.texturePath, core::Vector2(16.f, 24.f), basePosition + core::Vector2(1.f, 0.f), sprite.margin, sprite.spacing)
-    }, 0.15f)});
+    }, 0.3f)});
 
     animations.insert({core::AnimationType::WalkRight, core::Animation({
         core::SpriteFrame(sprite.texturePath, core::Vector2(16.f, 24.f), basePosition + core::Vector2(-1.f, 1.f), sprite.margin, sprite.spacing),
         core::SpriteFrame(sprite.texturePath, core::Vector2(16.f, 24.f), basePosition + core::Vector2(0.f, 1.f), sprite.margin, sprite.spacing),
         core::SpriteFrame(sprite.texturePath, core::Vector2(16.f, 24.f), basePosition + core::Vector2(1.f, 1.f), sprite.margin, sprite.spacing)
-    }, 0.15f)});
+    }, 0.3f)});
 
     animations.insert({core::AnimationType::WalkLeft, core::Animation({
         core::SpriteFrame(sprite.texturePath, core::Vector2(16.f, 24.f), basePosition + core::Vector2(-1.f, 3.f), sprite.margin, sprite.spacing),
         core::SpriteFrame(sprite.texturePath, core::Vector2(16.f, 24.f), basePosition + core::Vector2(0.f, 3.f), sprite.margin, sprite.spacing),
         core::SpriteFrame(sprite.texturePath, core::Vector2(16.f, 24.f), basePosition + core::Vector2(1.f, 3.f), sprite.margin, sprite.spacing)
-    }, 0.15f)});
+    }, 0.3f)});
 
     animations.insert({core::AnimationType::WalkUp, core::Animation({
         core::SpriteFrame(sprite.texturePath, core::Vector2(16.f, 24.f), basePosition + core::Vector2(-1.f, 2.f), sprite.margin, sprite.spacing),
         core::SpriteFrame(sprite.texturePath, core::Vector2(16.f, 24.f), basePosition + core::Vector2(0.f, 2.f), sprite.margin, sprite.spacing),
         core::SpriteFrame(sprite.texturePath, core::Vector2(16.f, 24.f), basePosition + core::Vector2(1.f, 2.f), sprite.margin, sprite.spacing)
-    }, 0.15f)});
+    }, 0.3f)});
 }
