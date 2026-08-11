@@ -12,6 +12,8 @@
 #include <views/PowerUpView.h>
 #include <views/BombView.h>
 
+#include "CharacterColor.h"
+
 core::SpriteFrame ConcreteFactory::frameFor(const core::Vector2& cell) const {
     return {spriteSheetPath, cellSize, cell, margin, spacing};
 }
@@ -19,11 +21,29 @@ core::SpriteFrame ConcreteFactory::frameFor(const core::Vector2& cell) const {
 ConcreteFactory::ConcreteFactory(std::string spritesheetPath, const core::Vector2& cellSize, const core::Vector2& margin, const core::Vector2& spacing)
     : spriteSheetPath(std::move(spritesheetPath)), cellSize(cellSize), margin(margin), spacing(spacing) {}
 
-std::unique_ptr<core::EntityModel> ConcreteFactory::createCharacter(const core::Vector2& position, const core::Vector2& size) {
+std::unique_ptr<core::EntityModel> ConcreteFactory::createCharacter(const core::Vector2& position, const core::Vector2& size, const core::CharacterColor& color) {
     std::unique_ptr<core::EntityModel> character = std::make_unique<core::Character>(position, size);
+
+    core::Vector2 colorPosition;
+    switch (color) {
+        case core::CharacterColor::White:
+            colorPosition = core::Vector2(1.f, 1.f);
+            break;
+        case core::CharacterColor::Blue:
+            colorPosition = core::Vector2(4.f, 1.f);
+            break;
+        case core::CharacterColor::Red:
+            colorPosition = core::Vector2(7.f, 1.f);
+            break;
+        case core::CharacterColor::Black:
+            colorPosition = core::Vector2(10.f, 1.f);
+            break;
+    }
+
     character->attach(std::make_shared<CharacterView>(
         *character,
-        core::SpriteFrame(spriteSheetPath, core::Vector2(16.f, 24.f), core::Vector2(1.f, 1.f), margin, spacing)
+        core::SpriteFrame(spriteSheetPath, core::Vector2(16.f, 24.f), colorPosition, margin, spacing),
+        color
         ));
     return character;
 }

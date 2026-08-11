@@ -1,5 +1,5 @@
 WWWWWWWWWWWWWWW
-WC___________CW
+WP___________BW
 W_W_W_W_W_W_W_W
 W_____________W
 W_W_W_W_W_W_W_W
@@ -9,5 +9,5 @@ W_____________W
 W_W_W_W_W_W_W_W
 W_____________W
 W_W_W_W_W_W_W_W
-WC___________CW
+WR___________LW
 WWWWWWWWWWWWWWW

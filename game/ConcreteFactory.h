@@ -55,9 +55,10 @@ class ConcreteFactory final : public core::AbstractFactory {
      * @brief Creates a character entity with the specified position and size.
      * @param position The position of the character in world coordinates.
      * @param size The size of the character in world coordinates.
+     * @param color The color of the character.
      * @return A unique pointer to the created core::EntityModel representing the character.
      */
-    std::unique_ptr<core::EntityModel> createCharacter(const core::Vector2& position, const core::Vector2& size) override;
+    std::unique_ptr<core::EntityModel> createCharacter(const core::Vector2 &position, const core::Vector2 &size, const core::CharacterColor& color) override;
 
     /**
      * @brief Creates a wall entity with the specified position, size, and destructibility.

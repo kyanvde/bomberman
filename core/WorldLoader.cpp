@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <fstream>
 #include <stdexcept>
+
+#include "CharacterColor.h"
 #include "Random.h"
 
 namespace {
@@ -68,9 +70,24 @@ void WorldLoader::loadFromFile(const std::string& filename, World& world, const 
             const bool shaded = previousRowIsWall[x];
 
             switch (cell) {
-                case 'C':
+                case 'P':
                     world.addEntity(factory->createGrass(position, size, shaded));
-                    world.addEntity(factory->createCharacter(position, size));
+                    world.addEntity(factory->createCharacter(position, size, CharacterColor::White));
+                    currentRowIsWall[x] = false;
+                    break;
+                case 'B':
+                    world.addEntity(factory->createGrass(position, size, shaded));
+                    world.addEntity(factory->createCharacter(position, size, CharacterColor::Blue));
+                    currentRowIsWall[x] = false;
+                    break;
+                case 'R':
+                    world.addEntity(factory->createGrass(position, size, shaded));
+                    world.addEntity(factory->createCharacter(position, size, CharacterColor::Red));
+                    currentRowIsWall[x] = false;
+                    break;
+                case 'L':
+                    world.addEntity(factory->createGrass(position, size, shaded));
+                    world.addEntity(factory->createCharacter(position, size, CharacterColor::Black));
                     currentRowIsWall[x] = false;
                     break;
                 case 'W':

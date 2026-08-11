@@ -10,6 +10,7 @@ SET(SRC
     Random.cpp
     Subject.cpp
 		Animation.cpp
+        CharacterColor.h
 )
 
 ADD_LIBRARY(core STATIC ${SRC})
