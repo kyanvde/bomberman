@@ -111,13 +111,15 @@ void World::moveCharacter(const EntityId characterId, const Vector2& direction, 
 }
 
 void World::markForRemoval(const EntityId entityId) {
-    if (!hasEntity(entityId)) {
+    if (!hasEntity(entityId) || isPendingRemoval(entityId)) {
         return;
     }
 
-    if (std::find(pendingRemoval.begin(), pendingRemoval.end(), entityId) == pendingRemoval.end()) {
-        pendingRemoval.push_back(entityId);
-    }
+    pendingRemoval.push_back(entityId);
+}
+
+bool World::isPendingRemoval(const EntityId entityId) const {
+    return std::find(pendingRemoval.begin(), pendingRemoval.end(), entityId) != pendingRemoval.end();
 }
 
 void World::flushPendingRemovals() {
@@ -236,6 +238,101 @@ void World::notifyBombExploded(const CharacterColor& owner) {
         if (entity && entity->isCharacterOfColor(owner)) {
             entity->onBombExploded();
             return;
+        }
+    }
+}
+
+bool World::isBlastStoppedAt(const Vector2& tilePosition, const Vector2& tileSize) const {
+    for (const auto& entity : entities) {
+        if (entity && entity->blocksExplosion() && !entity->isDestructibleByExplosion() &&
+            intersects(entity->getPosition(), entity->getSize(), tilePosition, tileSize)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool World::explodeTile(const Vector2& tilePosition, const Vector2& tileSize) {
+    // TODO: spawn a visual Explosion entity at this tile once that entity type exists.
+
+    bool destroyedWall = false;
+
+    // Snapshot which entities occupy this tile before touching any of them: destroying a wall,
+    // killing a character, or chain-detonating a bomb here can itself mutate `entities` (removal
+    // marks, and -- once chain reactions recurse -- further explodeTile calls elsewhere), so this
+    // follows the same discipline as World::update's tick loop rather than holding a raw iterator
+    // across those mutations.
+    std::vector<EntityId> idsHere;
+    for (const auto& entity : entities) {
+        if (entity && intersects(entity->getPosition(), entity->getSize(), tilePosition, tileSize)) {
+            idsHere.push_back(entity->getId());
+        }
+    }
+
+    for (const EntityId id : idsHere) {
+        const std::optional<std::size_t> index = indexOf(id);
+        if (!index.has_value()) {
+            continue; // already removed as a side effect of an earlier entity on this same tile
+        }
+
+        EntityModel& entity = *entities[*index];
+
+        if (entity.isDestructibleByExplosion()) {
+            // TODO (power-ups phase): roll a power-up spawn chance here instead of a plain removal.
+            markForRemoval(id);
+            destroyedWall = true;
+        }
+
+        if (entity.isKilledByExplosion()) {
+            // TODO (death/win-lose phase): transition to a "dead" state instead of removing.
+            markForRemoval(id);
+        }
+
+        if (entity.isPowerUp()) {
+            markForRemoval(id);
+        }
+
+        if (entity.isBomb()) {
+            entity.detonate(*this, id);
+        }
+    }
+
+    return destroyedWall;
+}
+
+void World::detonateBomb(const EntityId bombId, const int radius, const CharacterColor& owner) {
+    if (isPendingRemoval(bombId)) {
+        return; // already detonated earlier in this same chain reaction
+    }
+
+    const std::optional<std::size_t> bombIndex = indexOf(bombId);
+    if (!bombIndex.has_value()) {
+        return;
+    }
+
+    const Vector2 bombTilePosition = entities[*bombIndex]->getPosition();
+    const Vector2 tileSize = entities[*bombIndex]->getSize();
+
+    markForRemoval(bombId);
+    notifyBombExploded(owner);
+
+    explodeTile(bombTilePosition, tileSize); // the bomb's own tile always explodes
+
+    const Vector2 directions[] = {Vector2(1.f, 0.f), Vector2(-1.f, 0.f), Vector2(0.f, 1.f), Vector2(0.f, -1.f)};
+
+    for (const Vector2& direction : directions) {
+        for (int step = 1; step <= radius; ++step) {
+            const Vector2 tilePosition(bombTilePosition.x + direction.x * tileSize.x * static_cast<float>(step),
+                                       bombTilePosition.y + direction.y * tileSize.y * static_cast<float>(step));
+
+            if (isBlastStoppedAt(tilePosition, tileSize)) {
+                break; // an indestructible wall -- the blast never reaches this tile
+            }
+
+            if (explodeTile(tilePosition, tileSize)) {
+                break; // a destructible wall was destroyed here -- the blast stops after it
+            }
         }
     }
 }

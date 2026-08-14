@@ -17,6 +17,11 @@ public:
      * @param size The size of the power-up in world coordinates.
      */
     PowerUp(const Vector2& pos, const Vector2& size);
+
+    /**
+     * @brief A power-up caught in an explosion's blast is destroyed rather than picked up.
+     */
+    [[nodiscard]] bool isPowerUp() const noexcept override { return true; }
 };
 
 }; // namespace core

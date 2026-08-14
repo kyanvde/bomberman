@@ -120,8 +120,13 @@ void runBombTests(tests::TestRunner& runner) {
         runner.check(!world.hasEntity(EntityId{11}),
                      "A second placeBomb call while at capacity does not create another bomb");
 
+        // Step off the bomb's tile first: since detonateBomb now genuinely kills anything caught
+        // in the blast, staying put would kill the owner along with despawning the bomb.
+        ownerPtr->setPosition(Vector2(0.6f, 0.6f));
+
         world.update(3.f); // let the first bomb's fuse expire, freeing the slot
         runner.check(!world.hasEntity(firstBombId), "The first bomb has despawned after its fuse expired");
+        runner.check(world.hasEntity(ownerId), "The owner survives its own bomb once it has stepped away");
         runner.check(ownerPtr->canPlaceBomb(), "The bomb slot is freed once the bomb it was holding is gone");
 
         world.placeBomb(ownerId);

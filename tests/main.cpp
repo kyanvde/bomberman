@@ -9,6 +9,7 @@ void runWallTests(tests::TestRunner& runner);
 void runWorldTests(tests::TestRunner& runner);
 void runWorldTickTests(tests::TestRunner& runner);
 void runBombTests(tests::TestRunner& runner);
+void runDetonateBombTests(tests::TestRunner& runner);
 
 /**
  * @brief Entry point for the core_tests executable.
@@ -28,6 +29,7 @@ int main() {
     runWorldTests(runner);
     runWorldTickTests(runner);
     runBombTests(runner);
+    runDetonateBombTests(runner);
 
     return runner.summarize();
 }

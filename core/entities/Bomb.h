@@ -60,9 +60,8 @@ public:
     [[nodiscard]] int getRadius() const noexcept { return radius; }
 
     /**
-     * @brief Counts down the fuse and checks whether the owner has left this bomb's tile.
-     * Once the fuse expires this bomb removes itself from the world. (Triggering an actual
-     * cross-shaped explosion is added in a later step; for now expiry just despawns the bomb.)
+     * @brief Counts down the fuse and checks whether the owner has left this bomb's tile. Once
+     * the fuse expires, triggers this bomb's own explosion via World::detonateBomb.
      * @param world The world this bomb belongs to.
      * @param selfId This bomb's own identifier.
      * @param deltaTime The time elapsed since the previous tick, in seconds.
@@ -84,6 +83,14 @@ public:
      * @brief A bomb caught in another explosion's blast should itself chain-detonate.
      */
     [[nodiscard]] bool isBomb() const noexcept override { return true; }
+
+    /**
+     * @brief Triggers this bomb's own explosion immediately, using its own radius and owner.
+     * Called by World when this bomb is caught in another explosion's blast (a chain reaction).
+     * @param world The world this bomb belongs to.
+     * @param selfId This bomb's own identifier.
+     */
+    void detonate(World& world, EntityId selfId) override;
 };
 
 }; // namespace core

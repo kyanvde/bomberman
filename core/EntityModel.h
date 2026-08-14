@@ -246,6 +246,24 @@ public:
      * @return True if this entity is a bomb, false otherwise.
      */
     [[nodiscard]] virtual bool isBomb() const noexcept { return false; }
+
+    /**
+     * @brief Determines whether this entity is a power-up, so it should be destroyed (without
+     * being picked up) when an explosion reaches it. Always false except for PowerUp.
+     * @return True if this entity is a power-up, false otherwise.
+     */
+    [[nodiscard]] virtual bool isPowerUp() const noexcept { return false; }
+
+    /**
+     * @brief Tells this entity to detonate immediately, if it is a bomb caught in another
+     * explosion's blast (a chain reaction). Default implementation does nothing. Only Bomb
+     * overrides this, using its own privately-held radius and owner to trigger its explosion via
+     * World::detonateBomb -- this avoids World ever needing to downcast a generic EntityModel to
+     * extract bomb-specific data.
+     * @param world The world this entity belongs to.
+     * @param selfId This entity's own identifier.
+     */
+    virtual void detonate(World&, EntityId) {}
 };
 
 } // namespace core

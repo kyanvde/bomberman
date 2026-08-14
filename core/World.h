@@ -49,6 +49,16 @@ class World {
     void flushPendingRemovals();
 
     /**
+     * @brief Checks whether the entity with the given identifier is already queued for removal
+     * this tick. Used as a chain-reaction reentrancy guard: a bomb already mid-detonation (queued
+     * for removal) should not have its explosion propagation logic run a second time if another
+     * blast also reaches it in the same cascade.
+     * @param entityId The identifier to check.
+     * @return True if entityId is currently pending removal, false otherwise.
+     */
+    [[nodiscard]] bool isPendingRemoval(EntityId entityId) const;
+
+    /**
      * @brief The factory used to create new entities.
      */
     const std::shared_ptr<AbstractFactory> factory;
@@ -100,6 +110,27 @@ class World {
      * @param owner The color of the character placing the bomb.
      */
     void spawnBombAtIndex(std::size_t entityIndex, int radius, const CharacterColor& owner);
+
+    /**
+     * @brief Checks whether any entity overlapping the given tile blocks an explosion from
+     * propagating past it and is not itself destructible (i.e. an indestructible wall).
+     * @param tilePosition The top-left corner of the tile to check.
+     * @param tileSize The size of the tile to check.
+     * @return True if the blast cannot reach this tile at all, false otherwise.
+     */
+    [[nodiscard]] bool isBlastStoppedAt(const Vector2& tilePosition, const Vector2& tileSize) const;
+
+    /**
+     * @brief Applies an explosion's effect to a single tile: destroys any destructible wall
+     * there, kills any entity that dies from explosions, destroys any power-up there, and
+     * chain-detonates any bomb there. (Spawning the explosion's own visual entity is added in a
+     * later step.)
+     * @param tilePosition The top-left corner of the tile to affect.
+     * @param tileSize The size of the tile to affect.
+     * @return True if a destructible wall was destroyed on this tile (signals the caller that
+     * the blast should not propagate further in this direction), false otherwise.
+     */
+    bool explodeTile(const Vector2& tilePosition, const Vector2& tileSize);
 
 public:
     /**
@@ -193,6 +224,20 @@ public:
      * @param owner The color of the character to notify.
      */
     void notifyBombExploded(const CharacterColor& owner);
+
+    /**
+     * @brief Detonates the bomb with the given identifier: removes it, frees its owner's bomb
+     * slot, and propagates a cross-shaped blast in all four directions up to the given radius.
+     * Each direction stops at the first indestructible wall (which the blast never reaches), or
+     * immediately after destroying the first destructible wall it reaches. Along the way, any
+     * killable entity dies, any power-up is destroyed, and any bomb caught in the blast
+     * chain-detonates in turn. Safe to call more than once for the same bomb within a single
+     * chain reaction: a bomb already mid-detonation is not processed twice.
+     * @param bombId The identifier of the bomb entity to detonate.
+     * @param radius The blast radius, in tiles, in each direction.
+     * @param owner The color of the character that placed this bomb.
+     */
+    void detonateBomb(EntityId bombId, int radius, const CharacterColor& owner);
 };
 
 } // namespace core
