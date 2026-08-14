@@ -39,6 +39,12 @@ public:
      * @param deltaTime The time elapsed since the previous tick, in seconds.
      */
     void onTick(World& world, EntityId selfId, float deltaTime) override;
+
+    /**
+     * @brief Reports how far through its own lifetime this explosion is, from 0 (just spawned) to
+     * 1 (about to expire), for ExplosionView's grow/fade animation.
+     */
+    [[nodiscard]] float getLifetimeFraction() const noexcept override;
 };
 
 }; // namespace core

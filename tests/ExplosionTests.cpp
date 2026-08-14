@@ -85,4 +85,26 @@ void runExplosionTests(tests::TestRunner& runner) {
         runner.check(world.hasEntity(expectedExplosionId),
                      "detonateBomb creates an Explosion entity on the blast tile");
     }
+
+    // --- getLifetimeFraction() reports progress from 0 (just spawned) upward, driving
+    //     ExplosionView's grow/fade animation. Only checked while the explosion is still present
+    //     -- once it expires and is removed, the object itself is gone. ---
+    {
+        World world = makeEmptyWorld("explosion_tests_tmp3.txt");
+
+        auto explosion = std::make_unique<Explosion>(Vector2(0.f, 0.f), tileSize);
+        const Explosion* explosionPtr = explosion.get();
+        world.addEntity(std::move(explosion));
+
+        runner.checkNear(explosionPtr->getLifetimeFraction(), 0.f, "A freshly created explosion has fraction 0");
+
+        world.update(0.1f);
+        const float firstFraction = explosionPtr->getLifetimeFraction();
+        runner.check(firstFraction > 0.f && firstFraction < 1.f,
+                     "Partway through its lifetime, the fraction is between 0 and 1");
+
+        world.update(0.1f);
+        const float secondFraction = explosionPtr->getLifetimeFraction();
+        runner.check(secondFraction > firstFraction, "The fraction keeps increasing as more time passes");
+    }
 }

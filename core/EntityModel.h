@@ -273,6 +273,15 @@ public:
     [[nodiscard]] virtual bool threatensTile(const Vector2&, const Vector2&) const noexcept { return false; }
 
     /**
+     * @brief Reports how far through its own transient visual lifetime this entity is, from 0
+     * (just created) to 1 (about to expire). Meaningless for anything with an indefinite
+     * lifetime; always 0 except for Explosion, which overrides it to drive its grow/fade
+     * animation in ExplosionView.
+     * @return The lifetime fraction, in [0, 1].
+     */
+    [[nodiscard]] virtual float getLifetimeFraction() const noexcept { return 0.f; }
+
+    /**
      * @brief Determines whether this entity is a power-up, so it should be destroyed (without
      * being picked up) when an explosion reaches it. Always false except for PowerUp.
      * @return True if this entity is a power-up, false otherwise.

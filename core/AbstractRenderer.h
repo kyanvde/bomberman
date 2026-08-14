@@ -38,6 +38,12 @@ struct SpriteFrame {
     Vector2 spacing;
 
     /**
+     * @brief The opacity to draw this sprite frame at, in [0, 1]. Defaults to fully opaque, so
+     * every existing call site is unaffected; used for fade effects (e.g. Explosion's grow/fade).
+     */
+    float alpha = 1.f;
+
+    /**
      * @brief Constructs a new SpriteFrame object with default values.
      */
     SpriteFrame();

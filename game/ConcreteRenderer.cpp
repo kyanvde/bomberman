@@ -1,5 +1,6 @@
 #include "ConcreteRenderer.h"
 
+#include <algorithm>
 #include <stdexcept>
 
 namespace game {
@@ -48,6 +49,9 @@ void ConcreteRenderer::drawSprite(const core::Vector2& position, const core::Vec
     sfSprite.setPosition(projectedPosition.x, projectedPosition.y);
 
     sfSprite.setScale(scale, scaleY);
+
+    const auto alpha = static_cast<sf::Uint8>(std::clamp(sprite.alpha, 0.f, 1.f) * 255.f);
+    sfSprite.setColor(sf::Color(255, 255, 255, alpha));
 
     window.draw(sfSprite);
 }

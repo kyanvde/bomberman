@@ -2,6 +2,8 @@
 
 #include "World.h"
 
+#include <algorithm>
+
 namespace core {
 namespace {
 constexpr float explosionLifetimeSeconds = 0.4f;
@@ -20,5 +22,10 @@ void Explosion::onTick(World& world, const EntityId selfId, const float deltaTim
     if (remainingLifetime <= 0.f) {
         world.markForRemoval(selfId);
     }
+}
+
+float Explosion::getLifetimeFraction() const noexcept {
+    const float elapsed = explosionLifetimeSeconds - remainingLifetime;
+    return std::clamp(elapsed / explosionLifetimeSeconds, 0.f, 1.f);
 }
 } // namespace core
