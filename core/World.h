@@ -4,6 +4,7 @@
 #include "AbstractFactory.h"
 #include "AbstractRenderer.h"
 #include "EntityModel.h"
+#include "GameOutcome.h"
 #include <cstddef>
 #include <memory>
 #include <optional>
@@ -333,6 +334,15 @@ public:
      * @param owner The color of the character that placed this bomb.
      */
     void detonateBomb(EntityId bombId, int radius, const CharacterColor& owner);
+
+    /**
+     * @brief Reports the current result of the round: the Player has lost if the White character
+     * exists and is dead (checked first, so a simultaneous Player/last-bot death resolves as a
+     * loss); otherwise the Player has won if at least one bot character existed and all of them
+     * are dead; otherwise the round is still in progress.
+     * @return The current GameOutcome.
+     */
+    [[nodiscard]] GameOutcome getOutcome() const;
 };
 
 } // namespace core

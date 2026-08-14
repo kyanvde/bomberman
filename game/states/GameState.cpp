@@ -2,6 +2,9 @@
 
 #include "ConcreteFactory.h"
 #include "ConcreteRenderer.h"
+#include "GameOutcome.h"
+#include "GameOverState.h"
+#include "StateManager.h"
 #include "Stopwatch.h"
 
 namespace game {
@@ -51,6 +54,11 @@ void GameState::update() {
     const float deltaTime = core::Stopwatch::getInstance().getDeltaTime();
     world.update(deltaTime);
     world.moveCharacter(playerId, direction, deltaTime);
+
+    if (const core::GameOutcome outcome = world.getOutcome(); outcome != core::GameOutcome::InProgress) {
+        stateManager.pushState(
+            std::make_unique<GameOverState>(window, stateManager, outcome == core::GameOutcome::PlayerWon));
+    }
 }
 
 void GameState::render() { world.render(renderer); }

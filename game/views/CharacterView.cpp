@@ -69,6 +69,14 @@ CharacterView::CharacterView(const core::EntityModel& model, const core::SpriteF
                           core::SpriteFrame(sprite.texturePath, core::Vector2(16.f, 24.f),
                                             basePosition + core::Vector2(1.f, 2.f), sprite.margin, sprite.spacing)},
                          0.3f)});
+
+    // Placeholder frame -- arbitrary unused spritesheet cell until a dedicated death frame is
+    // picked for each character color.
+    animations.insert(
+        {core::AnimationType::Death,
+         core::Animation({core::SpriteFrame(sprite.texturePath, core::Vector2(16.f, 24.f),
+                                            basePosition + core::Vector2(2.f, 3.f), sprite.margin, sprite.spacing)},
+                         1.f, false)});
 }
 
 } // namespace game

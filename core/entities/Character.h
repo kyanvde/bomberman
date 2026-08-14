@@ -47,9 +47,17 @@ class Character final : public EntityModel {
 
     /**
      * @brief The strategy driving this character's movement/bombing decisions each tick, or
-     * nullptr for the human-controlled White character (whose input comes from GameState instead).
+     * nullptr for the human-controlled White character (whose input comes from GameState instead)
+     * or a character that has been killed (a corpse is no longer bot-driven).
      */
     std::unique_ptr<AIController> aiController;
+
+    /**
+     * @brief Whether this character is still alive. A dead character stays in the world as an
+     * inert corpse rather than being removed: it can no longer move, place bombs, or be
+     * re-killed.
+     */
+    bool alive = true;
 
 public:
     /**
@@ -80,10 +88,11 @@ public:
     [[nodiscard]] std::optional<CharacterColor> getCharacterColor() const noexcept override { return color; }
 
     /**
-     * @brief Checks whether this character currently has a free bomb slot.
-     * @return True if activeBombs is below maxBombs, false otherwise.
+     * @brief Checks whether this character currently has a free bomb slot. A dead character can
+     * never place a bomb.
+     * @return True if the character is alive and activeBombs is below maxBombs, false otherwise.
      */
-    [[nodiscard]] bool canPlaceBomb() const noexcept override { return activeBombs < maxBombs; }
+    [[nodiscard]] bool canPlaceBomb() const noexcept override { return alive && activeBombs < maxBombs; }
 
     /**
      * @brief Retrieves this character's current bomb blast radius.
@@ -107,10 +116,21 @@ public:
     }
 
     /**
-     * @brief A character always dies when an explosion reaches it. (Once a "dead"/"alive" state
-     * is introduced in a later phase, this will also need to account for that.)
+     * @brief A character dies when an explosion reaches it, unless it's already dead (a corpse
+     * caught in a further blast doesn't die again).
      */
-    [[nodiscard]] bool isKilledByExplosion() const noexcept override { return true; }
+    [[nodiscard]] bool isKilledByExplosion() const noexcept override { return alive; }
+
+    /**
+     * @brief Kills this character: it becomes an inert corpse -- no longer alive, bot-driven, or
+     * able to place bombs -- and switches to its death animation.
+     */
+    void onExplosionKill() override;
+
+    /**
+     * @brief Checks whether this character is still alive.
+     */
+    [[nodiscard]] bool isAlive() const noexcept override { return alive; }
 
     /**
      * @brief Applies a power-up's permanent stat boost: Fire increases blast radius, ExtraBomb

@@ -139,7 +139,8 @@ void runDetonateBombTests(tests::TestRunner& runner) {
         world.detonateBomb(bombId, 2, CharacterColor::White);
         world.update(0.f);
 
-        runner.check(!world.hasEntity(victimId), "A character caught in the blast dies");
+        runner.check(world.hasEntity(victimId), "A character caught in the blast stays in the world as a corpse");
+        runner.check(!victimPtr->isAlive(), "A character caught in the blast dies");
     }
 
     // --- A power-up caught in the blast is destroyed. ---

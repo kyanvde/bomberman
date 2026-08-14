@@ -109,6 +109,9 @@ void World::moveCharacter(const EntityId characterId, const Vector2& direction, 
     }
 
     EntityModel& character = *entities[*characterIndex];
+    if (!character.isAlive()) {
+        return; // a dead character no longer responds to movement input
+    }
 
     const float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
     if (length <= 0.f) {
@@ -466,8 +469,7 @@ bool World::explodeTile(const Vector2& tilePosition, const Vector2& tileSize) {
         }
 
         if (entity.isKilledByExplosion()) {
-            // TODO (death/win-lose phase): transition to a "dead" state instead of removing.
-            markForRemoval(id);
+            entity.onExplosionKill();
         }
 
         if (entity.isPowerUp()) {
@@ -480,6 +482,42 @@ bool World::explodeTile(const Vector2& tilePosition, const Vector2& tileSize) {
     }
 
     return destroyedWall;
+}
+
+GameOutcome World::getOutcome() const {
+    bool playerFound = false;
+    bool playerAlive = false;
+    bool anyBotFound = false;
+    bool anyBotAlive = false;
+
+    for (const auto& entity : entities) {
+        if (!entity) {
+            continue;
+        }
+
+        const std::optional<CharacterColor> color = entity->getCharacterColor();
+        if (!color.has_value()) {
+            continue;
+        }
+
+        if (*color == CharacterColor::White) {
+            playerFound = true;
+            playerAlive = entity->isAlive();
+        } else {
+            anyBotFound = true;
+            anyBotAlive = anyBotAlive || entity->isAlive();
+        }
+    }
+
+    // Player-alive is checked first: if the Player and the last bot die in the same blast, this
+    // resolves as a loss rather than a win.
+    if (playerFound && !playerAlive) {
+        return GameOutcome::PlayerLost;
+    }
+    if (anyBotFound && !anyBotAlive) {
+        return GameOutcome::PlayerWon;
+    }
+    return GameOutcome::InProgress;
 }
 
 void World::detonateBomb(const EntityId bombId, const int radius, const CharacterColor& owner) {

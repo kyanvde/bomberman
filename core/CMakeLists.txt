@@ -15,6 +15,7 @@ SET(SRC
         PowerUpType.h
         AIController.h
         BasicAIController.cpp
+        GameOutcome.h
 )
 
 ADD_LIBRARY(core STATIC ${SRC})

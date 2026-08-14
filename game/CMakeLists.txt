@@ -3,6 +3,7 @@ SET(BOMBERMAN_SOURCES main.cpp
 	StateManager.cpp
     states/MenuState.cpp
     states/GameState.cpp
+    states/GameOverState.cpp
     ConcreteFactory.cpp
     ConcreteRenderer.cpp
 	views/CharacterView.cpp

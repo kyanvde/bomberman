@@ -236,10 +236,24 @@ public:
 
     /**
      * @brief Determines whether this entity dies when an explosion reaches it. Always false
-     * except for Character.
+     * except for a Character that is still alive.
      * @return True if this entity should die from an explosion that reaches it.
      */
     [[nodiscard]] virtual bool isKilledByExplosion() const noexcept { return false; }
+
+    /**
+     * @brief Called when this entity is killed by an explosion (isKilledByExplosion() was true).
+     * Default implementation does nothing; only Character overrides it meaningfully, becoming an
+     * inert "corpse" rather than being removed from the world.
+     */
+    virtual void onExplosionKill() {}
+
+    /**
+     * @brief Determines whether this entity is currently alive. Always true except for a
+     * Character that has been killed by an explosion.
+     * @return True if this entity is alive, false otherwise.
+     */
+    [[nodiscard]] virtual bool isAlive() const noexcept { return true; }
 
     /**
      * @brief Determines whether this entity is a bomb, so an explosion reaching it should

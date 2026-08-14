@@ -15,6 +15,7 @@ void runWorldLoaderTests(tests::TestRunner& runner);
 void runPowerUpSpawnTests(tests::TestRunner& runner);
 void runPowerUpPickupTests(tests::TestRunner& runner);
 void runAIControllerTests(tests::TestRunner& runner);
+void runGameOutcomeTests(tests::TestRunner& runner);
 
 /**
  * @brief Entry point for the core_tests executable.
@@ -40,6 +41,7 @@ int main() {
     runPowerUpSpawnTests(runner);
     runPowerUpPickupTests(runner);
     runAIControllerTests(runner);
+    runGameOutcomeTests(runner);
 
     return runner.summarize();
 }

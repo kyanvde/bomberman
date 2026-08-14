@@ -62,6 +62,16 @@ void Character::onMovementAttempt(const Vector2& direction) {
 
 int Character::renderLayer() const noexcept { return 2; }
 
+void Character::onExplosionKill() {
+    if (!alive) {
+        return; // already dead; a later blast in the same chain reaction doesn't kill twice
+    }
+
+    alive = false;
+    aiController.reset();
+    setAnimationType(AnimationType::Death);
+}
+
 void Character::onTick(World& world, const EntityId selfId, const float deltaTime) {
     if (!aiController) {
         return;
