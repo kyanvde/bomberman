@@ -108,12 +108,45 @@ void World::moveCharacter(const EntityId characterId, const Vector2& direction, 
     character.setPosition(nextPosition);
 }
 
+void World::markForRemoval(const EntityId entityId) {
+    if (!hasEntity(entityId)) {
+        return;
+    }
+
+    if (std::find(pendingRemoval.begin(), pendingRemoval.end(), entityId) == pendingRemoval.end()) {
+        pendingRemoval.push_back(entityId);
+    }
+}
+
+void World::flushPendingRemovals() {
+    if (pendingRemoval.empty()) {
+        return;
+    }
+
+    for (const EntityId entityId : pendingRemoval) {
+        if (playerId == entityId) {
+            playerId.reset();
+        }
+    }
+
+    entities.erase(std::remove_if(entities.begin(), entities.end(),
+                                  [this](const std::unique_ptr<EntityModel>& entity) {
+                                      return !entity || std::find(pendingRemoval.begin(), pendingRemoval.end(),
+                                                                  entity->getId()) != pendingRemoval.end();
+                                  }),
+                   entities.end());
+
+    pendingRemoval.clear();
+}
+
 void World::update() {
     for (const auto& entity : entities) {
         if (entity) {
             entity->notify();
         }
     }
+
+    flushPendingRemovals();
 }
 
 void World::render(AbstractRenderer& renderer) const {

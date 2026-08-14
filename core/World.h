@@ -34,6 +34,19 @@ class World {
     EntityId nextEntityId = 0;
 
     /**
+     * @brief Identifiers of entities marked for removal, erased from entities at the end of the
+     * current update() call rather than immediately, so in-progress iteration over entities is
+     * never invalidated mid-tick.
+     */
+    std::vector<EntityId> pendingRemoval;
+
+    /**
+     * @brief Erases every entity currently marked for removal from entities and clears
+     * pendingRemoval. Called once at the end of update().
+     */
+    void flushPendingRemovals();
+
+    /**
      * @brief The factory used to create new entities.
      */
     const std::shared_ptr<AbstractFactory> factory;
@@ -106,7 +119,23 @@ public:
     [[nodiscard]] std::optional<EntityId> getPlayerId() const noexcept { return playerId; }
 
     /**
-     * @brief Updates all entity views for the current frame.
+     * @brief Checks whether an entity with the given identifier currently exists in the world.
+     * @param entityId The identifier to look up.
+     * @return True if such an entity exists, false otherwise.
+     */
+    [[nodiscard]] bool hasEntity(const EntityId entityId) const { return indexOf(entityId).has_value(); }
+
+    /**
+     * @brief Marks the entity with the given identifier for removal. The entity is not erased
+     * immediately; it is removed at the end of the current update() call. Marking an id that
+     * does not exist, or that is already marked, has no additional effect.
+     * @param entityId The identifier of the entity to remove.
+     */
+    void markForRemoval(EntityId entityId);
+
+    /**
+     * @brief Updates all entity views for the current frame, then removes any entities that were
+     * marked for removal during this update.
      */
     void update();
 
