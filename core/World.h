@@ -237,6 +237,14 @@ public:
     [[nodiscard]] bool hasGrassAt(const Vector2& tilePosition, const Vector2& tileSize) const;
 
     /**
+     * @brief Checks whether a power-up currently overlaps the given tile.
+     * @param tilePosition The top-left corner of the tile to check.
+     * @param tileSize The size of the tile to check.
+     * @return True if a power-up overlaps the tile, false otherwise.
+     */
+    [[nodiscard]] bool hasPowerUpAt(const Vector2& tilePosition, const Vector2& tileSize) const;
+
+    /**
      * @brief Notifies whichever character has the given color that one of its bombs has just
      * exploded (or otherwise been removed), freeing up a bomb slot. Does nothing if no character
      * of that color exists.

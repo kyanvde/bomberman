@@ -2,6 +2,7 @@
 
 #include "CharacterColor.h"
 #include "Collision.h"
+#include "Random.h"
 #include "WorldLoader.h"
 #include <algorithm>
 #include <cmath>
@@ -10,6 +11,16 @@ namespace core {
 namespace {
 constexpr float playerSpeed = 0.75f;
 constexpr float collisionMargin = 0.0002f;
+
+// A destroyed destructible wall has a low chance of leaving a power-up behind, on top of the
+// grass tile it always leaves.
+constexpr double powerUpDropChance = 0.25;
+
+PowerUpType randomPowerUpType() {
+    constexpr int typeCount = 3; // Fire, ExtraBomb, Skates
+    const int index = std::min(typeCount - 1, static_cast<int>(Random::getInstance().getRandomNumber(0, typeCount)));
+    return static_cast<PowerUpType>(index);
+}
 
 // Tile-aligned queries (is there a wall/grass/character/etc. "at" this exact tile) compare an
 // entity's rectangle against a full-size query tile. Adjacent tiles' edges are computed via
@@ -280,6 +291,17 @@ bool World::hasGrassAt(const Vector2& tilePosition, const Vector2& tileSize) con
     return false;
 }
 
+bool World::hasPowerUpAt(const Vector2& tilePosition, const Vector2& tileSize) const {
+    for (const auto& entity : entities) {
+        if (entity && entity->isPowerUp() &&
+            overlapsTile(entity->getPosition(), entity->getSize(), tilePosition, tileSize)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool World::isBlastStoppedAt(const Vector2& tilePosition, const Vector2& tileSize) const {
     for (const auto& entity : entities) {
         if (entity && entity->blocksExplosion() && !entity->isDestructibleByExplosion() &&
@@ -323,10 +345,12 @@ bool World::explodeTile(const Vector2& tilePosition, const Vector2& tileSize) {
             markForRemoval(id);
             destroyedWall = true;
 
-            // TODO (power-ups phase): roll a power-up spawn chance here instead of always leaving
-            // plain grass behind.
             const Vector2 abovePosition(wallPosition.x, wallPosition.y - wallSize.y);
             addEntity(factory->createGrass(wallPosition, wallSize, isWallAt(abovePosition, wallSize)));
+
+            if (Random::getInstance().chance(powerUpDropChance)) {
+                addEntity(factory->createPowerUp(wallPosition, wallSize, randomPowerUpType()));
+            }
         }
 
         if (entity.isKilledByExplosion()) {
