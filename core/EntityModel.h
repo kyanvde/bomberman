@@ -5,9 +5,17 @@
 #include "Subject.h"
 #include "Vector2.h"
 
+#include <cstddef>
+
 namespace core {
 
 class Character;
+
+/**
+ * @brief A stable identifier for an entity within its World, assigned once when the entity
+ * is added and unaffected by later additions or removals of other entities.
+ */
+using EntityId = std::size_t;
 
 /**
  * @brief The EntityModel class represents a generic entity in the game world.
@@ -16,6 +24,11 @@ class Character;
  */
 class EntityModel : public Subject {
 protected:
+    /**
+     * @brief The entity's stable identifier. Set once by World::addEntity when the entity is added.
+     */
+    EntityId id = 0;
+
     /**
      * @brief The position of the entity in world coordinates.
      */
@@ -58,6 +71,18 @@ public:
      * @return A constant reference to the Vector2 representing the entity's position.
      */
     [[nodiscard]] const Vector2& getPosition() const noexcept { return position; }
+
+    /**
+     * @brief Retrieves the entity's stable identifier.
+     * @return The EntityId assigned to this entity when it was added to the World.
+     */
+    [[nodiscard]] EntityId getId() const noexcept { return id; }
+
+    /**
+     * @brief Sets the entity's stable identifier. Called once by World::addEntity.
+     * @param newId The identifier assigned to this entity.
+     */
+    void setId(const EntityId newId) noexcept { id = newId; }
 
     /**
      * @brief Retrieves the size of the entity.

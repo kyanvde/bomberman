@@ -1,6 +1,5 @@
 #include "GameState.h"
 
-#include "CharacterColor.h"
 #include "ConcreteFactory.h"
 #include "ConcreteRenderer.h"
 #include "Stopwatch.h"
@@ -12,7 +11,7 @@ GameState::GameState(const std::shared_ptr<sf::RenderWindow>& window, StateManag
       world(std::make_shared<ConcreteFactory>("assets/sprites/spritesheet.png", core::Vector2(16.f, 16.f),
                                               core::Vector2(), core::Vector2(1, 1)),
             "assets/worlds/main.txt"),
-      renderer(*window) {
+      playerId(world.getPlayerId().value()), renderer(*window) {
     renderer.setViewportSize(
         core::Vector2(static_cast<float>(window->getSize().x), static_cast<float>(window->getSize().y)));
 }
@@ -22,7 +21,7 @@ void GameState::processEvent(const sf::Event& event) {
         heldKeys.insert(event.key.code);
 
         if (event.key.code == sf::Keyboard::Space) {
-            world.spawnBomb(core::CharacterColor::White);
+            world.placeBomb(playerId);
         }
 
     } else if (event.type == sf::Event::KeyReleased) {
@@ -50,7 +49,7 @@ void GameState::update() {
     }
 
     world.update();
-    world.movePlayer(direction, core::Stopwatch::getInstance().getDeltaTime());
+    world.moveCharacter(playerId, direction, core::Stopwatch::getInstance().getDeltaTime());
 }
 
 void GameState::render() { world.render(renderer); }

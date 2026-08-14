@@ -23,10 +23,15 @@ class World {
     std::vector<std::unique_ptr<EntityModel>> entities;
 
     /**
-     * @brief An optional index representing the position of the player entity in the entities vector.
+     * @brief The identifier of the player entity, if it has been added to the world.
      * If the player entity is not present, this will be std::nullopt.
      */
-    std::optional<std::size_t> playerIndex;
+    std::optional<EntityId> playerId;
+
+    /**
+     * @brief The identifier to assign to the next entity added via addEntity, incremented each time.
+     */
+    EntityId nextEntityId = 0;
 
     /**
      * @brief The factory used to create new entities.
@@ -37,6 +42,13 @@ class World {
      * @brief The size of a single grid tile in world coordinates, set once during loading.
      */
     Vector2 cellSize;
+
+    /**
+     * @brief Finds the current vector index of the entity with the given identifier.
+     * @param entityId The identifier of the entity to look up.
+     * @return The entity's index in the entities vector, or std::nullopt if no such entity exists.
+     */
+    [[nodiscard]] std::optional<std::size_t> indexOf(EntityId entityId) const;
 
     /**
      * @brief Checks if the specified mover entity collides with any blocking entity in the world.
@@ -65,6 +77,12 @@ class World {
      */
     [[nodiscard]] Vector2 snapToTileTopLeft(const Vector2& position, const Vector2& size) const;
 
+    /**
+     * @brief Spawns a bomb centered on the tile occupied by the entity at the given vector index.
+     * @param entityIndex The index of the entity (player or AI) placing the bomb.
+     */
+    void spawnBombAtIndex(std::size_t entityIndex);
+
 public:
     /**
      * @brief Adds a new entity to the world.
@@ -73,11 +91,19 @@ public:
     void addEntity(std::unique_ptr<EntityModel> entity);
 
     /**
-     * @brief Moves the player entity in the specified direction, considering collisions and world bounds.
-     * @param direction The direction vector to move the player.
+     * @brief Moves the character with the given identifier in the specified direction, considering collisions and
+     * world bounds. Does nothing if no entity with that identifier exists.
+     * @param characterId The identifier of the character to move.
+     * @param direction The direction vector to move the character.
      * @param deltaTime The time elapsed since the last update, used for movement calculations.
      */
-    void movePlayer(const Vector2& direction, float deltaTime) const;
+    void moveCharacter(EntityId characterId, const Vector2& direction, float deltaTime);
+
+    /**
+     * @brief Retrieves the identifier of the player entity, if it has been added to the world.
+     * @return The player's EntityId, or std::nullopt if no player-controlled entity was loaded.
+     */
+    [[nodiscard]] std::optional<EntityId> getPlayerId() const noexcept { return playerId; }
 
     /**
      * @brief Updates all entity views for the current frame.
@@ -104,16 +130,11 @@ public:
     void setCellSize(const Vector2& size) { cellSize = size; }
 
     /**
-     * @brief Spawns a bomb centered on the tile occupied by the specified entity.
-     * @param entityIndex The index of the entity (player or AI) placing the bomb.
+     * @brief Spawns a bomb centered on the tile occupied by the character with the given identifier.
+     * Does nothing if no entity with that identifier exists.
+     * @param characterId The identifier of the character (player or AI) placing the bomb.
      */
-    void spawnBombAt(std::size_t entityIndex);
-
-    /**
-     * @Brief Spawns a bomb centered on the tile occupied by the character with the specified color.
-     * @param color The color of the character placing the bomb
-     */
-    void spawnBomb(const CharacterColor& color);
+    void placeBomb(EntityId characterId);
 };
 
 } // namespace core

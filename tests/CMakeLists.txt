@@ -6,6 +6,7 @@ SET(TEST_SRC
     StopwatchTests.cpp
     CharacterTests.cpp
     WallTests.cpp
+    WorldTests.cpp
 )
 
 ADD_EXECUTABLE(core_tests ${TEST_SRC})

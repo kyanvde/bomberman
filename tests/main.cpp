@@ -6,6 +6,7 @@ void runRandomTests(tests::TestRunner& runner);
 void runStopwatchTests(tests::TestRunner& runner);
 void runCharacterTests(tests::TestRunner& runner);
 void runWallTests(tests::TestRunner& runner);
+void runWorldTests(tests::TestRunner& runner);
 
 /**
  * @brief Entry point for the core_tests executable.
@@ -22,6 +23,7 @@ int main() {
     runStopwatchTests(runner);
     runCharacterTests(runner);
     runWallTests(runner);
+    runWorldTests(runner);
 
     return runner.summarize();
 }

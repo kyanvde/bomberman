@@ -22,6 +22,11 @@ class GameState final : public State {
     core::World world;
 
     /**
+     * @brief The identifier of the human-controlled player's character, resolved once at construction.
+     */
+    core::EntityId playerId;
+
+    /**
      * @brief The SFML renderer used for rendering the game world.
      */
     ConcreteRenderer renderer;
