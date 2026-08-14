@@ -218,6 +218,25 @@ public:
                                              const CharacterColor& color) const;
 
     /**
+     * @brief Checks whether any wall (destructible or indestructible) currently overlaps the
+     * given tile. Used both while loading a world (to decide whether a grass tile should be
+     * shaded, i.e. whether the tile above it is a wall) and when a destructible wall is destroyed
+     * by an explosion (to shade the grass tile revealed underneath it the same way).
+     * @param tilePosition The top-left corner of the tile to check.
+     * @param tileSize The size of the tile to check.
+     * @return True if a wall overlaps the tile, false otherwise.
+     */
+    [[nodiscard]] bool isWallAt(const Vector2& tilePosition, const Vector2& tileSize) const;
+
+    /**
+     * @brief Checks whether grass currently overlaps the given tile.
+     * @param tilePosition The top-left corner of the tile to check.
+     * @param tileSize The size of the tile to check.
+     * @return True if grass overlaps the tile, false otherwise.
+     */
+    [[nodiscard]] bool hasGrassAt(const Vector2& tilePosition, const Vector2& tileSize) const;
+
+    /**
      * @brief Notifies whichever character has the given color that one of its bombs has just
      * exploded (or otherwise been removed), freeing up a bomb slot. Does nothing if no character
      * of that color exists.

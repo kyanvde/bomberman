@@ -10,6 +10,22 @@ namespace core {
 namespace {
 constexpr float playerSpeed = 0.75f;
 constexpr float collisionMargin = 0.0002f;
+
+// Tile-aligned queries (is there a wall/grass/character/etc. "at" this exact tile) compare an
+// entity's rectangle against a full-size query tile. Adjacent tiles' edges are computed via
+// different floating-point expressions (e.g. a tile's bottom edge as position.y + size.y versus
+// the next tile's top edge as -1 + (row+1) * cellSize.y), which are mathematically equal but not
+// always bit-identical, so two tiles that only touch can occasionally register as overlapping.
+// Insetting the query tile by a tiny margin avoids that boundary-touching false positive while
+// still reliably matching a genuine same-tile entity (which always spans the tile fully).
+constexpr float tileQueryMargin = 0.0002f;
+
+bool overlapsTile(const Vector2& entityPosition, const Vector2& entitySize, const Vector2& tilePosition,
+                  const Vector2& tileSize) {
+    const Vector2 insetPosition(tilePosition.x + tileQueryMargin, tilePosition.y + tileQueryMargin);
+    const Vector2 insetSize(tileSize.x - tileQueryMargin * 2, tileSize.y - tileQueryMargin * 2);
+    return intersects(entityPosition, entitySize, insetPosition, insetSize);
+}
 } // namespace
 
 Vector2 World::snapToTileTopLeft(const Vector2& position, const Vector2& size) const {
@@ -225,7 +241,7 @@ bool World::isTileOccupiedByColor(const Vector2& tilePosition, const Vector2& ti
                                   const CharacterColor& color) const {
     for (const auto& entity : entities) {
         if (entity && entity->isCharacterOfColor(color) &&
-            intersects(entity->getPosition(), entity->getSize(), tilePosition, tileSize)) {
+            overlapsTile(entity->getPosition(), entity->getSize(), tilePosition, tileSize)) {
             return true;
         }
     }
@@ -242,10 +258,32 @@ void World::notifyBombExploded(const CharacterColor& owner) {
     }
 }
 
+bool World::isWallAt(const Vector2& tilePosition, const Vector2& tileSize) const {
+    for (const auto& entity : entities) {
+        if (entity && entity->blocksExplosion() &&
+            overlapsTile(entity->getPosition(), entity->getSize(), tilePosition, tileSize)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool World::hasGrassAt(const Vector2& tilePosition, const Vector2& tileSize) const {
+    for (const auto& entity : entities) {
+        if (entity && entity->isGrass() &&
+            overlapsTile(entity->getPosition(), entity->getSize(), tilePosition, tileSize)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool World::isBlastStoppedAt(const Vector2& tilePosition, const Vector2& tileSize) const {
     for (const auto& entity : entities) {
         if (entity && entity->blocksExplosion() && !entity->isDestructibleByExplosion() &&
-            intersects(entity->getPosition(), entity->getSize(), tilePosition, tileSize)) {
+            overlapsTile(entity->getPosition(), entity->getSize(), tilePosition, tileSize)) {
             return true;
         }
     }
@@ -265,7 +303,7 @@ bool World::explodeTile(const Vector2& tilePosition, const Vector2& tileSize) {
     // across those mutations.
     std::vector<EntityId> idsHere;
     for (const auto& entity : entities) {
-        if (entity && intersects(entity->getPosition(), entity->getSize(), tilePosition, tileSize)) {
+        if (entity && overlapsTile(entity->getPosition(), entity->getSize(), tilePosition, tileSize)) {
             idsHere.push_back(entity->getId());
         }
     }
@@ -279,9 +317,16 @@ bool World::explodeTile(const Vector2& tilePosition, const Vector2& tileSize) {
         EntityModel& entity = *entities[*index];
 
         if (entity.isDestructibleByExplosion()) {
-            // TODO (power-ups phase): roll a power-up spawn chance here instead of a plain removal.
+            const Vector2 wallPosition = entity.getPosition();
+            const Vector2 wallSize = entity.getSize();
+
             markForRemoval(id);
             destroyedWall = true;
+
+            // TODO (power-ups phase): roll a power-up spawn chance here instead of always leaving
+            // plain grass behind.
+            const Vector2 abovePosition(wallPosition.x, wallPosition.y - wallSize.y);
+            addEntity(factory->createGrass(wallPosition, wallSize, isWallAt(abovePosition, wallSize)));
         }
 
         if (entity.isKilledByExplosion()) {

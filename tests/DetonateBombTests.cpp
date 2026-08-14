@@ -114,6 +114,8 @@ void runDetonateBombTests(tests::TestRunner& runner) {
         runner.check(!world.hasEntity(nearWallId), "The nearest destructible wall is destroyed");
         runner.check(world.hasEntity(farWallId),
                      "A second destructible wall further away survives -- the blast stops after one");
+        runner.check(world.hasGrassAt(nearWallTile, tileSize),
+                     "A destroyed destructible wall leaves grass behind on its tile");
     }
 
     // --- A character caught in the blast dies. ---

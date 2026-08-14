@@ -17,6 +17,11 @@ public:
      * @param size The size of the grass in world coordinates.
      */
     Grass(const Vector2& pos, const Vector2& size);
+
+    /**
+     * @brief Identifies this entity as grass (open, walkable ground).
+     */
+    [[nodiscard]] bool isGrass() const noexcept override { return true; }
 };
 
 }; // namespace core

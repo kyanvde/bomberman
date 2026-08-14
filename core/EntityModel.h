@@ -255,6 +255,13 @@ public:
     [[nodiscard]] virtual bool isPowerUp() const noexcept { return false; }
 
     /**
+     * @brief Determines whether this entity is grass (open, walkable ground). Always false except
+     * for Grass.
+     * @return True if this entity is grass, false otherwise.
+     */
+    [[nodiscard]] virtual bool isGrass() const noexcept { return false; }
+
+    /**
      * @brief Tells this entity to detonate immediately, if it is a bomb caught in another
      * explosion's blast (a chain reaction). Default implementation does nothing. Only Bomb
      * overrides this, using its own privately-held radius and owner to trigger its explosion via
