@@ -11,6 +11,7 @@ namespace core {
 
 class Character;
 class World;
+enum class CharacterColor;
 
 /**
  * @brief A stable identifier for an entity within its World, assigned once when the entity
@@ -105,6 +106,16 @@ public:
      * @return True if the entity is player-controlled, false otherwise.
      */
     [[nodiscard]] virtual bool isPlayerControlled() const noexcept { return false; }
+
+    /**
+     * @brief Determines if this entity is a character of the given color. Always false except
+     * for Character, which overrides it to compare against its own color. Lets other code (e.g.
+     * a bomb checking whether its owner still stands on its tile) ask this question without
+     * downcasting to a concrete entity type.
+     * @param color The color to compare against.
+     * @return True if this entity is a Character of the given color, false otherwise.
+     */
+    [[nodiscard]] virtual bool isCharacterOfColor(const CharacterColor&) const noexcept { return false; }
 
     /**
      * @brief Returns the rendering layer for this entity.

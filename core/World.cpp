@@ -1,5 +1,6 @@
 #include "World.h"
 
+#include "Collision.h"
 #include "WorldLoader.h"
 #include <algorithm>
 #include <cmath>
@@ -203,5 +204,17 @@ void World::placeBomb(const EntityId characterId) {
     if (characterIndex.has_value()) {
         spawnBombAtIndex(*characterIndex);
     }
+}
+
+bool World::isTileOccupiedByColor(const Vector2& tilePosition, const Vector2& tileSize,
+                                  const CharacterColor& color) const {
+    for (const auto& entity : entities) {
+        if (entity && entity->isCharacterOfColor(color) &&
+            intersects(entity->getPosition(), entity->getSize(), tilePosition, tileSize)) {
+            return true;
+        }
+    }
+
+    return false;
 }
 } // namespace core

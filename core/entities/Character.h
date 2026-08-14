@@ -40,6 +40,15 @@ public:
     [[nodiscard]] bool isPlayerControlled() const noexcept override { return color == CharacterColor::White; }
 
     /**
+     * @brief Checks whether this character's color matches the given color.
+     * @param otherColor The color to compare against.
+     * @return True if this character's color equals otherColor, false otherwise.
+     */
+    [[nodiscard]] bool isCharacterOfColor(const CharacterColor& otherColor) const noexcept override {
+        return color == otherColor;
+    }
+
+    /**
      * @brief Characters should render above the static world tiles.
      */
     [[nodiscard]] int renderLayer() const noexcept override;

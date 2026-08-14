@@ -12,6 +12,8 @@
 
 namespace core {
 
+enum class CharacterColor;
+
 /**
  * @brief The World class represents the game world and manages the entities within it.
  * It provides methods to add entities, move the player, and render the world.
@@ -167,6 +169,17 @@ public:
      * @param characterId The identifier of the character (player or AI) placing the bomb.
      */
     void placeBomb(EntityId characterId);
+
+    /**
+     * @brief Checks whether a character of the given color currently overlaps the given tile.
+     * Used by a bomb to determine whether its owner has left its tile yet.
+     * @param tilePosition The top-left corner of the tile to check.
+     * @param tileSize The size of the tile to check.
+     * @param color The character color to look for.
+     * @return True if a character of that color overlaps the tile, false otherwise.
+     */
+    [[nodiscard]] bool isTileOccupiedByColor(const Vector2& tilePosition, const Vector2& tileSize,
+                                             const CharacterColor& color) const;
 };
 
 } // namespace core
