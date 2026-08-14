@@ -1,14 +1,14 @@
 #ifndef BOMBERMAN_CORE_ABSTRACTFACTORY_H
 #define BOMBERMAN_CORE_ABSTRACTFACTORY_H
 
-#include <memory>
 #include "EntityModel.h"
 #include "Vector2.h"
+#include <memory>
 
 namespace core {
-    enum class CharacterColor;
+enum class CharacterColor;
 
-    /**
+/**
  * @brief The AbstractFactory class defines the interface for creating various game entities.
  * It provides pure virtual methods for creating characters, walls, grass, power-ups, and bombs.
  * Concrete implementations of this factory will provide specific creation logic for each entity type.
@@ -22,7 +22,8 @@ public:
      * @param color The color of the character.
      * @return A unique pointer to the created EntityModel representing the character.
      */
-    virtual std::unique_ptr<EntityModel> createCharacter(const Vector2 &pos, const Vector2 &size, const CharacterColor& color) = 0;
+    virtual std::unique_ptr<EntityModel> createCharacter(const Vector2& pos, const Vector2& size,
+                                                         const CharacterColor& color) = 0;
 
     /**
      * @brief Creates a wall entity with the specified position, size, and destructibility.
@@ -31,7 +32,7 @@ public:
      * @param destructible A boolean indicating whether the wall is destructible.
      * @return A unique pointer to the created EntityModel representing the wall.
      */
-    virtual std::unique_ptr<EntityModel> createWall(const Vector2 &pos, const Vector2 &size, bool destructible) = 0;
+    virtual std::unique_ptr<EntityModel> createWall(const Vector2& pos, const Vector2& size, bool destructible) = 0;
 
     /**
      * @brief Creates a grass entity with the specified position and size.

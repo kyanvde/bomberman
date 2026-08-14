@@ -4,10 +4,10 @@
 #include <ConcreteRenderer.h>
 
 #include "State.h"
+#include "World.h"
+#include <SFML/Graphics.hpp>
 #include <memory>
 #include <set>
-#include <SFML/Graphics.hpp>
-#include "World.h"
 
 /**
  * @brief The GameState class represents the main game state of the application.
@@ -28,6 +28,7 @@ class GameState final : public State {
      * @brief A set of currently held keyboard keys for smooth continuous movement.
      */
     std::set<sf::Keyboard::Key> heldKeys;
+
 public:
     /**
      * @brief Processes an event and handles it within the game state.

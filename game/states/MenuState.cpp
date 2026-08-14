@@ -29,25 +29,18 @@ MenuState::MenuState(const std::shared_ptr<sf::RenderWindow>& window, StateManag
     layout(window->getSize());
 }
 
-
 void MenuState::layout(const sf::Vector2u& size) {
     const float scale = static_cast<float>(size.y) / static_cast<float>(baseWindowHeight);
-    
+
     // Title
     title.setCharacterSize(std::lround(static_cast<float>(baseTitleCharacterSize) * scale));
     title.setOutlineThickness(baseTitleOutlineThickness * scale);
 
     const sf::FloatRect titleBounds = title.getLocalBounds();
 
-    title.setOrigin(
-        titleBounds.left + titleBounds.width * 0.5f,
-        titleBounds.top + titleBounds.height * 0.5f
-    );
+    title.setOrigin(titleBounds.left + titleBounds.width * 0.5f, titleBounds.top + titleBounds.height * 0.5f);
 
-    title.setPosition(
-        static_cast<float>(size.x) * 0.5f,
-        static_cast<float>(size.y) * 0.25f
-    );
+    title.setPosition(static_cast<float>(size.x) * 0.5f, static_cast<float>(size.y) * 0.25f);
 
     // Play button
     playButton.setCharacterSize(std::lround(static_cast<float>(basePlayButtonCharacterSize) * scale));
@@ -55,17 +48,10 @@ void MenuState::layout(const sf::Vector2u& size) {
 
     const sf::FloatRect playBounds = playButton.getLocalBounds();
 
-    playButton.setOrigin(
-        playBounds.left + playBounds.width * 0.5f,
-        playBounds.top + playBounds.height * 0.5f
-    );
+    playButton.setOrigin(playBounds.left + playBounds.width * 0.5f, playBounds.top + playBounds.height * 0.5f);
 
-    playButton.setPosition(
-        static_cast<float>(size.x) * 0.5f,
-        static_cast<float>(size.y) * 0.8f
-    );
+    playButton.setPosition(static_cast<float>(size.x) * 0.5f, static_cast<float>(size.y) * 0.8f);
 }
-
 
 void MenuState::processEvent(const sf::Event& event) {
     if (event.type != sf::Event::MouseButtonPressed)
@@ -80,16 +66,11 @@ void MenuState::processEvent(const sf::Event& event) {
     }
 }
 
-
-void MenuState::onResize(const sf::Vector2u&, const sf::Vector2u& newSize) {
-    layout(newSize);
-}
-
+void MenuState::onResize(const sf::Vector2u&, const sf::Vector2u& newSize) { layout(newSize); }
 
 void MenuState::update() {
     // Update menu state
 }
-
 
 void MenuState::render() {
     window->draw(title);

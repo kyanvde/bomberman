@@ -37,9 +37,10 @@ public:
      * @param size The size of the character in world coordinates.
      * @return True if the character is blocked by the obstacle, false otherwise.
      */
-    [[nodiscard]] bool isBlockedBy(const EntityModel& obstacle, const Vector2& moverPosition, const Vector2& moverSize) const override;
+    [[nodiscard]] bool isBlockedBy(const EntityModel& obstacle, const Vector2& moverPosition,
+                                   const Vector2& moverSize) const override;
 
-    void onMovementAttempt(const Vector2 &direction) override;
+    void onMovementAttempt(const Vector2& direction) override;
 };
 
 }; // namespace core

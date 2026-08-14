@@ -6,8 +6,8 @@
  * @return EXIT_SUCCESS on successful execution.
  */
 int main() {
-	Game game;
-	game.run();
-	
-	return EXIT_SUCCESS;
+    Game game;
+    game.run();
+
+    return EXIT_SUCCESS;
 }

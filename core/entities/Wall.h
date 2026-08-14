@@ -27,8 +27,8 @@ public:
      * @param size The size of the character in world coordinates.
      * @return True if the wall blocks the character's movement, false otherwise.
      */
-    [[nodiscard]] bool blocksCharacterMovement(const Character&, const Vector2& characterPosition, const Vector2& characterSize) const override;
-    
+    [[nodiscard]] bool blocksCharacterMovement(const Character&, const Vector2& characterPosition,
+                                               const Vector2& characterSize) const override;
 };
 
 }; // namespace core

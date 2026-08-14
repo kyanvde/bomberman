@@ -7,9 +7,12 @@
 
 GameState::GameState(const std::shared_ptr<sf::RenderWindow>& window, StateManager& stateManager)
     : State(window, stateManager),
-      world(std::make_shared<ConcreteFactory>("assets/sprites/spritesheet.png", core::Vector2(16.f, 16.f), core::Vector2(), core::Vector2(1, 1)), "assets/worlds/main.txt"),
+      world(std::make_shared<ConcreteFactory>("assets/sprites/spritesheet.png", core::Vector2(16.f, 16.f),
+                                              core::Vector2(), core::Vector2(1, 1)),
+            "assets/worlds/main.txt"),
       renderer(*window) {
-    renderer.setViewportSize(core::Vector2(static_cast<float>(window->getSize().x), static_cast<float>(window->getSize().y)));
+    renderer.setViewportSize(
+        core::Vector2(static_cast<float>(window->getSize().x), static_cast<float>(window->getSize().y)));
 }
 
 void GameState::processEvent(const sf::Event& event) {
@@ -31,7 +34,7 @@ void GameState::onResize(const sf::Vector2u&, const sf::Vector2u& newSize) {
 
 void GameState::update() {
     core::Vector2 direction(0.f, 0.f);
-    
+
     for (const auto& key : heldKeys) {
         if (key == sf::Keyboard::Left || key == sf::Keyboard::A) {
             direction.x -= 1.f;
@@ -43,11 +46,9 @@ void GameState::update() {
             direction.y += 1.f;
         }
     }
-    
+
     world.update();
     world.movePlayer(direction, core::Stopwatch::getInstance().getDeltaTime());
 }
 
-void GameState::render() {
-    world.render(renderer);
-}
+void GameState::render() { world.render(renderer); }

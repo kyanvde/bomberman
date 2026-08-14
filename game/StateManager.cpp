@@ -2,9 +2,7 @@
 
 #include <utility>
 
-void StateManager::pushState(std::unique_ptr<State> state) {
-    states.push(std::move(state));
-}
+void StateManager::pushState(std::unique_ptr<State> state) { states.push(std::move(state)); }
 
 std::unique_ptr<State> StateManager::popState() {
     if (states.empty()) {

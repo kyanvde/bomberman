@@ -41,15 +41,18 @@ class ConcreteFactory final : public core::AbstractFactory {
      */
     [[nodiscard]] core::SpriteFrame frameFor(const core::Vector2& cell) const;
 
- public:
+public:
     /**
-     * @brief Constructs a new ConcreteFactory object with the specified spritesheet path, cell size, margin, and spacing.
+     * @brief Constructs a new ConcreteFactory object with the specified spritesheet path, cell size, margin, and
+     * spacing.
      * @param spritesheetPath The path to the spritesheet image file.
      * @param cellSize The size of each cell in the spritesheet.
      * @param margin The margin around the sprites in the spritesheet (default is (0, 0)).
      * @param spacing The spacing between sprites in the spritesheet (default is (0, 0)).
      */
-    [[nodiscard]] ConcreteFactory(std::string  spritesheetPath, const core::Vector2& cellSize, const core::Vector2& margin = core::Vector2(), const core::Vector2& spacing = core::Vector2());
+    [[nodiscard]] ConcreteFactory(std::string spritesheetPath, const core::Vector2& cellSize,
+                                  const core::Vector2& margin = core::Vector2(),
+                                  const core::Vector2& spacing = core::Vector2());
 
     /**
      * @brief Creates a character entity with the specified position and size.
@@ -58,7 +61,8 @@ class ConcreteFactory final : public core::AbstractFactory {
      * @param color The color of the character.
      * @return A unique pointer to the created core::EntityModel representing the character.
      */
-    std::unique_ptr<core::EntityModel> createCharacter(const core::Vector2 &position, const core::Vector2 &size, const core::CharacterColor& color) override;
+    std::unique_ptr<core::EntityModel> createCharacter(const core::Vector2& position, const core::Vector2& size,
+                                                       const core::CharacterColor& color) override;
 
     /**
      * @brief Creates a wall entity with the specified position, size, and destructibility.
@@ -67,7 +71,8 @@ class ConcreteFactory final : public core::AbstractFactory {
      * @param destructible A boolean indicating whether the wall is destructible.
      * @return A unique pointer to the created core::EntityModel representing the wall.
      */
-    std::unique_ptr<core::EntityModel> createWall(const core::Vector2 &position, const core::Vector2 &size, bool destructible) override;
+    std::unique_ptr<core::EntityModel> createWall(const core::Vector2& position, const core::Vector2& size,
+                                                  bool destructible) override;
 
     /**
      * @brief Creates a grass entity with the specified position and size.
@@ -76,7 +81,8 @@ class ConcreteFactory final : public core::AbstractFactory {
      * @param shaded A boolean indicating whether the grass is shaded.
      * @return A unique pointer to the created core::EntityModel representing the grass.
      */
-    std::unique_ptr<core::EntityModel> createGrass(const core::Vector2& position, const core::Vector2& size, bool shaded) override;
+    std::unique_ptr<core::EntityModel> createGrass(const core::Vector2& position, const core::Vector2& size,
+                                                   bool shaded) override;
 
     /**
      * @brief Creates a power-up entity with the specified position and size.

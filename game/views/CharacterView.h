@@ -5,7 +5,7 @@
 #include "EntityView.h"
 
 namespace core {
-    enum class CharacterColor;
+enum class CharacterColor;
 }
 
 /**
@@ -14,6 +14,7 @@ namespace core {
  */
 class CharacterView : public EntityView {
     core::CharacterColor color;
+
 public:
     /**
      * @brief Constructs a new CharacterView object with the specified EntityModel and sprite frame.

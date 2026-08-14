@@ -1,12 +1,13 @@
 #ifndef BOMBERMAN_GAME_GAME_H
 #define BOMBERMAN_GAME_GAME_H
 
-#include <memory>
-#include <SFML/Graphics.hpp>
 #include "StateManager.h"
+#include <SFML/Graphics.hpp>
+#include <memory>
 
 /**
- * @brief The Game class is responsible for managing the main game loop, handling events, updating game state, and rendering.
+ * @brief The Game class is responsible for managing the main game loop, handling events, updating game state, and
+ * rendering.
  */
 class Game {
     /**
@@ -33,6 +34,7 @@ class Game {
      * @brief The StateManager instance responsible for managing the different states of the game.
      */
     StateManager stateManager;
+
 public:
     /**
      * @brief Constructs a new Game object, initializing the window and state manager.
@@ -40,9 +42,10 @@ public:
     Game();
 
     /**
-     * @brief Runs the main game loop, continuously processing events, updating the game state, and rendering until the window is closed.
+     * @brief Runs the main game loop, continuously processing events, updating the game state, and rendering until the
+     * window is closed.
      */
     void run();
 };
 
-#endif //BOMBERMAN_GAME_GAME_H
+#endif // BOMBERMAN_GAME_GAME_H

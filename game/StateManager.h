@@ -1,14 +1,15 @@
 #ifndef BOMBERMAN_GAME_STATEMANAGER_H
 #define BOMBERMAN_GAME_STATEMANAGER_H
 
-#include <memory>
 #include "State.h"
 #include <SFML/Graphics.hpp>
+#include <memory>
 #include <stack>
 
 /**
  * @brief The StateManager class is responsible for managing the different states of the game.
- * It allows pushing and popping states, processing events, handling window resizing, updating the current state, and rendering.
+ * It allows pushing and popping states, processing events, handling window resizing, updating the current state, and
+ * rendering.
  */
 class StateManager {
     /**
@@ -21,6 +22,7 @@ class StateManager {
      * The top of the stack represents the active state.
      */
     std::stack<std::unique_ptr<State>> states;
+
 public:
     /**
      * @brief Pushes a new state onto the stack, making it the active state.
@@ -64,4 +66,4 @@ public:
     explicit StateManager(std::shared_ptr<sf::RenderWindow> window);
 };
 
-#endif //BOMBERMAN_GAME_STATEMANAGER_H
+#endif // BOMBERMAN_GAME_STATEMANAGER_H

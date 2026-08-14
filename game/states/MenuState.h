@@ -2,8 +2,8 @@
 #define BOMBERMAN_GAME_STATES_MENUSTATE_H
 
 #include "State.h"
-#include <memory>
 #include <SFML/Graphics.hpp>
+#include <memory>
 
 /**
  * @brief The MenuState class represents the main menu state of the game.
@@ -55,6 +55,7 @@ class MenuState final : public State {
      * @param size The current size of the window.
      */
     void layout(const sf::Vector2u& size);
+
 public:
     /**
      * @brief Processes an event and handles it within the menu state.

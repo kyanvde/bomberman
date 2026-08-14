@@ -1,8 +1,8 @@
 #ifndef BOMBERMAN_GAME_STATE_H
 #define BOMBERMAN_GAME_STATE_H
 
-#include <memory>
 #include <SFML/Graphics.hpp>
+#include <memory>
 
 class StateManager;
 
@@ -60,4 +60,4 @@ public:
     virtual void render() = 0;
 };
 
-#endif //BOMBERMAN_GAME_STATE_H
+#endif // BOMBERMAN_GAME_STATE_H

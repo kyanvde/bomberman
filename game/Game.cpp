@@ -1,7 +1,7 @@
 #include "Game.h"
 
-#include "states/MenuState.h"
 #include "Stopwatch.h"
+#include "states/MenuState.h"
 
 void Game::processEvents() {
     sf::Event event{};
@@ -9,17 +9,13 @@ void Game::processEvents() {
         stateManager.processEvent(event);
 
         if (event.type == sf::Event::Closed) {
-            window->close();   
+            window->close();
         }
 
         if (event.type == sf::Event::Resized) {
             const sf::Vector2u previousSize = window->getSize();
-            sf::FloatRect visibleArea(
-                0,
-                0, 
-                static_cast<float>(event.size.width),
-                static_cast<float>(event.size.height)
-            );
+            sf::FloatRect visibleArea(0, 0, static_cast<float>(event.size.width),
+                                      static_cast<float>(event.size.height));
 
             window->setView(sf::View(visibleArea));
             stateManager.onResize(previousSize, window->getSize());

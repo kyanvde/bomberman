@@ -35,27 +35,21 @@ struct Vector2 {
      * @param vector2 The other Vector2 object to add.
      * @return A new Vector2 object representing the sum of the two vectors.
      */
-    Vector2 operator+(const Vector2& vector2) const {
-        return {x + vector2.x, y + vector2.y};
-    }
+    Vector2 operator+(const Vector2& vector2) const { return {x + vector2.x, y + vector2.y}; }
 
     /**
      * @brief Subtracts one Vector2 object from another and returns the result.
      * @param vector2 The other Vector2 object to subtract.
      * @return A new Vector2 object representing the difference of the two vectors.
      */
-    Vector2 operator-(const Vector2& vector2) const {
-        return {x - vector2.x, y - vector2.y};
-    }
+    Vector2 operator-(const Vector2& vector2) const { return {x - vector2.x, y - vector2.y}; }
 
     /**
      * @brief Multiplies the Vector2 object by a scalar value and returns the result.
      * @param i The scalar value to multiply by.
      * @return A new Vector2 object representing the scaled vector.
      */
-    Vector2 operator*(const int i) const {
-        return {x*static_cast<float>(i), y*static_cast<float>(i)};
-    }
+    Vector2 operator*(const int i) const { return {x * static_cast<float>(i), y * static_cast<float>(i)}; }
 };
 
 } // namespace core

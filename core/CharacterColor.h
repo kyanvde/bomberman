@@ -4,13 +4,8 @@
 
 namespace core {
 
-enum class CharacterColor {
-    White,
-    Blue,
-    Red,
-    Black
-};
+enum class CharacterColor { White, Blue, Red, Black };
 
 } // namespace core
 
-#endif //BOMBERMAN_CORE_CHARACTERCOLOR_H
+#endif // BOMBERMAN_CORE_CHARACTERCOLOR_H

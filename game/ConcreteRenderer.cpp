@@ -3,10 +3,8 @@
 #include <stdexcept>
 
 namespace {
-    core::Vector2 toVector2(const sf::Vector2u& size) {
-        return {static_cast<float>(size.x), static_cast<float>(size.y)};
-    }
-}
+core::Vector2 toVector2(const sf::Vector2u& size) { return {static_cast<float>(size.x), static_cast<float>(size.y)}; }
+} // namespace
 
 const sf::Texture& ConcreteRenderer::getTexture(const std::string& texturePath) const {
     if (const auto existing = textures.find(texturePath); existing != textures.end()) {
@@ -24,11 +22,10 @@ const sf::Texture& ConcreteRenderer::getTexture(const std::string& texturePath) 
 
 ConcreteRenderer::ConcreteRenderer(sf::RenderWindow& window) : window(window), camera(toVector2(window.getSize())) {}
 
-void ConcreteRenderer::setViewportSize(const core::Vector2& viewportSize) {
-    camera.setViewportSize(viewportSize);
-}
+void ConcreteRenderer::setViewportSize(const core::Vector2& viewportSize) { camera.setViewportSize(viewportSize); }
 
-void ConcreteRenderer::drawSprite(const core::Vector2& position, const core::Vector2& size, const core::SpriteFrame& sprite) {
+void ConcreteRenderer::drawSprite(const core::Vector2& position, const core::Vector2& size,
+                                  const core::SpriteFrame& sprite) {
     const sf::Texture& texture = getTexture(sprite.texturePath);
 
     sf::Sprite sfSprite(texture);

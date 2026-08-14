@@ -19,13 +19,13 @@ class Random {
      * @brief The Mersenne Twister random number generator.
      */
     std::mt19937 gen;
+
 public:
     /**
      * @brief Retrieves the singleton instance of the Random class.
      * @return A reference to the singleton Random instance.
      */
     [[nodiscard]] static Random& getInstance() noexcept;
-
 
     [[nodiscard]] double getRandomNumber(int min, int max);
 

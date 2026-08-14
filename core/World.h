@@ -1,14 +1,14 @@
 #ifndef BOMBERMAN_CORE_WORLD_H
 #define BOMBERMAN_CORE_WORLD_H
 
+#include "AbstractFactory.h"
+#include "AbstractRenderer.h"
+#include "EntityModel.h"
 #include <cstddef>
 #include <memory>
 #include <optional>
 #include <string>
 #include <vector>
-#include "AbstractFactory.h"
-#include "EntityModel.h"
-#include "AbstractRenderer.h"
 
 namespace core {
 
@@ -45,7 +45,8 @@ class World {
      * @param size The size of the mover entity.
      * @return True if there is a collision with a blocking entity, false otherwise.
      */
-    [[nodiscard]] bool collidesWithBlockingEntity(std::size_t moverIndex, const Vector2& position, const Vector2& size) const;
+    [[nodiscard]] bool collidesWithBlockingEntity(std::size_t moverIndex, const Vector2& position,
+                                                  const Vector2& size) const;
 
     /**
      * @brief Checks if the specified position and size are within the world bounds.
@@ -63,6 +64,7 @@ class World {
      * @return The top-left position of the tile the entity's center falls within.
      */
     [[nodiscard]] Vector2 snapToTileTopLeft(const Vector2& position, const Vector2& size) const;
+
 public:
     /**
      * @brief Adds a new entity to the world.
@@ -96,9 +98,9 @@ public:
     World(const std::shared_ptr<AbstractFactory>& factory, const std::string& filename);
 
     /**
-    * @brief Sets the world's tile size. Called once by WorldLoader after parsing the world file.
-    * @param size The size of a single tile in world coordinates.
-    */
+     * @brief Sets the world's tile size. Called once by WorldLoader after parsing the world file.
+     * @param size The size of a single tile in world coordinates.
+     */
     void setCellSize(const Vector2& size) { cellSize = size; }
 
     /**

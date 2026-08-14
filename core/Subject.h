@@ -1,9 +1,9 @@
 #ifndef BOMBERMAN_CORE_SUBJECT_H
 #define BOMBERMAN_CORE_SUBJECT_H
 
+#include "Observer.h"
 #include <memory>
 #include <vector>
-#include "Observer.h"
 
 namespace core {
 
@@ -17,6 +17,7 @@ protected:
      * @brief A vector of shared pointers to Observer objects that are observing this subject.
      */
     std::vector<std::shared_ptr<Observer>> observers;
+
 public:
     /**
      * @brief Virtual destructor for the Subject class.

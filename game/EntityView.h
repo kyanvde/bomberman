@@ -1,9 +1,9 @@
 #ifndef BOMBERMAN_GAME_ENTITYVIEW_H
 #define BOMBERMAN_GAME_ENTITYVIEW_H
 
+#include "AbstractRenderer.h"
 #include "EntityModel.h"
 #include "Observer.h"
-#include "AbstractRenderer.h"
 
 #include <functional>
 #include <iostream>
@@ -70,9 +70,7 @@ public:
      * @brief Renders the entity view using the specified renderer.
      * @param renderer The renderer used to draw the entity on the screen.
      */
-    void render(core::AbstractRenderer& renderer) const override {
-        renderer.drawSprite(position, size, sprite);
-    }
+    void render(core::AbstractRenderer& renderer) const override { renderer.drawSprite(position, size, sprite); }
 };
 
 #endif // BOMBERMAN_GAME_ENTITYVIEW_H

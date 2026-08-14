@@ -1,9 +1,9 @@
 #ifndef BOMBERMAN_CORE_RENDERER_H
 #define BOMBERMAN_CORE_RENDERER_H
 
+#include "Vector2.h"
 #include <string>
 #include <utility>
-#include "Vector2.h"
 
 namespace core {
 
@@ -43,18 +43,16 @@ struct SpriteFrame {
     SpriteFrame();
 
     /**
-     * @brief Constructs a new SpriteFrame object with the specified texture path, cell size, cell position, margin, and spacing.
+     * @brief Constructs a new SpriteFrame object with the specified texture path, cell size, cell position, margin, and
+     * spacing.
      * @param texturePath The path to the texture image file.
      * @param cellSize The size of each cell in the spritesheet.
      * @param cell The cell coordinates (x, y) in the spritesheet.
      * @param margin The margin around the sprites in the spritesheet (default is (0, 0)).
      * @param spacing The spacing between sprites in the spritesheet (default is (0, 0)).
      */
-    SpriteFrame(std::string texturePath,
-                const Vector2& cellSize,
-                const Vector2& cell,
-                const Vector2& margin = Vector2(),
-                const Vector2& spacing = Vector2())
+    SpriteFrame(std::string texturePath, const Vector2& cellSize, const Vector2& cell,
+                const Vector2& margin = Vector2(), const Vector2& spacing = Vector2())
         : texturePath(std::move(texturePath)), cellSize(cellSize), cell(cell), margin(margin), spacing(spacing) {}
 };
 

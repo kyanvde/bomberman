@@ -1,7 +1,7 @@
 #include "Animation.h"
 
-#include <utility>
 #include "AbstractRenderer.h"
+#include <utility>
 
 core::Animation::Animation(std::vector<SpriteFrame> frames, const float frameDuration, const bool loop)
     : frames(std::move(frames)), frameDuration(frameDuration), loop(loop) {}
@@ -32,6 +32,4 @@ void core::Animation::reset() {
     currentIndex = 0;
 }
 
-const core::SpriteFrame& core::Animation::getCurrentFrame() const {
-    return frames.at(currentIndex);
-}
+const core::SpriteFrame& core::Animation::getCurrentFrame() const { return frames.at(currentIndex); }

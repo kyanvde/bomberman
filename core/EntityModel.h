@@ -39,6 +39,7 @@ protected:
         this->animationType = newAnimationType;
         notify();
     }
+
 public:
     /**
      * @brief Constructs a new EntityModel object with the specified position and size.
@@ -92,7 +93,8 @@ public:
      * @param moverSize The size of the moving entity.
      * @return True if this entity blocks the movement of the mover, false otherwise.
      */
-    [[nodiscard]] virtual bool blocksMovementOf(const EntityModel& mover, const Vector2& moverPosition, const Vector2& moverSize) const {
+    [[nodiscard]] virtual bool blocksMovementOf(const EntityModel& mover, const Vector2& moverPosition,
+                                                const Vector2& moverSize) const {
         return mover.isBlockedBy(*this, moverPosition, moverSize);
     }
 
@@ -112,7 +114,9 @@ public:
      * @param characterSize The size of the character.
      * @return True if this entity blocks the movement of the character, false otherwise.
      */
-    [[nodiscard]] virtual bool blocksCharacterMovement(const Character&, const Vector2&, const Vector2&) const { return false; }
+    [[nodiscard]] virtual bool blocksCharacterMovement(const Character&, const Vector2&, const Vector2&) const {
+        return false;
+    }
 
     /**
      * @brief Called when movement in a given direction is attempted, so the entity

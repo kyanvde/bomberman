@@ -17,7 +17,6 @@ public:
      * @param size The size of the power-up in world coordinates.
      */
     PowerUp(const Vector2& pos, const Vector2& size);
-    
 };
 
 }; // namespace core
