@@ -33,6 +33,9 @@ jobs:
           key: sfml-deps-v1-{{ checksum "game/CMakeLists.txt" }}
           paths:
             - build/_deps
+      - run:
+          name: Test
+          command: ctest --test-dir build -C Release --output-on-failure
 
 workflows:
   build:

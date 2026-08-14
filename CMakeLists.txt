@@ -12,6 +12,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 ADD_SUBDIRECTORY(game)
 ADD_SUBDIRECTORY(core)
 
+enable_testing()
+ADD_SUBDIRECTORY(tests)
+
 # Documentation
 find_package(Doxygen)
 
