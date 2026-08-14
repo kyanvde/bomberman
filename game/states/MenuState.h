@@ -28,6 +28,11 @@ class MenuState final : public State {
     sf::Text playButton;
 
     /**
+     * @brief The persisted top-5 high score list, displayed below the play button.
+     */
+    sf::Text scoreboard;
+
+    /**
      * @brief The base width of the window used for scaling UI elements.
      */
     unsigned int baseWindowHeight = 0;
@@ -51,6 +56,11 @@ class MenuState final : public State {
      * @brief The base outline thickness of the play button text used for scaling UI elements.
      */
     float basePlayButtonOutlineThickness = 4.f;
+
+    /**
+     * @brief The base character size of the scoreboard text used for scaling UI elements.
+     */
+    unsigned int baseScoreboardCharacterSize = 28;
 
     /**
      * @brief Lays out the UI elements based on the current window size.

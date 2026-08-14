@@ -1,12 +1,35 @@
 #include "MenuState.h"
 
 #include <cmath>
+#include <sstream>
 #include <stdexcept>
 
 #include "GameState.h"
+#include "HighScores.h"
 #include "StateManager.h"
 
 namespace game {
+namespace {
+// Matches GameState.cpp's highScoresPath -- where the round's final score is recorded, and where
+// this menu reads the top-5 list from.
+constexpr const char* highScoresPath = "highscores.txt";
+
+std::string formatScoreboard(const std::vector<int>& scores) {
+    if (scores.empty()) {
+        return "TOP SCORES\nNo scores yet";
+    }
+
+    std::ostringstream text;
+    text << "TOP SCORES\n";
+    for (std::size_t i = 0; i < scores.size(); ++i) {
+        text << (i + 1) << ". " << scores[i];
+        if (i + 1 < scores.size()) {
+            text << '\n';
+        }
+    }
+    return text.str();
+}
+} // namespace
 
 MenuState::MenuState(const std::shared_ptr<sf::RenderWindow>& window, StateManager& stateManager)
     : State(window, stateManager) {
@@ -25,6 +48,13 @@ MenuState::MenuState(const std::shared_ptr<sf::RenderWindow>& window, StateManag
     playButton.setFillColor(sf::Color(188, 190, 0));
     playButton.setOutlineColor(sf::Color(110, 0, 64));
     playButton.setOutlineThickness(basePlayButtonOutlineThickness);
+
+    // Scoreboard setup
+    const core::HighScores highScores(highScoresPath);
+    scoreboard = sf::Text(formatScoreboard(highScores.getScores()), font, baseScoreboardCharacterSize);
+    scoreboard.setFillColor(sf::Color(188, 190, 0));
+    scoreboard.setOutlineColor(sf::Color(110, 0, 64));
+    scoreboard.setOutlineThickness(2.f);
 
     baseWindowHeight = window->getSize().y;
 
@@ -53,6 +83,17 @@ void MenuState::layout(const sf::Vector2u& size) {
     playButton.setOrigin(playBounds.left + playBounds.width * 0.5f, playBounds.top + playBounds.height * 0.5f);
 
     playButton.setPosition(static_cast<float>(size.x) * 0.5f, static_cast<float>(size.y) * 0.8f);
+
+    // Scoreboard
+    scoreboard.setCharacterSize(std::lround(static_cast<float>(baseScoreboardCharacterSize) * scale));
+    scoreboard.setOutlineThickness(2.f * scale);
+
+    const sf::FloatRect scoreboardBounds = scoreboard.getLocalBounds();
+
+    scoreboard.setOrigin(scoreboardBounds.left + scoreboardBounds.width * 0.5f,
+                         scoreboardBounds.top + scoreboardBounds.height * 0.5f);
+
+    scoreboard.setPosition(static_cast<float>(size.x) * 0.5f, static_cast<float>(size.y) * 0.53f);
 }
 
 void MenuState::processEvent(const sf::Event& event) {
@@ -77,6 +118,7 @@ void MenuState::update() {
 void MenuState::render() {
     window->draw(title);
     window->draw(playButton);
+    window->draw(scoreboard);
 }
 
 } // namespace game
