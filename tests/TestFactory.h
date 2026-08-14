@@ -36,8 +36,9 @@ public:
         return std::make_unique<core::PowerUp>(pos, size);
     }
 
-    std::unique_ptr<core::EntityModel> createBomb(const core::Vector2& pos, const core::Vector2& size) override {
-        return std::make_unique<core::Bomb>(pos, size);
+    std::unique_ptr<core::EntityModel> createBomb(const core::Vector2& pos, const core::Vector2& size,
+                                                  const core::CharacterColor& owner, const int radius) override {
+        return std::make_unique<core::Bomb>(pos, size, owner, radius);
     }
 };
 

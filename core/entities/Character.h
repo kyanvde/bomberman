@@ -18,6 +18,24 @@ class Character final : public EntityModel {
      */
     CharacterColor color;
 
+    /**
+     * @brief The blast radius, in tiles, of bombs this character places. Starts at 1; increased
+     * permanently by Fire power-ups.
+     */
+    int bombRadius = 1;
+
+    /**
+     * @brief The maximum number of bombs this character can have active at once. Starts at 1;
+     * increased permanently by Extra Bomb power-ups.
+     */
+    int maxBombs = 1;
+
+    /**
+     * @brief How many of this character's own bombs are currently active (placed but not yet
+     * exploded/removed).
+     */
+    int activeBombs = 0;
+
 public:
     /**
      * @brief Constructs a new Character object with the specified position, size, and color.
@@ -40,12 +58,37 @@ public:
     [[nodiscard]] bool isPlayerControlled() const noexcept override { return color == CharacterColor::White; }
 
     /**
-     * @brief Checks whether this character's color matches the given color.
-     * @param otherColor The color to compare against.
-     * @return True if this character's color equals otherColor, false otherwise.
+     * @brief Retrieves this character's own color.
+     * @return This character's CharacterColor, wrapped in an optional as required by the base
+     * class interface.
      */
-    [[nodiscard]] bool isCharacterOfColor(const CharacterColor& otherColor) const noexcept override {
-        return color == otherColor;
+    [[nodiscard]] std::optional<CharacterColor> getCharacterColor() const noexcept override { return color; }
+
+    /**
+     * @brief Checks whether this character currently has a free bomb slot.
+     * @return True if activeBombs is below maxBombs, false otherwise.
+     */
+    [[nodiscard]] bool canPlaceBomb() const noexcept override { return activeBombs < maxBombs; }
+
+    /**
+     * @brief Retrieves this character's current bomb blast radius.
+     * @return The blast radius, in tiles, that this character's next bomb should have.
+     */
+    [[nodiscard]] int getBombRadius() const noexcept override { return bombRadius; }
+
+    /**
+     * @brief Records that this character has just placed a bomb.
+     */
+    void onBombPlaced() override { ++activeBombs; }
+
+    /**
+     * @brief Records that one of this character's bombs has just exploded (or otherwise been
+     * removed), freeing up a bomb slot.
+     */
+    void onBombExploded() override {
+        if (activeBombs > 0) {
+            --activeBombs;
+        }
     }
 
     /**

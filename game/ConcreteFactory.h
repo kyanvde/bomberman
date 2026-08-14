@@ -95,12 +95,15 @@ public:
     std::unique_ptr<core::EntityModel> createPowerUp(const core::Vector2& position, const core::Vector2& size) override;
 
     /**
-     * @brief Creates a bomb entity with the specified position and size.
+     * @brief Creates a bomb entity with the specified position, size, owner, and blast radius.
      * @param position The position of the bomb in world coordinates.
      * @param size The size of the bomb in world coordinates.
+     * @param owner The color of the character that placed this bomb.
+     * @param radius The blast radius of this bomb, in tiles, in each direction.
      * @return A unique pointer to the created core::EntityModel representing the bomb.
      */
-    std::unique_ptr<core::EntityModel> createBomb(const core::Vector2& position, const core::Vector2& size) override;
+    std::unique_ptr<core::EntityModel> createBomb(const core::Vector2& position, const core::Vector2& size,
+                                                  const core::CharacterColor& owner, int radius) override;
 };
 
 } // namespace game

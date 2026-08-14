@@ -74,9 +74,9 @@ std::unique_ptr<core::EntityModel> ConcreteFactory::createPowerUp(const core::Ve
     return powerUp;
 }
 
-std::unique_ptr<core::EntityModel> ConcreteFactory::createBomb(const core::Vector2& position,
-                                                               const core::Vector2& size) {
-    std::unique_ptr<core::EntityModel> bomb = std::make_unique<core::Bomb>(position, size);
+std::unique_ptr<core::EntityModel> ConcreteFactory::createBomb(const core::Vector2& position, const core::Vector2& size,
+                                                               const core::CharacterColor& owner, const int radius) {
+    std::unique_ptr<core::EntityModel> bomb = std::make_unique<core::Bomb>(position, size, owner, radius);
     bomb->attach(std::make_shared<BombView>(*bomb, frameFor(core::Vector2(6.f, 0.f))));
     return bomb;
 }

@@ -52,12 +52,15 @@ public:
     virtual std::unique_ptr<EntityModel> createPowerUp(const Vector2& pos, const Vector2& size) = 0;
 
     /**
-     * @brief Creates a bomb entity with the specified position and size.
+     * @brief Creates a bomb entity with the specified position, size, owner, and blast radius.
      * @param pos The position of the bomb in world coordinates.
      * @param size The size of the bomb in world coordinates.
+     * @param owner The color of the character that placed this bomb.
+     * @param radius The blast radius of this bomb, in tiles, in each direction.
      * @return A unique pointer to the created EntityModel representing the bomb.
      */
-    virtual std::unique_ptr<EntityModel> createBomb(const Vector2& pos, const Vector2& size) = 0;
+    virtual std::unique_ptr<EntityModel> createBomb(const Vector2& pos, const Vector2& size,
+                                                    const CharacterColor& owner, int radius) = 0;
 
     /**
      * @brief Virtual destructor for the AbstractFactory class.

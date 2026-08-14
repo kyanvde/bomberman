@@ -96,4 +96,34 @@ void runBombTests(tests::TestRunner& runner) {
         world.update(2.f); // well past the fuse duration
         runner.check(!world.hasEntity(bombId), "The bomb removes itself once its fuse expires");
     }
+
+    // --- Capacity enforcement: World::placeBomb respects the character's own maxBombs. ---
+    {
+        const std::string path = writeDeterministicWorldFile();
+        World world(std::make_shared<tests::TestFactory>(), path);
+        std::remove(path.c_str());
+
+        auto owner = std::make_unique<Character>(tilePosition, tileSize, CharacterColor::White);
+        Character* ownerPtr = owner.get();
+        const EntityId ownerId = 9; // first entity added after the 9 walls
+        world.addEntity(std::move(owner));
+
+        runner.check(ownerPtr->canPlaceBomb(), "A fresh character with maxBombs=1 can place a bomb");
+
+        world.placeBomb(ownerId);
+        const EntityId firstBombId = 10;
+        runner.check(world.hasEntity(firstBombId), "placeBomb created a bomb entity for the character");
+        runner.check(!ownerPtr->canPlaceBomb(), "After placing its one bomb, the character has no free slot left");
+
+        world.placeBomb(ownerId); // at capacity: should be a no-op
+        runner.check(!world.hasEntity(EntityId{11}),
+                     "A second placeBomb call while at capacity does not create another bomb");
+
+        world.update(3.f); // let the first bomb's fuse expire, freeing the slot
+        runner.check(!world.hasEntity(firstBombId), "The first bomb has despawned after its fuse expired");
+        runner.check(ownerPtr->canPlaceBomb(), "The bomb slot is freed once the bomb it was holding is gone");
+
+        world.placeBomb(ownerId);
+        runner.check(world.hasEntity(EntityId{11}), "The character can place a new bomb once its slot is free again");
+    }
 }

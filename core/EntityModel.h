@@ -6,6 +6,7 @@
 #include "Vector2.h"
 
 #include <cstddef>
+#include <optional>
 
 namespace core {
 
@@ -108,14 +109,50 @@ public:
     [[nodiscard]] virtual bool isPlayerControlled() const noexcept { return false; }
 
     /**
-     * @brief Determines if this entity is a character of the given color. Always false except
-     * for Character, which overrides it to compare against its own color. Lets other code (e.g.
-     * a bomb checking whether its owner still stands on its tile) ask this question without
-     * downcasting to a concrete entity type.
+     * @brief Retrieves this entity's character color, if it is a character. Only Character
+     * overrides this meaningfully. Lets other code (e.g. World resolving who to attribute a
+     * placed bomb to, or a bomb checking whether its owner still stands on its tile) ask a
+     * generic EntityModel for its color without downcasting to a concrete entity type.
+     * @return The entity's CharacterColor, or std::nullopt if it isn't a character.
+     */
+    [[nodiscard]] virtual std::optional<CharacterColor> getCharacterColor() const noexcept { return std::nullopt; }
+
+    /**
+     * @brief Determines if this entity is a character of the given color. Implemented in terms
+     * of getCharacterColor(), so only Character (via that override) can ever answer true.
      * @param color The color to compare against.
      * @return True if this entity is a Character of the given color, false otherwise.
      */
-    [[nodiscard]] virtual bool isCharacterOfColor(const CharacterColor&) const noexcept { return false; }
+    [[nodiscard]] bool isCharacterOfColor(const CharacterColor& color) const noexcept {
+        return getCharacterColor() == color;
+    }
+
+    /**
+     * @brief Determines whether this entity currently has a free bomb slot. Always false except
+     * for Character, which overrides it based on its own bomb capacity and how many of its
+     * bombs are currently active.
+     * @return True if this entity can place another bomb right now, false otherwise.
+     */
+    [[nodiscard]] virtual bool canPlaceBomb() const noexcept { return false; }
+
+    /**
+     * @brief Retrieves this entity's current bomb blast radius. Meaningless for entities that
+     * cannot place bombs; only Character overrides it meaningfully.
+     * @return The blast radius, in tiles, that a bomb placed by this entity should have.
+     */
+    [[nodiscard]] virtual int getBombRadius() const noexcept { return 1; }
+
+    /**
+     * @brief Notifies this entity that it has just placed a bomb, so it can track how many of
+     * its bombs are currently active. Default implementation does nothing.
+     */
+    virtual void onBombPlaced() {}
+
+    /**
+     * @brief Notifies this entity that one of its previously placed bombs has just exploded (or
+     * otherwise been removed), freeing up a bomb slot. Default implementation does nothing.
+     */
+    virtual void onBombExploded() {}
 
     /**
      * @brief Returns the rendering layer for this entity.

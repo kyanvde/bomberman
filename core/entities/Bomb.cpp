@@ -25,7 +25,8 @@ void Bomb::onTick(World& world, const EntityId selfId, const float deltaTime) {
     fuseRemaining -= deltaTime;
     if (fuseRemaining <= 0.f) {
         // TODO: trigger a cross-shaped explosion via World once it exists; for now the bomb
-        // simply despawns when its fuse expires.
+        // simply despawns when its fuse expires, freeing up its owner's bomb slot.
+        world.notifyBombExploded(owner);
         world.markForRemoval(selfId);
     }
 }

@@ -93,10 +93,13 @@ class World {
     [[nodiscard]] Vector2 snapToTileTopLeft(const Vector2& position, const Vector2& size) const;
 
     /**
-     * @brief Spawns a bomb centered on the tile occupied by the entity at the given vector index.
+     * @brief Spawns a bomb centered on the tile occupied by the entity at the given vector index,
+     * with the given blast radius and owner.
      * @param entityIndex The index of the entity (player or AI) placing the bomb.
+     * @param radius The blast radius of the new bomb, in tiles, in each direction.
+     * @param owner The color of the character placing the bomb.
      */
-    void spawnBombAtIndex(std::size_t entityIndex);
+    void spawnBombAtIndex(std::size_t entityIndex, int radius, const CharacterColor& owner);
 
 public:
     /**
@@ -164,8 +167,10 @@ public:
     void setCellSize(const Vector2& size) { cellSize = size; }
 
     /**
-     * @brief Spawns a bomb centered on the tile occupied by the character with the given identifier.
-     * Does nothing if no entity with that identifier exists.
+     * @brief Spawns a bomb centered on the tile occupied by the character with the given
+     * identifier, using that character's current bomb radius and color, provided the character
+     * currently has a free bomb slot. Does nothing if no entity with that identifier exists, or
+     * if it cannot currently place another bomb.
      * @param characterId The identifier of the character (player or AI) placing the bomb.
      */
     void placeBomb(EntityId characterId);
@@ -180,6 +185,14 @@ public:
      */
     [[nodiscard]] bool isTileOccupiedByColor(const Vector2& tilePosition, const Vector2& tileSize,
                                              const CharacterColor& color) const;
+
+    /**
+     * @brief Notifies whichever character has the given color that one of its bombs has just
+     * exploded (or otherwise been removed), freeing up a bomb slot. Does nothing if no character
+     * of that color exists.
+     * @param owner The color of the character to notify.
+     */
+    void notifyBombExploded(const CharacterColor& owner);
 };
 
 } // namespace core

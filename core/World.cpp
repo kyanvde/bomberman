@@ -1,5 +1,6 @@
 #include "World.h"
 
+#include "CharacterColor.h"
 #include "Collision.h"
 #include "WorldLoader.h"
 #include <algorithm>
@@ -193,17 +194,29 @@ World::World(const std::shared_ptr<AbstractFactory>& factory, const std::string&
     WorldLoader::loadFromFile(filename, *this, factory);
 }
 
-void World::spawnBombAtIndex(const std::size_t entityIndex) {
+void World::spawnBombAtIndex(const std::size_t entityIndex, const int radius, const CharacterColor& owner) {
     const EntityModel& entity = *entities[entityIndex];
     const Vector2 tilePosition = snapToTileTopLeft(entity.getPosition(), entity.getSize());
-    entities.push_back(factory->createBomb(tilePosition, cellSize));
+    // Route through addEntity (not a direct push_back) so this bomb gets a real, unique id --
+    // otherwise it silently keeps its default id of 0, colliding with whichever entity already
+    // holds that id.
+    addEntity(factory->createBomb(tilePosition, cellSize, owner, radius));
 }
 
 void World::placeBomb(const EntityId characterId) {
     const std::optional<std::size_t> characterIndex = indexOf(characterId);
-    if (characterIndex.has_value()) {
-        spawnBombAtIndex(*characterIndex);
+    if (!characterIndex.has_value()) {
+        return;
     }
+
+    EntityModel& character = *entities[*characterIndex];
+    if (!character.canPlaceBomb()) {
+        return;
+    }
+
+    character.onBombPlaced();
+    spawnBombAtIndex(*characterIndex, character.getBombRadius(),
+                     character.getCharacterColor().value_or(CharacterColor::White));
 }
 
 bool World::isTileOccupiedByColor(const Vector2& tilePosition, const Vector2& tileSize,
@@ -216,5 +229,14 @@ bool World::isTileOccupiedByColor(const Vector2& tilePosition, const Vector2& ti
     }
 
     return false;
+}
+
+void World::notifyBombExploded(const CharacterColor& owner) {
+    for (const auto& entity : entities) {
+        if (entity && entity->isCharacterOfColor(owner)) {
+            entity->onBombExploded();
+            return;
+        }
+    }
 }
 } // namespace core
