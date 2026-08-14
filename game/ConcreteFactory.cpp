@@ -27,7 +27,7 @@ ConcreteFactory::ConcreteFactory(std::string spritesheetPath, const core::Vector
 std::unique_ptr<core::EntityModel> ConcreteFactory::createCharacter(const core::Vector2& position,
                                                                     const core::Vector2& size,
                                                                     const core::CharacterColor& color) {
-    std::unique_ptr<core::EntityModel> character = std::make_unique<core::Character>(position, size);
+    std::unique_ptr<core::EntityModel> character = std::make_unique<core::Character>(position, size, color);
 
     core::Vector2 colorPosition;
     switch (color) {

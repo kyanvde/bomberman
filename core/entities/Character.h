@@ -1,6 +1,7 @@
 #ifndef BOMBERMAN_CORE_ENTITIES_CHARACTER_H
 #define BOMBERMAN_CORE_ENTITIES_CHARACTER_H
 
+#include "CharacterColor.h"
 #include "EntityModel.h"
 
 namespace core {
@@ -11,19 +12,32 @@ namespace core {
  * including player control and collision detection with obstacles.
  */
 class Character final : public EntityModel {
+    /**
+     * @brief The character's color, which also identifies the human-controlled player (White)
+     * versus the computer-controlled bots (Blue/Red/Black).
+     */
+    CharacterColor color;
+
 public:
     /**
-     * @brief Constructs a new Character object with the specified position and size.
+     * @brief Constructs a new Character object with the specified position, size, and color.
      * @param pos The position of the character in world coordinates.
      * @param size The size of the character in world coordinates.
+     * @param color The character's color; White identifies the human-controlled player.
      */
-    Character(const Vector2& pos, const Vector2& size);
+    Character(const Vector2& pos, const Vector2& size, const CharacterColor& color);
+
+    /**
+     * @brief Retrieves the character's color.
+     * @return The CharacterColor this character was constructed with.
+     */
+    [[nodiscard]] CharacterColor getColor() const noexcept { return color; }
 
     /**
      * @brief Checks if the character is player-controlled.
-     * @return True, indicating that this character is controlled by the player.
+     * @return True if this character is the White (human-controlled) character.
      */
-    [[nodiscard]] bool isPlayerControlled() const noexcept override { return true; }
+    [[nodiscard]] bool isPlayerControlled() const noexcept override { return color == CharacterColor::White; }
 
     /**
      * @brief Characters should render above the static world tiles.

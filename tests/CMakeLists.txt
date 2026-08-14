@@ -4,6 +4,7 @@ SET(TEST_SRC
     CameraTests.cpp
     RandomTests.cpp
     StopwatchTests.cpp
+    CharacterTests.cpp
 )
 
 ADD_EXECUTABLE(core_tests ${TEST_SRC})

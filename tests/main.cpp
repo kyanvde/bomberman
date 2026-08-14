@@ -4,6 +4,7 @@ void runVector2Tests(tests::TestRunner& runner);
 void runCameraTests(tests::TestRunner& runner);
 void runRandomTests(tests::TestRunner& runner);
 void runStopwatchTests(tests::TestRunner& runner);
+void runCharacterTests(tests::TestRunner& runner);
 
 /**
  * @brief Entry point for the core_tests executable.
@@ -18,6 +19,7 @@ int main() {
     runCameraTests(runner);
     runRandomTests(runner);
     runStopwatchTests(runner);
+    runCharacterTests(runner);
 
     return runner.summarize();
 }
