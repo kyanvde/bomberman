@@ -1,0 +1,40 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: ubuntu:24.04
+    resource_class: medium
+    steps:
+      - run:
+          name: Install git and CA certificates
+          command: |
+            apt-get update
+            DEBIAN_FRONTEND=noninteractive apt-get install -y git ca-certificates openssh-client
+      - checkout
+      - run:
+          name: Install build dependencies
+          command: |
+            apt-get update
+            DEBIAN_FRONTEND=noninteractive apt-get install -y \
+              cmake g++ pkg-config \
+              libx11-dev libxrandr-dev libxcursor-dev libudev-dev \
+              libgl1-mesa-dev libfreetype-dev
+      - restore_cache:
+          keys:
+            - sfml-deps-v1-{{ checksum "game/CMakeLists.txt" }}
+      - run:
+          name: Configure
+          command: cmake -S . -B build
+      - run:
+          name: Build
+          command: cmake --build build --config Release -j "$(nproc)"
+      - save_cache:
+          key: sfml-deps-v1-{{ checksum "game/CMakeLists.txt" }}
+          paths:
+            - build/_deps
+
+workflows:
+  build:
+    jobs:
+      - build
