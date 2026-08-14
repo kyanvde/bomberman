@@ -139,7 +139,27 @@ void World::flushPendingRemovals() {
     pendingRemoval.clear();
 }
 
-void World::update() {
+void World::update(const float deltaTime) {
+    // Snapshot the ids present at the start of this tick, then re-resolve each entity's index
+    // fresh on every iteration (rather than holding a raw iterator/reference across the loop).
+    // An entity's onTick may itself add entities to `entities` (e.g. an exploding bomb spawning
+    // explosion tiles), which can reallocate the vector's storage; re-resolving by id each time
+    // means that reallocation never leaves this loop holding a dangling iterator. Entities added
+    // during this tick are simply not in the snapshot, so they start ticking on the next update().
+    std::vector<EntityId> tickOrder;
+    tickOrder.reserve(entities.size());
+    for (const auto& entity : entities) {
+        if (entity) {
+            tickOrder.push_back(entity->getId());
+        }
+    }
+
+    for (const EntityId id : tickOrder) {
+        if (const std::optional<std::size_t> index = indexOf(id); index.has_value()) {
+            entities[*index]->onTick(*this, id, deltaTime);
+        }
+    }
+
     for (const auto& entity : entities) {
         if (entity) {
             entity->notify();

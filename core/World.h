@@ -134,10 +134,13 @@ public:
     void markForRemoval(EntityId entityId);
 
     /**
-     * @brief Updates all entity views for the current frame, then removes any entities that were
-     * marked for removal during this update.
+     * @brief Advances the world by one simulation tick: lets every entity present at the start of
+     * the tick perform its own time-based self-maintenance (EntityModel::onTick), refreshes every
+     * entity's view, then removes any entities that were marked for removal during this tick.
+     * Entities created during this tick (e.g. by an explosion) are picked up on the next tick.
+     * @param deltaTime The time elapsed since the previous tick, in seconds.
      */
-    void update();
+    void update(float deltaTime);
 
     /**
      * @brief Renders the world and its entities using the provided Renderer.

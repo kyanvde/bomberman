@@ -10,6 +10,7 @@
 namespace core {
 
 class Character;
+class World;
 
 /**
  * @brief A stable identifier for an entity within its World, assigned once when the entity
@@ -155,6 +156,18 @@ public:
      * @return The active AnimationType of the entity.
      */
     [[nodiscard]] AnimationType getAnimationType() const { return animationType; }
+
+    /**
+     * @brief Called once per simulation tick so the entity can perform its own time-based
+     * self-maintenance (e.g. a bomb counting down its fuse). Default implementation does nothing.
+     * May freely query and mutate world (e.g. to detonate, spawn, or remove entities); it must
+     * not assume any particular entity storage layout, since world may reallocate internally
+     * as a result of this call.
+     * @param world The world this entity belongs to.
+     * @param selfId This entity's own identifier, for convenience when calling back into world.
+     * @param deltaTime The time elapsed since the previous tick, in seconds.
+     */
+    virtual void onTick(World&, EntityId, float) {}
 };
 
 } // namespace core

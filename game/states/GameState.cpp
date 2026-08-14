@@ -48,8 +48,9 @@ void GameState::update() {
         }
     }
 
-    world.update();
-    world.moveCharacter(playerId, direction, core::Stopwatch::getInstance().getDeltaTime());
+    const float deltaTime = core::Stopwatch::getInstance().getDeltaTime();
+    world.update(deltaTime);
+    world.moveCharacter(playerId, direction, deltaTime);
 }
 
 void GameState::render() { world.render(renderer); }

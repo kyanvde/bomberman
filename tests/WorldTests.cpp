@@ -58,18 +58,18 @@ void runWorldTests(tests::TestRunner& runner) {
     world.markForRemoval(wallId);
     runner.check(world.hasEntity(wallId), "Marking an entity for removal does not remove it immediately");
 
-    world.update();
+    world.update(0.f);
     runner.check(!world.hasEntity(wallId), "update() removes entities that were marked for removal");
 
     // Marking an unknown id, or the same id twice, must not crash or corrupt state.
     world.markForRemoval(EntityId{999});
     world.markForRemoval(wallId);
     world.markForRemoval(wallId);
-    world.update();
+    world.update(0.f);
     runner.check(world.getPlayerId() == playerId, "Repeated/unknown removal marks leave the rest of the world intact");
 
     // Removing the player entity itself clears the player id.
     world.markForRemoval(playerId.value());
-    world.update();
+    world.update(0.f);
     runner.check(!world.getPlayerId().has_value(), "Removing the player entity clears the player id");
 }
