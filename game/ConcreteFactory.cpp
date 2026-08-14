@@ -14,6 +14,8 @@
 
 #include "CharacterColor.h"
 
+namespace game {
+
 core::SpriteFrame ConcreteFactory::frameFor(const core::Vector2& cell) const {
     return {spriteSheetPath, cellSize, cell, margin, spacing};
 }
@@ -78,3 +80,5 @@ std::unique_ptr<core::EntityModel> ConcreteFactory::createBomb(const core::Vecto
     bomb->attach(std::make_shared<BombView>(*bomb, frameFor(core::Vector2(6.f, 0.f))));
     return bomb;
 }
+
+} // namespace game

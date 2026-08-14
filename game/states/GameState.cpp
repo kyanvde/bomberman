@@ -5,6 +5,8 @@
 #include "ConcreteRenderer.h"
 #include "Stopwatch.h"
 
+namespace game {
+
 GameState::GameState(const std::shared_ptr<sf::RenderWindow>& window, StateManager& stateManager)
     : State(window, stateManager),
       world(std::make_shared<ConcreteFactory>("assets/sprites/spritesheet.png", core::Vector2(16.f, 16.f),
@@ -52,3 +54,5 @@ void GameState::update() {
 }
 
 void GameState::render() { world.render(renderer); }
+
+} // namespace game

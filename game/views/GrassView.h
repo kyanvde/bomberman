@@ -3,6 +3,8 @@
 
 #include "EntityView.h"
 
+namespace game {
+
 /**
  * @brief The GrassView class represents the visual representation of a grass entity in the game.
  * It inherits from EntityView and provides specific rendering for grass entities.
@@ -16,5 +18,7 @@ public:
      */
     GrassView(const core::EntityModel& model, const core::SpriteFrame& sprite) : EntityView(model, sprite) {}
 };
+
+} // namespace game
 
 #endif // BOMBERMAN_GAME_VIEWS_GRASSVIEW_H

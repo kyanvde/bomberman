@@ -6,6 +6,8 @@
 #include <memory>
 #include <stack>
 
+namespace game {
+
 /**
  * @brief The StateManager class is responsible for managing the different states of the game.
  * It allows pushing and popping states, processing events, handling window resizing, updating the current state, and
@@ -65,5 +67,7 @@ public:
      */
     explicit StateManager(std::shared_ptr<sf::RenderWindow> window);
 };
+
+} // namespace game
 
 #endif // BOMBERMAN_GAME_STATEMANAGER_H

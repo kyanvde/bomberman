@@ -9,6 +9,8 @@
 #include <memory>
 #include <set>
 
+namespace game {
+
 /**
  * @brief The GameState class represents the main game state of the application.
  * It handles user input, updates the game world, and renders the game scene.
@@ -60,5 +62,7 @@ public:
      */
     GameState(const std::shared_ptr<sf::RenderWindow>& window, StateManager& stateManager);
 };
+
+} // namespace game
 
 #endif // BOMBERMAN_GAME_STATES_GAMESTATE_H

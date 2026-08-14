@@ -6,6 +6,8 @@
 #include <SFML/Graphics.hpp>
 #include <unordered_map>
 
+namespace game {
+
 /**
  * @brief The ConcreteRenderer class is a concrete implementation of the core::Renderer interface using SFML for
  * rendering. It provides functionality to draw sprites on an SFML RenderWindow, manage textures, and handle camera
@@ -59,5 +61,7 @@ public:
      */
     void drawSprite(const core::Vector2& position, const core::Vector2& size, const core::SpriteFrame& sprite) override;
 };
+
+} // namespace game
 
 #endif // BOMBERMAN_GAME_SFMLRENDERER_H

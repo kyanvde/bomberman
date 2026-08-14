@@ -5,6 +5,8 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 
+namespace game {
+
 /**
  * @brief The MenuState class represents the main menu state of the game.
  * It handles user input, updates the menu logic, and renders the menu interface.
@@ -87,5 +89,7 @@ public:
      */
     MenuState(const std::shared_ptr<sf::RenderWindow>& window, StateManager& stateManager);
 };
+
+} // namespace game
 
 #endif // BOMBERMAN_GAME_STATES_MENUSTATE_H

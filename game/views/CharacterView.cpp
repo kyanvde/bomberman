@@ -2,6 +2,8 @@
 
 #include "CharacterColor.h"
 
+namespace game {
+
 CharacterView::CharacterView(const core::EntityModel& model, const core::SpriteFrame& sprite,
                              const core::CharacterColor& color)
     : EntityView(model, sprite), color(color) {
@@ -68,3 +70,5 @@ CharacterView::CharacterView(const core::EntityModel& model, const core::SpriteF
                                             basePosition + core::Vector2(1.f, 2.f), sprite.margin, sprite.spacing)},
                          0.3f)});
 }
+
+} // namespace game

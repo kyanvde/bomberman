@@ -6,6 +6,8 @@
 #include "GameState.h"
 #include "StateManager.h"
 
+namespace game {
+
 MenuState::MenuState(const std::shared_ptr<sf::RenderWindow>& window, StateManager& stateManager)
     : State(window, stateManager) {
     if (!font.loadFromFile("assets/fonts/arcadeclassic.ttf")) {
@@ -76,3 +78,5 @@ void MenuState::render() {
     window->draw(title);
     window->draw(playButton);
 }
+
+} // namespace game

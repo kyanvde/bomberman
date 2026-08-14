@@ -8,6 +8,8 @@
 
 #include <string>
 
+namespace game {
+
 /**
  * @brief The ConcreteFactory class is a concrete implementation of the core::AbstractFactory interface.
  * It provides methods to create various game entities, such as characters, walls, grass, power-ups, and bombs.
@@ -100,5 +102,7 @@ public:
      */
     std::unique_ptr<core::EntityModel> createBomb(const core::Vector2& position, const core::Vector2& size) override;
 };
+
+} // namespace game
 
 #endif // BOMBERMAN_GAME_CONCRETEFACTORY_H

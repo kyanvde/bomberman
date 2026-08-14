@@ -11,6 +11,8 @@
 
 #include "Stopwatch.h"
 
+namespace game {
+
 /**
  * @brief The EntityView class represents the visual representation of an entity in the game.
  * It observes changes in the associated EntityModel and updates its position and size accordingly.
@@ -72,5 +74,7 @@ public:
      */
     void render(core::AbstractRenderer& renderer) const override { renderer.drawSprite(position, size, sprite); }
 };
+
+} // namespace game
 
 #endif // BOMBERMAN_GAME_ENTITYVIEW_H

@@ -2,6 +2,8 @@
 
 #include <stdexcept>
 
+namespace game {
+
 namespace {
 core::Vector2 toVector2(const sf::Vector2u& size) { return {static_cast<float>(size.x), static_cast<float>(size.y)}; }
 } // namespace
@@ -49,3 +51,5 @@ void ConcreteRenderer::drawSprite(const core::Vector2& position, const core::Vec
 
     window.draw(sfSprite);
 }
+
+} // namespace game

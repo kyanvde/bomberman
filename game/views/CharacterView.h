@@ -8,6 +8,8 @@ namespace core {
 enum class CharacterColor;
 }
 
+namespace game {
+
 /**
  * @brief The CharacterView class represents the visual representation of a character entity in the game.
  * It inherits from EntityView and provides specific rendering for character entities.
@@ -24,5 +26,7 @@ public:
      */
     CharacterView(const core::EntityModel& model, const core::SpriteFrame& sprite, const core::CharacterColor& color);
 };
+
+} // namespace game
 
 #endif // BOMBERMAN_GAME_VIEWS_CHARACTERVIEW_H

@@ -3,6 +3,8 @@
 
 #include "EntityView.h"
 
+namespace game {
+
 /**
  * @brief The WallView class represents the visual representation of a wall entity in the game.
  * It inherits from EntityView and provides specific rendering for wall entities.
@@ -16,5 +18,7 @@ public:
      */
     WallView(const core::EntityModel& model, const core::SpriteFrame& sprite) : EntityView(model, sprite) {}
 };
+
+} // namespace game
 
 #endif // BOMBERMAN_GAME_VIEWS_WALLVIEW_H

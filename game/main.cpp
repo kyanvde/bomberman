@@ -6,7 +6,7 @@
  * @return EXIT_SUCCESS on successful execution.
  */
 int main() {
-    Game game;
+    game::Game game;
     game.run();
 
     return EXIT_SUCCESS;

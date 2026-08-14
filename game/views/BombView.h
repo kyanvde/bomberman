@@ -3,6 +3,8 @@
 
 #include "EntityView.h"
 
+namespace game {
+
 /**
  * @brief The BombView class represents the visual representation of a bomb entity in the game.
  * It inherits from EntityView and provides specific rendering for bomb entities.
@@ -30,5 +32,7 @@ public:
                                0.15f)});
     }
 };
+
+} // namespace game
 
 #endif // BOMBERMAN_GAME_VIEWS_BOMBVIEW_H

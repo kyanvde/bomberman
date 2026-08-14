@@ -3,6 +3,8 @@
 #include "Stopwatch.h"
 #include "states/MenuState.h"
 
+namespace game {
+
 void Game::processEvents() {
     sf::Event event{};
     while (window->pollEvent(event)) {
@@ -45,3 +47,5 @@ void Game::run() {
         render();
     }
 }
+
+} // namespace game

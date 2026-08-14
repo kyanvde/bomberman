@@ -4,6 +4,8 @@
 
 #include "EntityView.h"
 
+namespace game {
+
 /**
  * @brief The PowerUpView class represents the visual representation of a power-up entity in the game.
  * It inherits from EntityView and provides specific rendering for power-up entities.
@@ -17,5 +19,7 @@ public:
      */
     PowerUpView(const core::EntityModel& model, const core::SpriteFrame& sprite) : EntityView(model, sprite) {}
 };
+
+} // namespace game
 
 #endif // BOMBERMAN_GAME_VIEWS_POWERUPVIEW_H

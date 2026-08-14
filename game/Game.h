@@ -5,6 +5,8 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 
+namespace game {
+
 /**
  * @brief The Game class is responsible for managing the main game loop, handling events, updating game state, and
  * rendering.
@@ -47,5 +49,7 @@ public:
      */
     void run();
 };
+
+} // namespace game
 
 #endif // BOMBERMAN_GAME_GAME_H

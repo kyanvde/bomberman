@@ -4,6 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 
+namespace game {
+
 class StateManager;
 
 /**
@@ -59,5 +61,7 @@ public:
      */
     virtual void render() = 0;
 };
+
+} // namespace game
 
 #endif // BOMBERMAN_GAME_STATE_H
