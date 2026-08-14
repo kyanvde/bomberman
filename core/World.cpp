@@ -113,8 +113,8 @@ void World::moveCharacter(const EntityId characterId, const Vector2& direction, 
     const Vector2 normalizedDirection(direction.x / length, direction.y / length);
     character.onMovementAttempt(normalizedDirection);
 
-    const Vector2 delta(normalizedDirection.x * playerSpeed * deltaTime,
-                        normalizedDirection.y * playerSpeed * deltaTime);
+    const float speed = playerSpeed * character.getSpeedMultiplier();
+    const Vector2 delta(normalizedDirection.x * speed * deltaTime, normalizedDirection.y * speed * deltaTime);
     const Vector2 size = character.getSize();
 
     Vector2 nextPosition = character.getPosition();
@@ -135,6 +135,19 @@ void World::moveCharacter(const EntityId characterId, const Vector2& direction, 
     }
 
     character.setPosition(nextPosition);
+
+    // A power-up the character now overlaps is picked up: its stat boost is applied and it is
+    // removed. The pending-removal check guards against two characters both picking up the same
+    // power-up within the same tick, before the removal is actually flushed.
+    for (const auto& entity : entities) {
+        if (entity && entity->isPowerUp() && !isPendingRemoval(entity->getId()) &&
+            intersects(character.getPosition(), character.getSize(), entity->getPosition(), entity->getSize())) {
+            if (const std::optional<PowerUpType> type = entity->getPowerUpType(); type.has_value()) {
+                character.applyPowerUp(*type);
+            }
+            markForRemoval(entity->getId());
+        }
+    }
 }
 
 void World::markForRemoval(const EntityId entityId) {

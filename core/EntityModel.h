@@ -2,6 +2,7 @@
 #define BOMBERMAN_CORE_ENTITYMODEL_H
 
 #include "Animation.h"
+#include "PowerUpType.h"
 #include "Subject.h"
 #include "Vector2.h"
 
@@ -260,6 +261,29 @@ public:
      * @return True if this entity is grass, false otherwise.
      */
     [[nodiscard]] virtual bool isGrass() const noexcept { return false; }
+
+    /**
+     * @brief Retrieves this entity's power-up type, if it is a power-up. Only PowerUp overrides
+     * this meaningfully, mirroring getCharacterColor()'s pattern so a generic EntityModel can be
+     * asked what kind of power-up it is (e.g. by a character picking it up) without downcasting.
+     * @return The entity's PowerUpType, or std::nullopt if it isn't a power-up.
+     */
+    [[nodiscard]] virtual std::optional<PowerUpType> getPowerUpType() const noexcept { return std::nullopt; }
+
+    /**
+     * @brief Applies a power-up's permanent stat boost to this entity. Default implementation
+     * does nothing; only Character overrides it meaningfully.
+     * @param type Which permanent stat boost to apply.
+     */
+    virtual void applyPowerUp(PowerUpType) {}
+
+    /**
+     * @brief Retrieves this entity's current movement speed multiplier, applied on top of the
+     * base movement speed. Always 1 except for Character, which overrides it once a Skates
+     * power-up has been picked up.
+     * @return The speed multiplier to apply to this entity's movement.
+     */
+    [[nodiscard]] virtual float getSpeedMultiplier() const noexcept { return 1.f; }
 
     /**
      * @brief Tells this entity to detonate immediately, if it is a bomb caught in another

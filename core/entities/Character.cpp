@@ -1,8 +1,27 @@
 #include "Character.h"
 
 namespace core {
+namespace {
+// How much each Skates power-up permanently adds to a character's speed multiplier.
+constexpr float skatesSpeedBoost = 0.5f;
+} // namespace
+
 Character::Character(const Vector2& pos, const Vector2& size, const CharacterColor& color)
     : EntityModel(pos, size), color(color) {}
+
+void Character::applyPowerUp(const PowerUpType type) {
+    switch (type) {
+    case PowerUpType::Fire:
+        ++bombRadius;
+        break;
+    case PowerUpType::ExtraBomb:
+        ++maxBombs;
+        break;
+    case PowerUpType::Skates:
+        speedMultiplier += skatesSpeedBoost;
+        break;
+    }
+}
 
 bool Character::isBlockedBy(const EntityModel& obstacle, const Vector2& moverPosition, const Vector2& moverSize) const {
     return obstacle.blocksCharacterMovement(*this, moverPosition, moverSize);

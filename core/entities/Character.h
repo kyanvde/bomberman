@@ -36,6 +36,12 @@ class Character final : public EntityModel {
      */
     int activeBombs = 0;
 
+    /**
+     * @brief This character's movement speed multiplier, applied on top of the base movement
+     * speed. Starts at 1; increased permanently by Skates power-ups.
+     */
+    float speedMultiplier = 1.f;
+
 public:
     /**
      * @brief Constructs a new Character object with the specified position, size, and color.
@@ -96,6 +102,19 @@ public:
      * is introduced in a later phase, this will also need to account for that.)
      */
     [[nodiscard]] bool isKilledByExplosion() const noexcept override { return true; }
+
+    /**
+     * @brief Applies a power-up's permanent stat boost: Fire increases blast radius, ExtraBomb
+     * increases bomb capacity, Skates increases movement speed.
+     * @param type Which permanent stat boost to apply.
+     */
+    void applyPowerUp(PowerUpType type) override;
+
+    /**
+     * @brief Retrieves this character's current movement speed multiplier.
+     * @return The speed multiplier, starting at 1 and permanently increased by Skates power-ups.
+     */
+    [[nodiscard]] float getSpeedMultiplier() const noexcept override { return speedMultiplier; }
 
     /**
      * @brief Characters should render above the static world tiles.

@@ -13,6 +13,7 @@ void runDetonateBombTests(tests::TestRunner& runner);
 void runExplosionTests(tests::TestRunner& runner);
 void runWorldLoaderTests(tests::TestRunner& runner);
 void runPowerUpSpawnTests(tests::TestRunner& runner);
+void runPowerUpPickupTests(tests::TestRunner& runner);
 
 /**
  * @brief Entry point for the core_tests executable.
@@ -36,6 +37,7 @@ int main() {
     runExplosionTests(runner);
     runWorldLoaderTests(runner);
     runPowerUpSpawnTests(runner);
+    runPowerUpPickupTests(runner);
 
     return runner.summarize();
 }

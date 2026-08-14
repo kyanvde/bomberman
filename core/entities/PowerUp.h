@@ -35,6 +35,12 @@ public:
      * @brief A power-up caught in an explosion's blast is destroyed rather than picked up.
      */
     [[nodiscard]] bool isPowerUp() const noexcept override { return true; }
+
+    /**
+     * @brief Retrieves this power-up's type, so a character picking it up can apply the right
+     * stat boost without downcasting.
+     */
+    [[nodiscard]] std::optional<PowerUpType> getPowerUpType() const noexcept override { return type; }
 };
 
 }; // namespace core
