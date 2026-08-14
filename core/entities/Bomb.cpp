@@ -4,9 +4,15 @@
 #include "Collision.h"
 #include "World.h"
 
+#include <cmath>
+
 namespace core {
 namespace {
 constexpr float bombFuseSeconds = 2.f;
+
+// Tolerance for comparing a tile's coordinate against the bomb's own, matching World's tile-query
+// margin convention.
+constexpr float tileAlignmentEpsilon = 0.0005f;
 } // namespace
 
 Bomb::Bomb(const Vector2& pos, const Vector2& size, const CharacterColor& owner, const int radius)
@@ -38,4 +44,19 @@ bool Bomb::blocksCharacterMovement(const Character& character, const Vector2& ch
 }
 
 void Bomb::detonate(World& world, const EntityId selfId) { world.detonateBomb(selfId, radius, owner); }
+
+bool Bomb::threatensTile(const Vector2& tilePosition, const Vector2& tileSize) const noexcept {
+    const bool sameRow = std::abs(tilePosition.y - position.y) < tileAlignmentEpsilon;
+    const bool sameColumn = std::abs(tilePosition.x - position.x) < tileAlignmentEpsilon;
+
+    if (sameRow) {
+        const float distanceInTiles = std::abs(tilePosition.x - position.x) / tileSize.x;
+        return distanceInTiles <= static_cast<float>(radius) + tileAlignmentEpsilon;
+    }
+    if (sameColumn) {
+        const float distanceInTiles = std::abs(tilePosition.y - position.y) / tileSize.y;
+        return distanceInTiles <= static_cast<float>(radius) + tileAlignmentEpsilon;
+    }
+    return false;
+}
 } // namespace core

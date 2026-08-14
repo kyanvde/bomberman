@@ -37,6 +37,12 @@ bool overlapsTile(const Vector2& entityPosition, const Vector2& entitySize, cons
     const Vector2 insetSize(tileSize.x - tileQueryMargin * 2, tileSize.y - tileQueryMargin * 2);
     return intersects(entityPosition, entitySize, insetPosition, insetSize);
 }
+
+float squaredDistance(const Vector2& a, const Vector2& b) {
+    const float dx = a.x - b.x;
+    const float dy = a.y - b.y;
+    return dx * dx + dy * dy;
+}
 } // namespace
 
 Vector2 World::snapToTileTopLeft(const Vector2& position, const Vector2& size) const {
@@ -308,6 +314,99 @@ bool World::hasPowerUpAt(const Vector2& tilePosition, const Vector2& tileSize) c
     for (const auto& entity : entities) {
         if (entity && entity->isPowerUp() &&
             overlapsTile(entity->getPosition(), entity->getSize(), tilePosition, tileSize)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool World::isDestructibleWallAt(const Vector2& tilePosition, const Vector2& tileSize) const {
+    for (const auto& entity : entities) {
+        if (entity && entity->isDestructibleByExplosion() &&
+            overlapsTile(entity->getPosition(), entity->getSize(), tilePosition, tileSize)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool World::isTileDangerous(const Vector2& tilePosition, const Vector2& tileSize) const {
+    for (const auto& entity : entities) {
+        if (entity && entity->threatensTile(tilePosition, tileSize)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+std::optional<Vector2> World::findNearestPowerUpTile(const Vector2& fromPosition) const {
+    std::optional<Vector2> nearest;
+    float bestDistance = 0.f;
+
+    for (const auto& entity : entities) {
+        if (!entity || !entity->isPowerUp()) {
+            continue;
+        }
+
+        const float distance = squaredDistance(fromPosition, entity->getPosition());
+        if (!nearest.has_value() || distance < bestDistance) {
+            nearest = entity->getPosition();
+            bestDistance = distance;
+        }
+    }
+
+    return nearest;
+}
+
+std::optional<Vector2> World::findNearestDestructibleWallTile(const Vector2& fromPosition) const {
+    std::optional<Vector2> nearest;
+    float bestDistance = 0.f;
+
+    for (const auto& entity : entities) {
+        if (!entity || !entity->isDestructibleByExplosion()) {
+            continue;
+        }
+
+        const float distance = squaredDistance(fromPosition, entity->getPosition());
+        if (!nearest.has_value() || distance < bestDistance) {
+            nearest = entity->getPosition();
+            bestDistance = distance;
+        }
+    }
+
+    return nearest;
+}
+
+std::optional<Vector2> World::findNearestEnemyPosition(const Vector2& fromPosition, const CharacterColor& self) const {
+    std::optional<Vector2> nearest;
+    float bestDistance = 0.f;
+
+    for (const auto& entity : entities) {
+        if (!entity) {
+            continue;
+        }
+
+        const std::optional<CharacterColor> color = entity->getCharacterColor();
+        if (!color.has_value() || *color == self) {
+            continue;
+        }
+
+        const float distance = squaredDistance(fromPosition, entity->getPosition());
+        if (!nearest.has_value() || distance < bestDistance) {
+            nearest = entity->getPosition();
+            bestDistance = distance;
+        }
+    }
+
+    return nearest;
+}
+
+bool World::anyDestructibleWallsRemain() const {
+    for (const auto& entity : entities) {
+        if (entity && entity->isDestructibleByExplosion()) {
             return true;
         }
     }

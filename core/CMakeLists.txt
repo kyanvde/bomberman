@@ -13,6 +13,8 @@ SET(SRC
 		Animation.cpp
         CharacterColor.h
         PowerUpType.h
+        AIController.h
+        BasicAIController.cpp
 )
 
 ADD_LIBRARY(core STATIC ${SRC})

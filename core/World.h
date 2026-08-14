@@ -245,6 +245,74 @@ public:
     [[nodiscard]] bool hasPowerUpAt(const Vector2& tilePosition, const Vector2& tileSize) const;
 
     /**
+     * @brief Checks whether a destructible (as opposed to indestructible) wall currently overlaps
+     * the given tile. Used by AI controllers deciding whether it's worth placing a bomb next to a
+     * given neighboring tile.
+     * @param tilePosition The top-left corner of the tile to check.
+     * @param tileSize The size of the tile to check.
+     * @return True if a destructible wall overlaps the tile, false otherwise.
+     */
+    [[nodiscard]] bool isDestructibleWallAt(const Vector2& tilePosition, const Vector2& tileSize) const;
+
+    /**
+     * @brief Checks whether any entity's eventual blast would reach the given tile (see
+     * EntityModel::threatensTile). Used by AI controllers to flee imminent bomb danger.
+     * @param tilePosition The top-left corner of the tile to check.
+     * @param tileSize The size of the tile to check.
+     * @return True if the tile is currently threatened by some entity's blast, false otherwise.
+     */
+    [[nodiscard]] bool isTileDangerous(const Vector2& tilePosition, const Vector2& tileSize) const;
+
+    /**
+     * @brief Retrieves the world's tile size.
+     * @return The size of a single grid tile in world coordinates.
+     */
+    [[nodiscard]] const Vector2& getCellSize() const noexcept { return cellSize; }
+
+    /**
+     * @brief Snaps a world position to the top-left corner of the tile it falls within, based on
+     * an entity's center point. Exposed read-only for AI controllers to reason about tile-aligned
+     * positions.
+     * @param position The entity's current (possibly mid-tile) position.
+     * @param size The entity's size, used to find its center.
+     * @return The top-left position of the tile the entity's center falls within.
+     */
+    [[nodiscard]] Vector2 tileOf(const Vector2& position, const Vector2& size) const {
+        return snapToTileTopLeft(position, size);
+    }
+
+    /**
+     * @brief Finds the position of the power-up nearest to the given position, if any exist.
+     * @param fromPosition The position to measure distance from.
+     * @return The nearest power-up's position, or std::nullopt if none exist.
+     */
+    [[nodiscard]] std::optional<Vector2> findNearestPowerUpTile(const Vector2& fromPosition) const;
+
+    /**
+     * @brief Finds the position of the destructible wall nearest to the given position, if any
+     * remain.
+     * @param fromPosition The position to measure distance from.
+     * @return The nearest destructible wall's position, or std::nullopt if none remain.
+     */
+    [[nodiscard]] std::optional<Vector2> findNearestDestructibleWallTile(const Vector2& fromPosition) const;
+
+    /**
+     * @brief Finds the position of the character of a different color nearest to the given
+     * position, if any exist.
+     * @param fromPosition The position to measure distance from.
+     * @param self The color to exclude from the search (the searching character's own color).
+     * @return The nearest enemy's position, or std::nullopt if none exist.
+     */
+    [[nodiscard]] std::optional<Vector2> findNearestEnemyPosition(const Vector2& fromPosition,
+                                                                   const CharacterColor& self) const;
+
+    /**
+     * @brief Checks whether any destructible wall remains anywhere in the world.
+     * @return True if at least one destructible wall exists, false otherwise.
+     */
+    [[nodiscard]] bool anyDestructibleWallsRemain() const;
+
+    /**
      * @brief Notifies whichever character has the given color that one of its bombs has just
      * exploded (or otherwise been removed), freeing up a bomb slot. Does nothing if no character
      * of that color exists.

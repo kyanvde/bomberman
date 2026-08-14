@@ -85,6 +85,18 @@ public:
     [[nodiscard]] bool isBomb() const noexcept override { return true; }
 
     /**
+     * @brief Checks whether this bomb's eventual cross-shaped blast (own tile plus up to radius
+     * tiles in each of the four directions) would reach the given tile. Deliberately ignores
+     * whether the bomb is armed yet, and whether an indestructible wall would actually stop the
+     * blast before reaching that far -- a cheap, slightly conservative danger estimate is safer
+     * for AI purposes than an exact one.
+     * @param tilePosition The top-left corner of the tile to check.
+     * @param tileSize The size of the tile to check.
+     * @return True if this bomb's blast would reach the given tile, false otherwise.
+     */
+    [[nodiscard]] bool threatensTile(const Vector2& tilePosition, const Vector2& tileSize) const noexcept override;
+
+    /**
      * @brief Triggers this bomb's own explosion immediately, using its own radius and owner.
      * Called by World when this bomb is caught in another explosion's blast (a chain reaction).
      * @param world The world this bomb belongs to.

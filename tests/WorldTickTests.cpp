@@ -1,7 +1,11 @@
+#include "CharacterColor.h"
+#include "PowerUpType.h"
 #include "TestEntities.h"
 #include "TestFactory.h"
 #include "TestRunner.h"
 #include "World.h"
+#include "entities/Character.h"
+#include "entities/PowerUp.h"
 
 #include <cstdio>
 #include <fstream>
@@ -74,4 +78,45 @@ void runWorldTickTests(tests::TestRunner& runner) {
     }
     runner.check(allTickedNow, "Entities spawned mid-tick are ticked on the following update() call");
     runner.check(spawnerPtr->tickCount == 2, "update() continues to behave correctly after a prior mid-tick spawn");
+
+    // --- End-to-end: an AI-controlled character's Character::onTick, driven by World::update(),
+    //     actually moves it over time -- proving the whole tick-dispatch pipeline (World::update
+    //     -> Character::onTick -> AIController::decide -> World::moveCharacter) is wired
+    //     correctly, not just that AIController::decide() returns a sensible Decision in
+    //     isolation (already covered by AIControllerTests.cpp). ---
+    {
+        const std::string aiPath = "world_tick_tests_tmp2.txt";
+        {
+            std::ofstream file(aiPath);
+            for (int row = 0; row < 10; ++row) {
+                file << "WWWWWWWWWW\n";
+            }
+        }
+
+        World aiWorld(std::make_shared<tests::TestFactory>(), aiPath);
+        std::remove(aiPath.c_str());
+
+        for (core::EntityId id = 0; id < 100; ++id) {
+            aiWorld.markForRemoval(id);
+        }
+        aiWorld.update(0.f);
+
+        const Vector2 tileSize(0.2f, 0.2f);
+        auto bot = std::make_unique<core::Character>(Vector2(0.f, 0.f), tileSize, core::CharacterColor::Blue);
+        auto powerUp = std::make_unique<core::PowerUp>(Vector2(0.6f, 0.f), tileSize, core::PowerUpType::Fire);
+
+        const core::Character* botPtr = bot.get();
+
+        aiWorld.addEntity(std::move(bot));
+        aiWorld.addEntity(std::move(powerUp));
+
+        const Vector2 startPosition = botPtr->getPosition();
+        for (int i = 0; i < 30; ++i) {
+            aiWorld.update(0.05f);
+        }
+        const Vector2 endPosition = botPtr->getPosition();
+
+        runner.check(startPosition.x != endPosition.x || startPosition.y != endPosition.y,
+                     "An AI-controlled character actually moves over time when driven by World::update()");
+    }
 }

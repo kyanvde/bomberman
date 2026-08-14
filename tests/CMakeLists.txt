@@ -14,6 +14,7 @@ SET(TEST_SRC
     WorldLoaderTests.cpp
     PowerUpSpawnTests.cpp
     PowerUpPickupTests.cpp
+    AIControllerTests.cpp
 )
 
 ADD_EXECUTABLE(core_tests ${TEST_SRC})

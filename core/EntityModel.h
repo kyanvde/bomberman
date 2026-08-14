@@ -249,6 +249,16 @@ public:
     [[nodiscard]] virtual bool isBomb() const noexcept { return false; }
 
     /**
+     * @brief Determines whether this entity's own eventual explosion would reach the given tile,
+     * so AI controllers can avoid standing in a bomb's blast path without needing to know
+     * anything bomb-specific (radius, fuse, arming). Always false except for Bomb.
+     * @param tilePosition The top-left corner of the tile to check.
+     * @param tileSize The size of the tile to check.
+     * @return True if this entity threatens the given tile, false otherwise.
+     */
+    [[nodiscard]] virtual bool threatensTile(const Vector2&, const Vector2&) const noexcept { return false; }
+
+    /**
      * @brief Determines whether this entity is a power-up, so it should be destroyed (without
      * being picked up) when an explosion reaches it. Always false except for PowerUp.
      * @return True if this entity is a power-up, false otherwise.

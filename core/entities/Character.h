@@ -1,8 +1,11 @@
 #ifndef BOMBERMAN_CORE_ENTITIES_CHARACTER_H
 #define BOMBERMAN_CORE_ENTITIES_CHARACTER_H
 
+#include "AIController.h"
 #include "CharacterColor.h"
 #include "EntityModel.h"
+
+#include <memory>
 
 namespace core {
 
@@ -41,6 +44,12 @@ class Character final : public EntityModel {
      * speed. Starts at 1; increased permanently by Skates power-ups.
      */
     float speedMultiplier = 1.f;
+
+    /**
+     * @brief The strategy driving this character's movement/bombing decisions each tick, or
+     * nullptr for the human-controlled White character (whose input comes from GameState instead).
+     */
+    std::unique_ptr<AIController> aiController;
 
 public:
     /**
@@ -132,6 +141,17 @@ public:
                                    const Vector2& moverSize) const override;
 
     void onMovementAttempt(const Vector2& direction) override;
+
+    /**
+     * @brief Lets an AI-controlled character (any color but White) act each tick: asks its
+     * AIController for a Decision given the current World, then applies it through the same
+     * World::moveCharacter/World::placeBomb methods the human player's input uses. Does nothing
+     * for the human-controlled White character, which has no AIController.
+     * @param world The world this character belongs to.
+     * @param selfId This character's own identifier.
+     * @param deltaTime The time elapsed since the previous tick, in seconds.
+     */
+    void onTick(World& world, EntityId selfId, float deltaTime) override;
 };
 
 }; // namespace core
