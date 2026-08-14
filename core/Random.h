@@ -30,6 +30,13 @@ public:
     [[nodiscard]] double getRandomNumber(int min, int max);
 
     /**
+     * @brief Rolls a random boolean outcome with the given probability of being true.
+     * @param probability The probability (in [0, 1]) that this call returns true.
+     * @return True with the given probability, false otherwise.
+     */
+    [[nodiscard]] bool chance(double probability);
+
+    /**
      * @brief Deleted copy constructor to prevent copying of the Random instance.
      */
     Random(const Random&) = delete;

@@ -12,6 +12,11 @@ double Random::getRandomNumber(const int min, const int max) {
     return dis(gen);
 }
 
+bool Random::chance(const double probability) {
+    std::uniform_real_distribution<> dis(0.0, 1.0);
+    return dis(gen) < probability;
+}
+
 Random::Random() noexcept : gen(std::random_device{}()) {}
 
 } // namespace core

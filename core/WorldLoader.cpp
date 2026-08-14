@@ -37,6 +37,11 @@ bool verifyFileFormat(const std::vector<std::string>& lines) {
 } // namespace
 
 namespace core {
+namespace {
+// Most '_' cells become destructible walls; only a low chance spawns air (open grass) instead,
+// matching the classic alternating-block Bomberman layout.
+constexpr double destructibleWallChance = 0.85;
+} // namespace
 
 void WorldLoader::loadFromFile(const std::string& filename, World& world,
                                const std::shared_ptr<AbstractFactory>& factory) {
@@ -68,7 +73,6 @@ void WorldLoader::loadFromFile(const std::string& filename, World& world,
             const Vector2 position(-1.f + static_cast<float>(x) * cellSize.x,
                                    -1.f + static_cast<float>(y) * cellSize.y);
             const Vector2 size(cellSize.x, cellSize.y);
-            const double result = Random::getInstance().getRandomNumber(0, 1);
             const bool shaded = previousRowIsWall[x];
 
             switch (cell) {
@@ -97,7 +101,7 @@ void WorldLoader::loadFromFile(const std::string& filename, World& world,
                 currentRowIsWall[x] = true;
                 break;
             case '_':
-                if (result > 0.75) {
+                if (Random::getInstance().chance(destructibleWallChance)) {
                     world.addEntity(factory->createWall(position, size, true));
                     currentRowIsWall[x] = true;
                 } else {

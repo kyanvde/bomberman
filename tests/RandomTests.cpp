@@ -21,4 +21,23 @@ void runRandomTests(tests::TestRunner& runner) {
         }
     }
     runner.check(sawVariety, "Random::getRandomNumber produces varying values across repeated calls");
+
+    int trueCount = 0;
+    constexpr int trials = 10000;
+    for (int i = 0; i < trials; ++i) {
+        if (core::Random::getInstance().chance(0.85)) {
+            ++trueCount;
+        }
+    }
+    const double observedRate = static_cast<double>(trueCount) / trials;
+    runner.check(observedRate > 0.8 && observedRate < 0.9,
+                 "Random::chance(0.85) returns true at roughly the requested rate over many trials");
+
+    int alwaysFalseCount = 0;
+    for (int i = 0; i < 100; ++i) {
+        if (core::Random::getInstance().chance(0.0)) {
+            ++alwaysFalseCount;
+        }
+    }
+    runner.check(alwaysFalseCount == 0, "Random::chance(0.0) never returns true");
 }
