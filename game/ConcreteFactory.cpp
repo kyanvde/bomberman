@@ -70,9 +70,26 @@ std::unique_ptr<core::EntityModel> ConcreteFactory::createGrass(const core::Vect
 }
 
 std::unique_ptr<core::EntityModel> ConcreteFactory::createPowerUp(const core::Vector2& position,
-                                                                  const core::Vector2& size) {
-    std::unique_ptr<core::EntityModel> powerUp = std::make_unique<core::PowerUp>(position, size);
-    powerUp->attach(std::make_shared<PowerUpView>(*powerUp, frameFor(core::Vector2(1.f, 1.f))));
+                                                                  const core::Vector2& size,
+                                                                  const core::PowerUpType type) {
+    std::unique_ptr<core::EntityModel> powerUp = std::make_unique<core::PowerUp>(position, size, type);
+
+    // Placeholder frames -- arbitrary distinct spritesheet cells until the correct icon for each
+    // power-up type is picked from the spritesheet.
+    core::Vector2 typePosition;
+    switch (type) {
+    case core::PowerUpType::Fire:
+        typePosition = core::Vector2(1.f, 1.f);
+        break;
+    case core::PowerUpType::ExtraBomb:
+        typePosition = core::Vector2(2.f, 1.f);
+        break;
+    case core::PowerUpType::Skates:
+        typePosition = core::Vector2(3.f, 1.f);
+        break;
+    }
+
+    powerUp->attach(std::make_shared<PowerUpView>(*powerUp, frameFor(typePosition)));
     return powerUp;
 }
 

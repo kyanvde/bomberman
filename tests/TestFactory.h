@@ -33,8 +33,9 @@ public:
         return std::make_unique<core::Grass>(pos, size);
     }
 
-    std::unique_ptr<core::EntityModel> createPowerUp(const core::Vector2& pos, const core::Vector2& size) override {
-        return std::make_unique<core::PowerUp>(pos, size);
+    std::unique_ptr<core::EntityModel> createPowerUp(const core::Vector2& pos, const core::Vector2& size,
+                                                     const core::PowerUpType type) override {
+        return std::make_unique<core::PowerUp>(pos, size, type);
     }
 
     std::unique_ptr<core::EntityModel> createBomb(const core::Vector2& pos, const core::Vector2& size,

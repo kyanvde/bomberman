@@ -148,7 +148,7 @@ void runDetonateBombTests(tests::TestRunner& runner) {
 
         const Vector2 powerUpTile(-0.2f, 0.f); // one tile west of the bomb
 
-        auto powerUp = std::make_unique<PowerUp>(powerUpTile, tileSize);
+        auto powerUp = std::make_unique<PowerUp>(powerUpTile, tileSize, core::PowerUpType::Fire);
         auto bomb = std::make_unique<Bomb>(bombTile, tileSize, CharacterColor::White, 2);
 
         const PowerUp* powerUpPtr = powerUp.get();

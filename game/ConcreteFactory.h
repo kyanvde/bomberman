@@ -87,12 +87,14 @@ public:
                                                    bool shaded) override;
 
     /**
-     * @brief Creates a power-up entity with the specified position and size.
+     * @brief Creates a power-up entity with the specified position, size, and type.
      * @param position The position of the power-up in world coordinates.
      * @param size The size of the power-up in world coordinates.
+     * @param type Which permanent stat boost this power-up grants when picked up.
      * @return A unique pointer to the created core::EntityModel representing the power-up.
      */
-    std::unique_ptr<core::EntityModel> createPowerUp(const core::Vector2& position, const core::Vector2& size) override;
+    std::unique_ptr<core::EntityModel> createPowerUp(const core::Vector2& position, const core::Vector2& size,
+                                                      core::PowerUpType type) override;
 
     /**
      * @brief Creates a bomb entity with the specified position, size, owner, and blast radius.

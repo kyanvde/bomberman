@@ -2,6 +2,7 @@
 #define BOMBERMAN_CORE_ABSTRACTFACTORY_H
 
 #include "EntityModel.h"
+#include "PowerUpType.h"
 #include "Vector2.h"
 #include <memory>
 
@@ -44,12 +45,13 @@ public:
     virtual std::unique_ptr<EntityModel> createGrass(const Vector2& pos, const Vector2& size, bool shaded) = 0;
 
     /**
-     * @brief Creates a power-up entity with the specified position and size.
+     * @brief Creates a power-up entity with the specified position, size, and type.
      * @param pos The position of the power-up in world coordinates.
      * @param size The size of the power-up in world coordinates.
+     * @param type Which permanent stat boost this power-up grants when picked up.
      * @return A unique pointer to the created EntityModel representing the power-up.
      */
-    virtual std::unique_ptr<EntityModel> createPowerUp(const Vector2& pos, const Vector2& size) = 0;
+    virtual std::unique_ptr<EntityModel> createPowerUp(const Vector2& pos, const Vector2& size, PowerUpType type) = 0;
 
     /**
      * @brief Creates a bomb entity with the specified position, size, owner, and blast radius.
