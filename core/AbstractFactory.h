@@ -63,6 +63,15 @@ public:
                                                     const CharacterColor& owner, int radius) = 0;
 
     /**
+     * @brief Creates an explosion entity (a single affected tile of a blast) with the specified
+     * position and size.
+     * @param pos The position of the explosion in world coordinates.
+     * @param size The size of the explosion in world coordinates.
+     * @return A unique pointer to the created EntityModel representing the explosion.
+     */
+    virtual std::unique_ptr<EntityModel> createExplosion(const Vector2& pos, const Vector2& size) = 0;
+
+    /**
      * @brief Virtual destructor for the AbstractFactory class.
      */
     virtual ~AbstractFactory() = default;

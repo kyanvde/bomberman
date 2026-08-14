@@ -4,6 +4,7 @@
 #include "AbstractFactory.h"
 #include "entities/Bomb.h"
 #include "entities/Character.h"
+#include "entities/Explosion.h"
 #include "entities/Grass.h"
 #include "entities/PowerUp.h"
 #include "entities/Wall.h"
@@ -39,6 +40,10 @@ public:
     std::unique_ptr<core::EntityModel> createBomb(const core::Vector2& pos, const core::Vector2& size,
                                                   const core::CharacterColor& owner, const int radius) override {
         return std::make_unique<core::Bomb>(pos, size, owner, radius);
+    }
+
+    std::unique_ptr<core::EntityModel> createExplosion(const core::Vector2& pos, const core::Vector2& size) override {
+        return std::make_unique<core::Explosion>(pos, size);
     }
 };
 

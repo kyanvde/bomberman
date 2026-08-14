@@ -14,6 +14,7 @@ enum class AnimationType {
     WalkLeft,
     WalkRight,
     BombTicking,
+    Explosion,
 };
 
 class Animation {

@@ -1,6 +1,7 @@
 #include "ConcreteFactory.h"
 
 #include <entities/Bomb.h>
+#include <entities/Explosion.h>
 #include <entities/Grass.h>
 #include <entities/PowerUp.h>
 #include <entities/Wall.h>
@@ -9,6 +10,7 @@
 #include <utility>
 #include <views/BombView.h>
 #include <views/CharacterView.h>
+#include <views/ExplosionView.h>
 #include <views/PowerUpView.h>
 #include <views/WallView.h>
 
@@ -79,6 +81,15 @@ std::unique_ptr<core::EntityModel> ConcreteFactory::createBomb(const core::Vecto
     std::unique_ptr<core::EntityModel> bomb = std::make_unique<core::Bomb>(position, size, owner, radius);
     bomb->attach(std::make_shared<BombView>(*bomb, frameFor(core::Vector2(6.f, 0.f))));
     return bomb;
+}
+
+std::unique_ptr<core::EntityModel> ConcreteFactory::createExplosion(const core::Vector2& position,
+                                                                    const core::Vector2& size) {
+    std::unique_ptr<core::EntityModel> explosion = std::make_unique<core::Explosion>(position, size);
+    // Placeholder frame -- reuses the destructible-wall rubble sprite until a dedicated explosion
+    // frame is picked from the spritesheet (see the grow/fade animation work in a later step).
+    explosion->attach(std::make_shared<ExplosionView>(*explosion, frameFor(core::Vector2(1.f, 0.f))));
+    return explosion;
 }
 
 } // namespace game

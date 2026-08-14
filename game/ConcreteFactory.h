@@ -104,6 +104,15 @@ public:
      */
     std::unique_ptr<core::EntityModel> createBomb(const core::Vector2& position, const core::Vector2& size,
                                                   const core::CharacterColor& owner, int radius) override;
+
+    /**
+     * @brief Creates an explosion entity with the specified position and size.
+     * @param position The position of the explosion in world coordinates.
+     * @param size The size of the explosion in world coordinates.
+     * @return A unique pointer to the created core::EntityModel representing the explosion.
+     */
+    std::unique_ptr<core::EntityModel> createExplosion(const core::Vector2& position,
+                                                       const core::Vector2& size) override;
 };
 
 } // namespace game

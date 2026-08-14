@@ -254,7 +254,7 @@ bool World::isBlastStoppedAt(const Vector2& tilePosition, const Vector2& tileSiz
 }
 
 bool World::explodeTile(const Vector2& tilePosition, const Vector2& tileSize) {
-    // TODO: spawn a visual Explosion entity at this tile once that entity type exists.
+    addEntity(factory->createExplosion(tilePosition, tileSize));
 
     bool destroyedWall = false;
 
