@@ -5,6 +5,7 @@ void runCameraTests(tests::TestRunner& runner);
 void runRandomTests(tests::TestRunner& runner);
 void runStopwatchTests(tests::TestRunner& runner);
 void runCharacterTests(tests::TestRunner& runner);
+void runWallTests(tests::TestRunner& runner);
 
 /**
  * @brief Entry point for the core_tests executable.
@@ -20,6 +21,7 @@ int main() {
     runRandomTests(runner);
     runStopwatchTests(runner);
     runCharacterTests(runner);
+    runWallTests(runner);
 
     return runner.summarize();
 }

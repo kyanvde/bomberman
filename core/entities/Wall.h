@@ -11,6 +11,11 @@ namespace core {
  * including collision detection with characters.
  */
 class Wall final : public EntityModel {
+    /**
+     * @brief Whether this wall can be destroyed by an explosion.
+     */
+    bool destructible;
+
 public:
     /**
      * @brief Constructs a new Wall object with the specified position, size, and destructibility.
@@ -18,7 +23,13 @@ public:
      * @param size The size of the wall in world coordinates.
      * @param destructible A boolean indicating whether the wall is destructible (default is false).
      */
-    Wall(const Vector2& pos, const Vector2& size, [[maybe_unused]] bool destructible = false);
+    Wall(const Vector2& pos, const Vector2& size, bool destructible = false);
+
+    /**
+     * @brief Checks whether this wall can be destroyed by an explosion.
+     * @return True if the wall is destructible, false otherwise.
+     */
+    [[nodiscard]] bool isDestructible() const noexcept { return destructible; }
 
     /**
      * @brief Checks if the wall blocks the movement of a character at a given position and size.

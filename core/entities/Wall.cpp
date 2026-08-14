@@ -9,7 +9,8 @@ bool intersects(const Vector2& aPos, const Vector2& aSize, const Vector2& bPos, 
 }
 } // namespace
 
-Wall::Wall(const Vector2& pos, const Vector2& size, [[maybe_unused]] bool destructible) : EntityModel(pos, size) {}
+Wall::Wall(const Vector2& pos, const Vector2& size, const bool destructible)
+    : EntityModel(pos, size), destructible(destructible) {}
 
 bool Wall::blocksCharacterMovement(const Character&, const Vector2& characterPosition,
                                    const Vector2& characterSize) const {
