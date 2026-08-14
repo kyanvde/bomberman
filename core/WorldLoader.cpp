@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <fstream>
 #include <stdexcept>
+#include <vector>
 
 #include "CharacterColor.h"
 #include "Random.h"
@@ -34,6 +35,32 @@ bool verifyFileFormat(const std::vector<std::string>& lines) {
                        [lineLength](const std::string& line) { return line.length() == lineLength; });
 }
 
+bool isSpawnCell(const char cell) { return cell == 'P' || cell == 'B' || cell == 'R' || cell == 'L'; }
+
+struct GridPosition {
+    std::size_t x;
+    std::size_t y;
+};
+
+// A destructible-wall roll this close (in the same row or column) to a spawn point is skipped in
+// favor of always placing grass, so every character has a guaranteed two-tile clear path in at
+// least one direction -- enough to escape their own radius-1 starting bomb -- instead of
+// potentially spawning boxed in on every side by chance.
+constexpr std::size_t spawnClearance = 2;
+
+bool isNearSpawn(const std::vector<GridPosition>& spawns, const std::size_t x, const std::size_t y) {
+    for (const GridPosition& spawn : spawns) {
+        const std::size_t dx = spawn.x > x ? spawn.x - x : x - spawn.x;
+        const std::size_t dy = spawn.y > y ? spawn.y - y : y - spawn.y;
+
+        if ((spawn.x == x && dy <= spawnClearance) || (spawn.y == y && dx <= spawnClearance)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 } // namespace
 
 namespace core {
@@ -60,61 +87,60 @@ void WorldLoader::loadFromFile(const std::string& filename, World& world,
     const Vector2 cellSize(2.f / worldSize.x, 2.f / worldSize.y);
     world.setCellSize(cellSize);
 
-    // Tracks which columns of the row above ended up being a wall,
-    // accounting for the random walls generated from '_' cells.
-    std::vector<bool> previousRowIsWall(lines[0].length(), false);
+    std::vector<GridPosition> spawns;
+    for (std::size_t y = 0; y < lines.size(); ++y) {
+        for (std::size_t x = 0; x < lines[y].length(); ++x) {
+            if (isSpawnCell(lines[y][x])) {
+                spawns.push_back({x, y});
+            }
+        }
+    }
 
     for (std::size_t y = 0; y < lines.size(); ++y) {
         const std::string& line = lines[y];
-        std::vector<bool> currentRowIsWall(line.length(), false);
 
         for (std::size_t x = 0; x < line.length(); ++x) {
             const char cell = line[x];
             const Vector2 position(-1.f + static_cast<float>(x) * cellSize.x,
                                    -1.f + static_cast<float>(y) * cellSize.y);
             const Vector2 size(cellSize.x, cellSize.y);
-            const bool shaded = previousRowIsWall[x];
+            // Entities in the row above are already loaded by the time this row is processed, so
+            // the shading a grass tile needs (whether the tile directly above it is a wall) can be
+            // read back from the world itself rather than tracked separately during loading.
+            const Vector2 abovePosition(position.x, position.y - cellSize.y);
+            const bool shaded = world.isWallAt(abovePosition, size);
 
             switch (cell) {
             case 'P':
                 world.addEntity(factory->createGrass(position, size, shaded));
                 world.addEntity(factory->createCharacter(position, size, CharacterColor::White));
-                currentRowIsWall[x] = false;
                 break;
             case 'B':
                 world.addEntity(factory->createGrass(position, size, shaded));
                 world.addEntity(factory->createCharacter(position, size, CharacterColor::Blue));
-                currentRowIsWall[x] = false;
                 break;
             case 'R':
                 world.addEntity(factory->createGrass(position, size, shaded));
                 world.addEntity(factory->createCharacter(position, size, CharacterColor::Red));
-                currentRowIsWall[x] = false;
                 break;
             case 'L':
                 world.addEntity(factory->createGrass(position, size, shaded));
                 world.addEntity(factory->createCharacter(position, size, CharacterColor::Black));
-                currentRowIsWall[x] = false;
                 break;
             case 'W':
                 world.addEntity(factory->createWall(position, size, false));
-                currentRowIsWall[x] = true;
                 break;
             case '_':
-                if (Random::getInstance().chance(destructibleWallChance)) {
+                if (!isNearSpawn(spawns, x, y) && Random::getInstance().chance(destructibleWallChance)) {
                     world.addEntity(factory->createWall(position, size, true));
-                    currentRowIsWall[x] = true;
                 } else {
                     world.addEntity(factory->createGrass(position, size, shaded));
-                    currentRowIsWall[x] = false;
                 }
                 break;
             default:
                 throw std::runtime_error("Unknown cell type: " + std::string(1, cell));
             }
         }
-
-        previousRowIsWall = std::move(currentRowIsWall);
     }
 }
 

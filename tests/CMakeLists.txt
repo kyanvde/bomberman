@@ -11,6 +11,7 @@ SET(TEST_SRC
     BombTests.cpp
     DetonateBombTests.cpp
     ExplosionTests.cpp
+    WorldLoaderTests.cpp
 )
 
 ADD_EXECUTABLE(core_tests ${TEST_SRC})
