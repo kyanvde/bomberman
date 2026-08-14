@@ -3,6 +3,7 @@
 
 #include <ConcreteRenderer.h>
 
+#include "Score.h"
 #include "State.h"
 #include "World.h"
 #include <SFML/Graphics.hpp>
@@ -16,6 +17,12 @@ namespace game {
  * It handles user input, updates the game world, and renders the game scene.
  */
 class GameState final : public State {
+    /**
+     * @brief This round's Score, created before the world so it can be passed into World's
+     * constructor and attached to every entity (including ones loaded from the world file).
+     */
+    std::shared_ptr<core::Score> score;
+
     /**
      * @brief The game world that contains all game entities and logic.
      */
@@ -35,6 +42,16 @@ class GameState final : public State {
      * @brief A set of currently held keyboard keys for smooth continuous movement.
      */
     std::set<sf::Keyboard::Key> heldKeys;
+
+    /**
+     * @brief The font used for rendering the score HUD.
+     */
+    sf::Font font;
+
+    /**
+     * @brief The current-score text drawn each frame.
+     */
+    sf::Text scoreText;
 
 public:
     /**

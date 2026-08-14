@@ -16,6 +16,9 @@ SET(SRC
         AIController.h
         BasicAIController.cpp
         GameOutcome.h
+        GameEvent.h
+        Score.cpp
+        HighScores.cpp
 )
 
 ADD_LIBRARY(core STATIC ${SRC})

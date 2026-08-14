@@ -56,9 +56,10 @@ public:
 
     /**
      * @brief Updates the position and size of the entity view based on the associated EntityModel.
-     * This method is called when the observed EntityModel changes.
+     * This method is called when the observed EntityModel changes. A view has nothing to do with
+     * the event's payload (that's Score's concern) -- it always just re-syncs from the model.
      */
-    void update() override {
+    void update(const core::GameEvent& = {}) override {
         position = model.get().getPosition();
         size = model.get().getSize();
 

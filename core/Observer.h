@@ -2,6 +2,7 @@
 #define BOMBERMAN_CORE_OBSERVER_H
 
 #include "AbstractRenderer.h"
+#include "GameEvent.h"
 
 namespace core {
 
@@ -19,15 +20,20 @@ public:
     /**
      * @brief Updates the observer based on changes in the subject.
      * This method should be implemented by derived classes to define how they respond to changes.
+     * @param event What happened and who it's attributed to. Defaults to a routine Tick, so a
+     * plain notify()/update() call (position or animation changes, unrelated to scoring) keeps
+     * working exactly as before.
      */
-    virtual void update() = 0;
+    virtual void update(const GameEvent& event = GameEvent{}) = 0;
 
     /**
-     * @brief Renders the observer using the provided renderer.
-     * This method should be implemented by derived classes to define how they are rendered.
+     * @brief Renders the observer using the provided renderer. Default implementation does
+     * nothing -- most Observers are visual (EntityView and friends) and override this, but a
+     * non-visual Observer like Score has no sprite to draw and shouldn't be forced to provide a
+     * meaningless override just to satisfy the interface.
      * @param renderer A reference to the Renderer used for rendering.
      */
-    virtual void render(AbstractRenderer& renderer) const = 0;
+    virtual void render(AbstractRenderer&) const {}
 };
 
 } // namespace core

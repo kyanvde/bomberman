@@ -2,6 +2,7 @@
 build
 .DS_Store
 docs
+highscores.txt
 
 # Visual Studio Code
 .vscode/*

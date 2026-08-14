@@ -16,6 +16,9 @@ SET(TEST_SRC
     PowerUpPickupTests.cpp
     AIControllerTests.cpp
     GameOutcomeTests.cpp
+    ScoreTests.cpp
+    HighScoresTests.cpp
+    WorldScoreIntegrationTests.cpp
 )
 
 ADD_EXECUTABLE(core_tests ${TEST_SRC})

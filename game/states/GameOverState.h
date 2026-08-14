@@ -22,6 +22,11 @@ class GameOverState final : public State {
     sf::Text resultText;
 
     /**
+     * @brief The final score text displayed to the player.
+     */
+    sf::Text scoreText;
+
+    /**
      * @brief A hint prompting the player how to return to the menu.
      */
     sf::Text hintText;
@@ -40,6 +45,11 @@ class GameOverState final : public State {
      * @brief The base outline thickness of the result text used for scaling UI elements.
      */
     float baseResultOutlineThickness = 5.f;
+
+    /**
+     * @brief The base character size of the score text used for scaling UI elements.
+     */
+    unsigned int baseScoreCharacterSize = 40;
 
     /**
      * @brief The base character size of the hint text used for scaling UI elements.
@@ -84,8 +94,10 @@ public:
      * @param stateManager A reference to the StateManager responsible for managing the different
      * states of the game.
      * @param playerWon True if the Player won the round, false if the Player lost.
+     * @param finalScore The Player's final score for the round, displayed alongside the outcome.
      */
-    GameOverState(const std::shared_ptr<sf::RenderWindow>& window, StateManager& stateManager, bool playerWon);
+    GameOverState(const std::shared_ptr<sf::RenderWindow>& window, StateManager& stateManager, bool playerWon,
+                 int finalScore);
 };
 
 } // namespace game

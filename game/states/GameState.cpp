@@ -2,21 +2,40 @@
 
 #include "ConcreteFactory.h"
 #include "ConcreteRenderer.h"
+#include "GameEvent.h"
 #include "GameOutcome.h"
 #include "GameOverState.h"
+#include "HighScores.h"
 #include "StateManager.h"
 #include "Stopwatch.h"
 
+#include <stdexcept>
+
 namespace game {
+namespace {
+// Where the round's final score is recorded, and where the menu's top-5 list is read from.
+// Runtime-generated, not checked into source control (see .gitignore).
+constexpr const char* highScoresPath = "highscores.txt";
+} // namespace
 
 GameState::GameState(const std::shared_ptr<sf::RenderWindow>& window, StateManager& stateManager)
-    : State(window, stateManager),
+    : State(window, stateManager), score(std::make_shared<core::Score>()),
       world(std::make_shared<ConcreteFactory>("assets/sprites/spritesheet.png", core::Vector2(16.f, 16.f),
                                               core::Vector2(), core::Vector2(1, 1)),
-            "assets/worlds/main.txt"),
+            "assets/worlds/main.txt", score),
       playerId(world.getPlayerId().value()), renderer(*window) {
     renderer.setViewportSize(
         core::Vector2(static_cast<float>(window->getSize().x), static_cast<float>(window->getSize().y)));
+
+    if (!font.loadFromFile("assets/fonts/arcadeclassic.ttf")) {
+        throw std::runtime_error("Failed to load font: assets/fonts/arcadeclassic.ttf");
+    }
+
+    scoreText = sf::Text("Score: 0", font, 24);
+    scoreText.setFillColor(sf::Color(188, 190, 0));
+    scoreText.setOutlineColor(sf::Color(110, 0, 64));
+    scoreText.setOutlineThickness(2.f);
+    scoreText.setPosition(10.f, 10.f);
 }
 
 void GameState::processEvent(const sf::Event& event) {
@@ -54,13 +73,25 @@ void GameState::update() {
     const float deltaTime = core::Stopwatch::getInstance().getDeltaTime();
     world.update(deltaTime);
     world.moveCharacter(playerId, direction, deltaTime);
+    score->tick(deltaTime);
+
+    scoreText.setString("Score: " + std::to_string(score->getPoints()));
 
     if (const core::GameOutcome outcome = world.getOutcome(); outcome != core::GameOutcome::InProgress) {
-        stateManager.pushState(
-            std::make_unique<GameOverState>(window, stateManager, outcome == core::GameOutcome::PlayerWon));
+        const bool playerWon = outcome == core::GameOutcome::PlayerWon;
+        score->update(core::GameEvent{playerWon ? core::GameEventType::GameWon : core::GameEventType::GameLost,
+                                      core::CharacterColor::White});
+
+        core::HighScores highScores(highScoresPath);
+        highScores.record(score->getPoints());
+
+        stateManager.pushState(std::make_unique<GameOverState>(window, stateManager, playerWon, score->getPoints()));
     }
 }
 
-void GameState::render() { world.render(renderer); }
+void GameState::render() {
+    world.render(renderer);
+    window->draw(scoreText);
+}
 
 } // namespace game

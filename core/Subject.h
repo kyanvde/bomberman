@@ -32,8 +32,9 @@ public:
 
     /**
      * @brief Notifies all attached observers of a change in the subject.
+     * @param event What happened and who it's attributed to. Defaults to a routine Tick.
      */
-    virtual void notify();
+    virtual void notify(const GameEvent& event = GameEvent{});
 
     /**
      * @brief Renders the subject using the provided renderer.

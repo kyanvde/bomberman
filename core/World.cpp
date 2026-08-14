@@ -2,7 +2,9 @@
 
 #include "CharacterColor.h"
 #include "Collision.h"
+#include "GameEvent.h"
 #include "Random.h"
+#include "Score.h"
 #include "WorldLoader.h"
 #include <algorithm>
 #include <cmath>
@@ -59,6 +61,10 @@ void World::addEntity(std::unique_ptr<EntityModel> entity) {
 
     if (!playerId.has_value() && entity->isPlayerControlled()) {
         playerId = entity->getId();
+    }
+
+    if (score) {
+        entity->attach(score);
     }
 
     entities.push_back(std::move(entity));
@@ -154,6 +160,8 @@ void World::moveCharacter(const EntityId characterId, const Vector2& direction, 
             if (const std::optional<PowerUpType> type = entity->getPowerUpType(); type.has_value()) {
                 character.applyPowerUp(*type);
             }
+            entity->notify(GameEvent{GameEventType::PowerUpCollected, character.getCharacterColor().value_or(
+                                                                          CharacterColor::White)});
             markForRemoval(entity->getId());
         }
     }
@@ -241,7 +249,9 @@ void World::render(AbstractRenderer& renderer) const {
     }
 }
 
-World::World(const std::shared_ptr<AbstractFactory>& factory, const std::string& filename) : factory(factory) {
+World::World(const std::shared_ptr<AbstractFactory>& factory, const std::string& filename,
+            const std::shared_ptr<Score>& score)
+    : score(score), factory(factory) {
     WorldLoader::loadFromFile(filename, *this, factory);
 }
 
@@ -428,7 +438,7 @@ bool World::isBlastStoppedAt(const Vector2& tilePosition, const Vector2& tileSiz
     return false;
 }
 
-bool World::explodeTile(const Vector2& tilePosition, const Vector2& tileSize) {
+bool World::explodeTile(const Vector2& tilePosition, const Vector2& tileSize, const CharacterColor& owner) {
     addEntity(factory->createExplosion(tilePosition, tileSize));
 
     bool destroyedWall = false;
@@ -459,6 +469,7 @@ bool World::explodeTile(const Vector2& tilePosition, const Vector2& tileSize) {
 
             markForRemoval(id);
             destroyedWall = true;
+            entity.notify(GameEvent{GameEventType::BlockDestroyed, owner});
 
             const Vector2 abovePosition(wallPosition.x, wallPosition.y - wallSize.y);
             addEntity(factory->createGrass(wallPosition, wallSize, isWallAt(abovePosition, wallSize)));
@@ -469,7 +480,13 @@ bool World::explodeTile(const Vector2& tilePosition, const Vector2& tileSize) {
         }
 
         if (entity.isKilledByExplosion()) {
+            // Only counts as a kill (for scoring) if the victim isn't the bomb's own owner --
+            // blowing yourself up isn't an "enemy killed".
+            const std::optional<CharacterColor> victimColor = entity.getCharacterColor();
             entity.onExplosionKill();
+            if (!victimColor.has_value() || *victimColor != owner) {
+                entity.notify(GameEvent{GameEventType::EntityKilled, owner});
+            }
         }
 
         if (entity.isPowerUp()) {
@@ -536,7 +553,7 @@ void World::detonateBomb(const EntityId bombId, const int radius, const Characte
     markForRemoval(bombId);
     notifyBombExploded(owner);
 
-    explodeTile(bombTilePosition, tileSize); // the bomb's own tile always explodes
+    explodeTile(bombTilePosition, tileSize, owner); // the bomb's own tile always explodes
 
     const Vector2 directions[] = {Vector2(1.f, 0.f), Vector2(-1.f, 0.f), Vector2(0.f, 1.f), Vector2(0.f, -1.f)};
 
@@ -549,7 +566,7 @@ void World::detonateBomb(const EntityId bombId, const int radius, const Characte
                 break; // an indestructible wall -- the blast never reaches this tile
             }
 
-            if (explodeTile(tilePosition, tileSize)) {
+            if (explodeTile(tilePosition, tileSize, owner)) {
                 break; // a destructible wall was destroyed here -- the blast stops after it
             }
         }

@@ -16,6 +16,9 @@ void runPowerUpSpawnTests(tests::TestRunner& runner);
 void runPowerUpPickupTests(tests::TestRunner& runner);
 void runAIControllerTests(tests::TestRunner& runner);
 void runGameOutcomeTests(tests::TestRunner& runner);
+void runScoreTests(tests::TestRunner& runner);
+void runHighScoresTests(tests::TestRunner& runner);
+void runWorldScoreIntegrationTests(tests::TestRunner& runner);
 
 /**
  * @brief Entry point for the core_tests executable.
@@ -42,6 +45,9 @@ int main() {
     runPowerUpPickupTests(runner);
     runAIControllerTests(runner);
     runGameOutcomeTests(runner);
+    runScoreTests(runner);
+    runHighScoresTests(runner);
+    runWorldScoreIntegrationTests(runner);
 
     return runner.summarize();
 }

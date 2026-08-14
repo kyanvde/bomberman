@@ -14,6 +14,7 @@
 namespace core {
 
 enum class CharacterColor;
+class Score;
 
 /**
  * @brief The World class represents the game world and manages the entities within it.
@@ -24,6 +25,13 @@ class World {
      * @brief A vector of unique pointers to EntityModel objects representing the entities in the world.
      */
     std::vector<std::unique_ptr<EntityModel>> entities;
+
+    /**
+     * @brief The current round's Score, if one was supplied at construction. Attached as an
+     * Observer to every entity added to this world (including ones loaded from the world file),
+     * so it can react to GameEvents fired by World as they happen.
+     */
+    std::shared_ptr<Score> score;
 
     /**
      * @brief The identifier of the player entity, if it has been added to the world.
@@ -124,14 +132,16 @@ class World {
     /**
      * @brief Applies an explosion's effect to a single tile: destroys any destructible wall
      * there, kills any entity that dies from explosions, destroys any power-up there, and
-     * chain-detonates any bomb there. (Spawning the explosion's own visual entity is added in a
-     * later step.)
+     * chain-detonates any bomb there. Fires BlockDestroyed/EntityKilled GameEvents attributed to
+     * the bomb's owner.
      * @param tilePosition The top-left corner of the tile to affect.
      * @param tileSize The size of the tile to affect.
+     * @param owner The color of the character that placed the bomb causing this explosion, for
+     * event attribution.
      * @return True if a destructible wall was destroyed on this tile (signals the caller that
      * the blast should not propagate further in this direction), false otherwise.
      */
-    bool explodeTile(const Vector2& tilePosition, const Vector2& tileSize);
+    bool explodeTile(const Vector2& tilePosition, const Vector2& tileSize, const CharacterColor& owner);
 
 public:
     /**
@@ -189,8 +199,11 @@ public:
      * @brief Constructs a new World object using the specified factory and loads the world data from the given file.
      * @param factory A shared pointer to an AbstractFactory used for creating game entities.
      * @param filename The path to the file containing the world data.
+     * @param score The current round's Score, or nullptr if none (e.g. in tests). Stored before
+     * loading, so entities created while loading the world file are covered too.
      */
-    World(const std::shared_ptr<AbstractFactory>& factory, const std::string& filename);
+    World(const std::shared_ptr<AbstractFactory>& factory, const std::string& filename,
+          const std::shared_ptr<Score>& score = nullptr);
 
     /**
      * @brief Sets the world's tile size. Called once by WorldLoader after parsing the world file.

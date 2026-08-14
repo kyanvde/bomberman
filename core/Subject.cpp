@@ -11,10 +11,10 @@ void Subject::attach(const std::shared_ptr<Observer>& observer) {
     observer->update();
 }
 
-void Subject::notify() {
+void Subject::notify(const GameEvent& event) {
     for (const auto& observer : observers) {
         if (observer) {
-            observer->update();
+            observer->update(event);
         }
     }
 }
