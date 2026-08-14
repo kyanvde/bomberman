@@ -92,6 +92,12 @@ public:
     }
 
     /**
+     * @brief A character always dies when an explosion reaches it. (Once a "dead"/"alive" state
+     * is introduced in a later phase, this will also need to account for that.)
+     */
+    [[nodiscard]] bool isKilledByExplosion() const noexcept override { return true; }
+
+    /**
      * @brief Characters should render above the static world tiles.
      */
     [[nodiscard]] int renderLayer() const noexcept override;

@@ -216,6 +216,36 @@ public:
      * @param deltaTime The time elapsed since the previous tick, in seconds.
      */
     virtual void onTick(World&, EntityId, float) {}
+
+    /**
+     * @brief Determines whether this entity blocks an explosion from propagating past it (the
+     * explosion still affects this entity's own tile, but does not continue beyond it). Always
+     * false except for Wall, which overrides it to true for both destructible and indestructible
+     * walls.
+     * @return True if an explosion cannot propagate past this entity, false otherwise.
+     */
+    [[nodiscard]] virtual bool blocksExplosion() const noexcept { return false; }
+
+    /**
+     * @brief Determines whether this entity is destroyed when an explosion reaches it. Always
+     * false except for a destructible Wall.
+     * @return True if this entity should be destroyed by an explosion that reaches it.
+     */
+    [[nodiscard]] virtual bool isDestructibleByExplosion() const noexcept { return false; }
+
+    /**
+     * @brief Determines whether this entity dies when an explosion reaches it. Always false
+     * except for Character.
+     * @return True if this entity should die from an explosion that reaches it.
+     */
+    [[nodiscard]] virtual bool isKilledByExplosion() const noexcept { return false; }
+
+    /**
+     * @brief Determines whether this entity is a bomb, so an explosion reaching it should
+     * chain-trigger its own detonation. Always false except for Bomb.
+     * @return True if this entity is a bomb, false otherwise.
+     */
+    [[nodiscard]] virtual bool isBomb() const noexcept { return false; }
 };
 
 } // namespace core

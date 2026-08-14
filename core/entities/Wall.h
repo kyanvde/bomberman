@@ -32,6 +32,17 @@ public:
     [[nodiscard]] bool isDestructible() const noexcept { return destructible; }
 
     /**
+     * @brief Both destructible and indestructible walls stop an explosion from propagating past
+     * them.
+     */
+    [[nodiscard]] bool blocksExplosion() const noexcept override { return true; }
+
+    /**
+     * @brief Only a destructible wall is destroyed when an explosion reaches it.
+     */
+    [[nodiscard]] bool isDestructibleByExplosion() const noexcept override { return destructible; }
+
+    /**
      * @brief Checks if the wall blocks the movement of a character at a given position and size.
      * @param character The character to check for collision with the wall.
      * @param position The position of the character in world coordinates.

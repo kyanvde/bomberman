@@ -79,6 +79,11 @@ public:
      */
     [[nodiscard]] bool blocksCharacterMovement(const Character& character, const Vector2& characterPosition,
                                                const Vector2& characterSize) const override;
+
+    /**
+     * @brief A bomb caught in another explosion's blast should itself chain-detonate.
+     */
+    [[nodiscard]] bool isBomb() const noexcept override { return true; }
 };
 
 }; // namespace core

@@ -56,6 +56,7 @@ void runBombTests(tests::TestRunner& runner) {
         Bomb bomb(tilePosition, tileSize, CharacterColor::White, 1);
         runner.check(!bomb.blocksCharacterMovement(*ownerPtr, tilePosition, tileSize),
                      "An unarmed bomb does not block its own owner");
+        runner.check(bomb.isBomb(), "A Bomb reports isBomb() true, for chain-reaction detection");
 
         const Character otherColorCharacter(Vector2(0.f, 0.f), tileSize, CharacterColor::Blue);
         runner.check(bomb.blocksCharacterMovement(otherColorCharacter, tilePosition, tileSize),
