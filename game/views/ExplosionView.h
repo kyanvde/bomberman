@@ -36,8 +36,7 @@ public:
 
         const core::Vector2 grownSize(size.x * scaleFactor, size.y * scaleFactor);
         // Grow outward from the tile's center rather than its top-left corner.
-        position = core::Vector2(position.x - (grownSize.x - size.x) / 2.f,
-                                 position.y - (grownSize.y - size.y) / 2.f);
+        position = core::Vector2(position.x - (grownSize.x - size.x) / 2.f, position.y - (grownSize.y - size.y) / 2.f);
         size = grownSize;
 
         sprite.alpha = 1.f - fraction;

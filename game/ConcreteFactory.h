@@ -94,7 +94,7 @@ public:
      * @return A unique pointer to the created core::EntityModel representing the power-up.
      */
     std::unique_ptr<core::EntityModel> createPowerUp(const core::Vector2& position, const core::Vector2& size,
-                                                      core::PowerUpType type) override;
+                                                     core::PowerUpType type) override;
 
     /**
      * @brief Creates a bomb entity with the specified position, size, owner, and blast radius.

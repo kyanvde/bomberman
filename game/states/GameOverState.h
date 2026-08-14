@@ -97,7 +97,7 @@ public:
      * @param finalScore The Player's final score for the round, displayed alongside the outcome.
      */
     GameOverState(const std::shared_ptr<sf::RenderWindow>& window, StateManager& stateManager, bool playerWon,
-                 int finalScore);
+                  int finalScore);
 };
 
 } // namespace game

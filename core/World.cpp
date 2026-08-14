@@ -160,8 +160,8 @@ void World::moveCharacter(const EntityId characterId, const Vector2& direction, 
             if (const std::optional<PowerUpType> type = entity->getPowerUpType(); type.has_value()) {
                 character.applyPowerUp(*type);
             }
-            entity->notify(GameEvent{GameEventType::PowerUpCollected, character.getCharacterColor().value_or(
-                                                                          CharacterColor::White)});
+            entity->notify(GameEvent{GameEventType::PowerUpCollected,
+                                     character.getCharacterColor().value_or(CharacterColor::White)});
             markForRemoval(entity->getId());
         }
     }
@@ -250,7 +250,7 @@ void World::render(AbstractRenderer& renderer) const {
 }
 
 World::World(const std::shared_ptr<AbstractFactory>& factory, const std::string& filename,
-            const std::shared_ptr<Score>& score)
+             const std::shared_ptr<Score>& score)
     : score(score), factory(factory) {
     WorldLoader::loadFromFile(filename, *this, factory);
 }

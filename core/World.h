@@ -318,7 +318,7 @@ public:
      * @return The nearest enemy's position, or std::nullopt if none exist.
      */
     [[nodiscard]] std::optional<Vector2> findNearestEnemyPosition(const Vector2& fromPosition,
-                                                                   const CharacterColor& self) const;
+                                                                  const CharacterColor& self) const;
 
     /**
      * @brief Checks whether any destructible wall remains anywhere in the world.
