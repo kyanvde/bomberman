@@ -31,7 +31,7 @@ GameState::GameState(const std::shared_ptr<sf::RenderWindow>& window, StateManag
         throw std::runtime_error("Failed to load font: assets/fonts/arcadeclassic.ttf");
     }
 
-    scoreText = sf::Text("Score: 0", font, 24);
+    scoreText = sf::Text("SCORE 0", font, 24);
     scoreText.setFillColor(sf::Color(188, 190, 0));
     scoreText.setOutlineColor(sf::Color(110, 0, 64));
     scoreText.setOutlineThickness(2.f);
@@ -75,7 +75,7 @@ void GameState::update() {
     world.moveCharacter(playerId, direction, deltaTime);
     score->tick(deltaTime);
 
-    scoreText.setString("Score: " + std::to_string(score->getPoints()));
+    scoreText.setString("SCORE " + std::to_string(score->getPoints()));
 
     if (const core::GameOutcome outcome = world.getOutcome(); outcome != core::GameOutcome::InProgress) {
         const bool playerWon = outcome == core::GameOutcome::PlayerWon;

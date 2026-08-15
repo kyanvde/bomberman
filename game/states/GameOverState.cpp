@@ -20,7 +20,7 @@ GameOverState::GameOverState(const std::shared_ptr<sf::RenderWindow>& window, St
     resultText.setOutlineColor(sf::Color(110, 0, 64));
     resultText.setOutlineThickness(baseResultOutlineThickness);
 
-    scoreText = sf::Text("Final score: " + std::to_string(finalScore), font, baseScoreCharacterSize);
+    scoreText = sf::Text("FINAL SCORE " + std::to_string(finalScore), font, baseScoreCharacterSize);
     scoreText.setFillColor(sf::Color(188, 190, 0));
 
     hintText = sf::Text("Click to return to the menu", font, baseHintCharacterSize);
