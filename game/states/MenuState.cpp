@@ -14,20 +14,30 @@ namespace {
 // this menu reads the top-5 list from.
 constexpr const char* highScoresPath = "highscores.txt";
 
-std::string formatScoreboard(const std::vector<int>& scores) {
+// The ordinal suffix for a 1-based rank (1st, 2nd, 3rd, 4th, 5th, ...). Only ranks 1-3 get a
+// distinct suffix; everything else is "TH" -- more than enough for a top-5 board.
+const char* ordinalSuffix(const std::size_t rank) {
+    switch (rank) {
+        case 1: return "ST";
+        case 2: return "ND";
+        case 3: return "RD";
+        default: return "TH";
+    }
+}
+
+std::vector<std::string> formatScoreboard(const std::vector<int>& scores) {
     if (scores.empty()) {
-        return "TOP SCORES\nNo scores yet";
+        return {"TOP SCORES", "No scores yet"};
     }
 
-    std::ostringstream text;
-    text << "TOP SCORES\n";
+    std::vector<std::string> lines;
+    lines.push_back("TOP SCORES");
     for (std::size_t i = 0; i < scores.size(); ++i) {
-        text << (i + 1) << ". " << scores[i];
-        if (i + 1 < scores.size()) {
-            text << '\n';
-        }
+        std::ostringstream line;
+        line << (i + 1) << ordinalSuffix(i + 1) << " PLACE " << scores[i];
+        lines.push_back(line.str());
     }
-    return text.str();
+    return lines;
 }
 } // namespace
 
@@ -51,10 +61,13 @@ MenuState::MenuState(const std::shared_ptr<sf::RenderWindow>& window, StateManag
 
     // Scoreboard setup
     const core::HighScores highScores(highScoresPath);
-    scoreboard = sf::Text(formatScoreboard(highScores.getScores()), font, baseScoreboardCharacterSize);
-    scoreboard.setFillColor(sf::Color(188, 190, 0));
-    scoreboard.setOutlineColor(sf::Color(110, 0, 64));
-    scoreboard.setOutlineThickness(2.f);
+    for (const std::string& line : formatScoreboard(highScores.getScores())) {
+        sf::Text lineText(line, font, baseScoreboardCharacterSize);
+        lineText.setFillColor(sf::Color(188, 190, 0));
+        lineText.setOutlineColor(sf::Color(110, 0, 64));
+        lineText.setOutlineThickness(2.f);
+        scoreboardLines.push_back(lineText);
+    }
 
     baseWindowHeight = window->getSize().y;
 
@@ -84,16 +97,22 @@ void MenuState::layout(const sf::Vector2u& size) {
 
     playButton.setPosition(static_cast<float>(size.x) * 0.5f, static_cast<float>(size.y) * 0.8f);
 
-    // Scoreboard
-    scoreboard.setCharacterSize(std::lround(static_cast<float>(baseScoreboardCharacterSize) * scale));
-    scoreboard.setOutlineThickness(2.f * scale);
+    // Scoreboard: each line is centered horizontally on its own, then stacked vertically, so lines
+    // of different lengths (e.g. "TOP SCORES" vs "1ST PLACE 100") all line up on the same center
+    // axis instead of being left-aligned within one shared multi-line block.
+    const float lineSpacing = baseScoreboardLineSpacing * scale;
+    const float scoreboardCenterX = static_cast<float>(size.x) * 0.5f;
+    const float scoreboardTop = static_cast<float>(size.y) * 0.53f;
 
-    const sf::FloatRect scoreboardBounds = scoreboard.getLocalBounds();
+    for (std::size_t i = 0; i < scoreboardLines.size(); ++i) {
+        sf::Text& lineText = scoreboardLines[i];
+        lineText.setCharacterSize(std::lround(static_cast<float>(baseScoreboardCharacterSize) * scale));
+        lineText.setOutlineThickness(2.f * scale);
 
-    scoreboard.setOrigin(scoreboardBounds.left + scoreboardBounds.width * 0.5f,
-                         scoreboardBounds.top + scoreboardBounds.height * 0.5f);
-
-    scoreboard.setPosition(static_cast<float>(size.x) * 0.5f, static_cast<float>(size.y) * 0.53f);
+        const sf::FloatRect lineBounds = lineText.getLocalBounds();
+        lineText.setOrigin(lineBounds.left + lineBounds.width * 0.5f, lineBounds.top + lineBounds.height * 0.5f);
+        lineText.setPosition(scoreboardCenterX, scoreboardTop + static_cast<float>(i) * lineSpacing);
+    }
 }
 
 void MenuState::processEvent(const sf::Event& event) {
@@ -118,7 +137,9 @@ void MenuState::update() {
 void MenuState::render() {
     window->draw(title);
     window->draw(playButton);
-    window->draw(scoreboard);
+    for (const sf::Text& lineText : scoreboardLines) {
+        window->draw(lineText);
+    }
 }
 
 } // namespace game

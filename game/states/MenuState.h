@@ -4,6 +4,7 @@
 #include "State.h"
 #include <SFML/Graphics.hpp>
 #include <memory>
+#include <vector>
 
 namespace game {
 
@@ -28,9 +29,12 @@ class MenuState final : public State {
     sf::Text playButton;
 
     /**
-     * @brief The persisted top-5 high score list, displayed below the play button.
+     * @brief The persisted top-5 high score list, displayed below the play button, one sf::Text
+     * per line. A single multi-line sf::Text left-aligns each line within its own block instead of
+     * centering them individually, which looks ragged when lines have different lengths (e.g. "TOP
+     * SCORES" vs "1ST PLACE 100") -- rendering each line as its own centered Text avoids that.
      */
-    sf::Text scoreboard;
+    std::vector<sf::Text> scoreboardLines;
 
     /**
      * @brief The base width of the window used for scaling UI elements.
@@ -61,6 +65,11 @@ class MenuState final : public State {
      * @brief The base character size of the scoreboard text used for scaling UI elements.
      */
     unsigned int baseScoreboardCharacterSize = 28;
+
+    /**
+     * @brief The base vertical gap between consecutive scoreboard lines, used for scaling UI elements.
+     */
+    float baseScoreboardLineSpacing = 34.f;
 
     /**
      * @brief Lays out the UI elements based on the current window size.
