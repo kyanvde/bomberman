@@ -9,6 +9,8 @@
 #include "entities/PowerUp.h"
 #include "entities/Wall.h"
 
+#include <vector>
+
 namespace tests {
 
 /**
@@ -18,6 +20,20 @@ namespace tests {
  */
 class TestFactory final : public core::AbstractFactory {
 public:
+    /**
+     * @brief A record of one createGrass call: where, and whether it was asked to be shaded. core
+     * itself throws this information away (Grass doesn't store it; only the real view would), so
+     * a test that needs to observe shading decisions -- e.g. that a stale shading gets refreshed
+     * once the wall casting it is destroyed -- reads the most recent entry for a position here
+     * instead.
+     */
+    struct GrassCreation {
+        core::Vector2 position;
+        bool shaded;
+    };
+
+    std::vector<GrassCreation> grassCreations;
+
     std::unique_ptr<core::EntityModel> createCharacter(const core::Vector2& pos, const core::Vector2& size,
                                                        const core::CharacterColor& color) override {
         return std::make_unique<core::Character>(pos, size, color);
@@ -29,7 +45,8 @@ public:
     }
 
     std::unique_ptr<core::EntityModel> createGrass(const core::Vector2& pos, const core::Vector2& size,
-                                                   bool /*shaded*/) override {
+                                                   const bool shaded) override {
+        grassCreations.push_back(GrassCreation{pos, shaded});
         return std::make_unique<core::Grass>(pos, size);
     }
 

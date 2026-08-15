@@ -183,6 +183,18 @@ class World {
      */
     bool explodeTile(const Vector2& tilePosition, const Vector2& tileSize, const CharacterColor& owner);
 
+    /**
+     * @brief Re-shades the grass tile directly below a wall that has just been destroyed, if one
+     * exists. A grass tile's shading (whether it looks like it's in a wall's shadow) is decided
+     * once, when the grass is created, from whatever occupies the tile above it at that moment.
+     * That snapshot goes stale the instant the wall above is destroyed -- the grass keeps looking
+     * shaded even though nothing is casting a shadow on it any more -- so the tile below a
+     * destroyed wall needs to be recreated with its shading reassessed.
+     * @param wallPosition The top-left corner of the tile the destroyed wall occupied.
+     * @param wallSize The size of that tile.
+     */
+    void refreshGrassShadingBelow(const Vector2& wallPosition, const Vector2& wallSize);
+
 public:
     /**
      * @brief Adds a new entity to the world.

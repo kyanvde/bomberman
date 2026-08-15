@@ -531,6 +531,33 @@ bool World::isBlastStoppedAt(const Vector2& tilePosition, const Vector2& tileSiz
     return false;
 }
 
+void World::refreshGrassShadingBelow(const Vector2& wallPosition, const Vector2& wallSize) {
+    const Vector2 belowPosition(wallPosition.x, wallPosition.y + wallSize.y);
+
+    // Snapshot the id first rather than mutating `entities` from inside a live iteration over it:
+    // addEntity below may reallocate the vector's storage, which would invalidate an in-progress
+    // range-for over `entities` itself.
+    std::optional<EntityId> grassBelowId;
+    for (const auto& entity : entities) {
+        if (entity && entity->isGrass() &&
+            overlapsTile(entity->getPosition(), entity->getSize(), belowPosition, wallSize)) {
+            grassBelowId = entity->getId();
+            break;
+        }
+    }
+
+    if (!grassBelowId.has_value()) {
+        return; // nothing below (edge of the map, or not grass yet) -- nothing to refresh
+    }
+
+    markForRemoval(*grassBelowId);
+    // The wall just destroyed was the only thing that could have been shading this tile, so the
+    // correct new state is unconditionally unshaded -- not a fresh isWallAt(wallPosition) query,
+    // which would still see the wall: its removal is deferred to the end of this tick and hasn't
+    // actually left `entities` yet.
+    addEntity(factory->createGrass(belowPosition, wallSize, false));
+}
+
 bool World::explodeTile(const Vector2& tilePosition, const Vector2& tileSize, const CharacterColor& owner) {
     addEntity(factory->createExplosion(tilePosition, tileSize));
 
@@ -566,6 +593,7 @@ bool World::explodeTile(const Vector2& tilePosition, const Vector2& tileSize, co
 
             const Vector2 abovePosition(wallPosition.x, wallPosition.y - wallSize.y);
             addEntity(factory->createGrass(wallPosition, wallSize, isWallAt(abovePosition, wallSize)));
+            refreshGrassShadingBelow(wallPosition, wallSize);
 
             if (Random::getInstance().chance(powerUpDropChance)) {
                 addEntity(factory->createPowerUp(wallPosition, wallSize, randomPowerUpType()));
