@@ -39,12 +39,6 @@ bool overlapsTile(const Vector2& entityPosition, const Vector2& entitySize, cons
     const Vector2 insetSize(tileSize.x - tileQueryMargin * 2, tileSize.y - tileQueryMargin * 2);
     return intersects(entityPosition, entitySize, insetPosition, insetSize);
 }
-
-float squaredDistance(const Vector2& a, const Vector2& b) {
-    const float dx = a.x - b.x;
-    const float dy = a.y - b.y;
-    return dx * dx + dy * dy;
-}
 } // namespace
 
 Vector2 World::snapToTileTopLeft(const Vector2& position, const Vector2& size) const {
@@ -104,6 +98,76 @@ bool World::insideWorldBounds(const Vector2& position, const Vector2& size) {
     return position.x >= -1.f && position.y >= -1.f && position.x + size.x <= 1.f && position.y + size.y <= 1.f;
 }
 
+float World::resolveAxisStep(const std::size_t moverIndex, const Vector2& position, const Vector2& size,
+                             const bool horizontal, const float requested) const {
+    const auto fits = [&](const float amount) {
+        const Vector2 candidate =
+            horizontal ? Vector2(position.x + amount, position.y) : Vector2(position.x, position.y + amount);
+        return insideWorldBounds(candidate, size) && !collidesWithBlockingEntity(moverIndex, candidate, size);
+    };
+
+    if (requested == 0.f || fits(requested)) {
+        return requested;
+    }
+
+    // Bisect between "definitely fine" and "definitely blocked" to find the contact point. A fixed
+    // handful of rounds is plenty: it narrows a frame's travel to well under the margin tile
+    // queries already tolerate, so the mover ends up flush rather than a visible gap away.
+    constexpr int refinements = 8;
+    float safe = 0.f;
+    float blocked = requested;
+
+    for (int i = 0; i < refinements; ++i) {
+        const float midpoint = (safe + blocked) * 0.5f;
+        if (fits(midpoint)) {
+            safe = midpoint;
+        } else {
+            blocked = midpoint;
+        }
+    }
+
+    return safe;
+}
+
+std::optional<Vector2> World::cornerAssistPosition(const std::size_t moverIndex, const Vector2& position,
+                                                   const Vector2& size, const Vector2& direction,
+                                                   const float maxStep) const {
+    // Only for a purely axis-aligned attempt; a diagonal one already resolves per-axis, so at
+    // least one of its components got a chance to move on its own.
+    const bool vertical = direction.x == 0.f && direction.y != 0.f;
+    const bool horizontal = direction.y == 0.f && direction.x != 0.f;
+    if (!vertical && !horizontal) {
+        return std::nullopt;
+    }
+
+    const Vector2 alignedTile = snapToTileTopLeft(position, size);
+    const float offset = vertical ? alignedTile.x - position.x : alignedTile.y - position.y;
+    if (offset == 0.f) {
+        return std::nullopt; // already aligned, so a real wall is blocking -- not misalignment
+    }
+
+    // Only assist if the blocked move would actually succeed once aligned. Otherwise the character
+    // is walking into a wall head-on and should simply stop, not drift sideways along it.
+    const Vector2 alignedAttempt = vertical ? Vector2(alignedTile.x, position.y + direction.y * maxStep)
+                                            : Vector2(position.x + direction.x * maxStep, alignedTile.y);
+    if (!insideWorldBounds(alignedAttempt, size) || collidesWithBlockingEntity(moverIndex, alignedAttempt, size)) {
+        return std::nullopt;
+    }
+
+    // Close the misalignment at the character's own speed rather than snapping instantly, so the
+    // correction stays smooth, and never overshoot past the aligned coordinate.
+    const float step = std::min(std::abs(offset), maxStep);
+    const float signedStep = offset > 0.f ? step : -step;
+    const Vector2 assisted =
+        vertical ? Vector2(position.x + signedStep, position.y) : Vector2(position.x, position.y + signedStep);
+
+    if (!insideWorldBounds(assisted, size) || collidesWithBlockingEntity(moverIndex, assisted, size)) {
+        return std::nullopt;
+    }
+
+    return assisted;
+}
+
 void World::moveCharacter(const EntityId characterId, const Vector2& direction, const float deltaTime) {
     if (deltaTime <= 0.f) {
         return;
@@ -133,20 +197,22 @@ void World::moveCharacter(const EntityId characterId, const Vector2& direction, 
     const Vector2 size = character.getSize();
 
     Vector2 nextPosition = character.getPosition();
+    const Vector2 previousPosition = nextPosition;
 
-    const Vector2 movedX(nextPosition.x + delta.x, nextPosition.y);
-    const bool canMoveX = insideWorldBounds(movedX, size) && !collidesWithBlockingEntity(*characterIndex, movedX, size);
+    // Resolved one axis at a time, each as far as it will go, so a blocked direction still lets the
+    // other one through and neither is refused outright just because the full step overshoots.
+    nextPosition.x += resolveAxisStep(*characterIndex, nextPosition, size, true, delta.x);
+    nextPosition.y += resolveAxisStep(*characterIndex, nextPosition, size, false, delta.y);
 
-    const Vector2 movedY(nextPosition.x, nextPosition.y + delta.y);
-    const bool canMoveY = insideWorldBounds(movedY, size) && !collidesWithBlockingEntity(*characterIndex, movedY, size);
-
-    if (canMoveX && canMoveY) {
-        nextPosition.x = movedX.x;
-        nextPosition.y = movedY.y;
-    } else if (canMoveX) {
-        nextPosition.x = movedX.x;
-    } else if (canMoveY) {
-        nextPosition.y = movedY.y;
+    // Nothing moved at all: the requested turn may be blocked purely because the character sits
+    // slightly off-grid, rather than because a wall genuinely bars the way. Nudge it back into
+    // alignment so the turn can open up (see cornerAssistPosition).
+    if (nextPosition.x == previousPosition.x && nextPosition.y == previousPosition.y) {
+        if (const std::optional<Vector2> assisted =
+                cornerAssistPosition(*characterIndex, nextPosition, size, normalizedDirection, speed * deltaTime);
+            assisted.has_value()) {
+            nextPosition = *assisted;
+        }
     }
 
     character.setPosition(nextPosition);
@@ -334,97 +400,124 @@ bool World::hasPowerUpAt(const Vector2& tilePosition, const Vector2& tileSize) c
     return false;
 }
 
-bool World::isDestructibleWallAt(const Vector2& tilePosition, const Vector2& tileSize) const {
-    for (const auto& entity : entities) {
-        if (entity && entity->isDestructibleByExplosion() &&
-            overlapsTile(entity->getPosition(), entity->getSize(), tilePosition, tileSize)) {
-            return true;
+int World::getGridWidth() const noexcept {
+    return cellSize.x > 0.f ? static_cast<int>(std::lround(2.f / cellSize.x)) : 0;
+}
+
+int World::getGridHeight() const noexcept {
+    return cellSize.y > 0.f ? static_cast<int>(std::lround(2.f / cellSize.y)) : 0;
+}
+
+GridCoord World::toGrid(const Vector2& position, const Vector2& size) const {
+    if (cellSize.x <= 0.f || cellSize.y <= 0.f) {
+        return GridCoord{0, 0};
+    }
+
+    const Vector2 tile = snapToTileTopLeft(position, size);
+    return GridCoord{static_cast<int>(std::lround((tile.x + 1.f) / cellSize.x)),
+                     static_cast<int>(std::lround((tile.y + 1.f) / cellSize.y))};
+}
+
+Vector2 World::toWorldPosition(const GridCoord& coord) const {
+    // Deliberately the same expression WorldLoader uses to place tiles, so a coordinate always
+    // converts back to exactly the position the entity on that tile was created at.
+    return Vector2(-1.f + static_cast<float>(coord.x) * cellSize.x, -1.f + static_cast<float>(coord.y) * cellSize.y);
+}
+
+std::vector<GridCoord> World::tilesOverlapping(const Vector2& position, const Vector2& size) const {
+    std::vector<GridCoord> tiles;
+    if (cellSize.x <= 0.f || cellSize.y <= 0.f) {
+        return tiles;
+    }
+
+    // Inset by the same margin tile queries use, so merely touching the next tile's edge does not
+    // count as being inside it.
+    const float minX = position.x + tileQueryMargin;
+    const float minY = position.y + tileQueryMargin;
+    const float maxX = position.x + size.x - tileQueryMargin;
+    const float maxY = position.y + size.y - tileQueryMargin;
+
+    const int firstX = static_cast<int>(std::floor((minX + 1.f) / cellSize.x));
+    const int lastX = static_cast<int>(std::floor((maxX + 1.f) / cellSize.x));
+    const int firstY = static_cast<int>(std::floor((minY + 1.f) / cellSize.y));
+    const int lastY = static_cast<int>(std::floor((maxY + 1.f) / cellSize.y));
+
+    for (int y = firstY; y <= lastY; ++y) {
+        for (int x = firstX; x <= lastX; ++x) {
+            tiles.push_back(GridCoord{x, y});
         }
     }
 
-    return false;
+    return tiles;
 }
 
-bool World::isTileDangerous(const Vector2& tilePosition, const Vector2& tileSize) const {
-    for (const auto& entity : entities) {
-        if (entity && entity->threatensTile(tilePosition, tileSize)) {
-            return true;
-        }
+TileGrid World::buildTileGrid() const {
+    TileGrid grid;
+    grid.width = getGridWidth();
+    grid.height = getGridHeight();
+
+    const std::size_t cells = static_cast<std::size_t>(grid.width) * static_cast<std::size_t>(grid.height);
+    grid.wall.assign(cells, 0);
+    grid.destructible.assign(cells, 0);
+    grid.bomb.assign(cells, 0);
+    grid.powerUp.assign(cells, 0);
+    grid.dangerous.assign(cells, 0);
+
+    if (cells == 0) {
+        return grid;
     }
 
-    return false;
-}
-
-std::optional<Vector2> World::findNearestPowerUpTile(const Vector2& fromPosition) const {
-    std::optional<Vector2> nearest;
-    float bestDistance = 0.f;
-
-    for (const auto& entity : entities) {
-        if (!entity || !entity->isPowerUp()) {
-            continue;
-        }
-
-        const float distance = squaredDistance(fromPosition, entity->getPosition());
-        if (!nearest.has_value() || distance < bestDistance) {
-            nearest = entity->getPosition();
-            bestDistance = distance;
-        }
-    }
-
-    return nearest;
-}
-
-std::optional<Vector2> World::findNearestDestructibleWallTile(const Vector2& fromPosition) const {
-    std::optional<Vector2> nearest;
-    float bestDistance = 0.f;
-
-    for (const auto& entity : entities) {
-        if (!entity || !entity->isDestructibleByExplosion()) {
-            continue;
-        }
-
-        const float distance = squaredDistance(fromPosition, entity->getPosition());
-        if (!nearest.has_value() || distance < bestDistance) {
-            nearest = entity->getPosition();
-            bestDistance = distance;
-        }
-    }
-
-    return nearest;
-}
-
-std::optional<Vector2> World::findNearestEnemyPosition(const Vector2& fromPosition, const CharacterColor& self) const {
-    std::optional<Vector2> nearest;
-    float bestDistance = 0.f;
-
+    // One pass over the entities marks everything that occupies a tile.
     for (const auto& entity : entities) {
         if (!entity) {
             continue;
         }
 
-        const std::optional<CharacterColor> color = entity->getCharacterColor();
-        if (!color.has_value() || *color == self) {
+        const GridCoord coord = toGrid(entity->getPosition(), entity->getSize());
+        if (!grid.inside(coord)) {
             continue;
         }
 
-        const float distance = squaredDistance(fromPosition, entity->getPosition());
-        if (!nearest.has_value() || distance < bestDistance) {
-            nearest = entity->getPosition();
-            bestDistance = distance;
+        const std::size_t cell = grid.index(coord);
+
+        if (entity->blocksExplosion()) {
+            grid.wall[cell] = 1;
+            if (entity->isDestructibleByExplosion()) {
+                grid.destructible[cell] = 1;
+            }
+        }
+        if (entity->isBomb()) {
+            grid.bomb[cell] = 1;
+        }
+        if (entity->isPowerUp()) {
+            grid.powerUp[cell] = 1;
+        }
+        if (const std::optional<CharacterColor> color = entity->getCharacterColor();
+            color.has_value() && entity->isAlive()) {
+            grid.characters.push_back(CharacterTile{coord, *color});
         }
     }
 
-    return nearest;
-}
-
-bool World::anyDestructibleWallsRemain() const {
+    // Danger is asked of each bomb rather than derived here, so the grid never has to know what a
+    // blast radius is -- only the bomb itself does (EntityModel::threatensTile). There are only
+    // ever a handful of bombs, so sweeping the tiles per bomb stays cheap.
     for (const auto& entity : entities) {
-        if (entity && entity->isDestructibleByExplosion()) {
-            return true;
+        if (!entity || !entity->isBomb()) {
+            continue;
+        }
+
+        for (int y = 0; y < grid.height; ++y) {
+            for (int x = 0; x < grid.width; ++x) {
+                const GridCoord coord{x, y};
+                const std::size_t cell = grid.index(coord);
+                if (grid.dangerous[cell] == 0 && entity->threatensTile(toWorldPosition(coord), cellSize)) {
+                    grid.dangerous[cell] = 1;
+                }
+            }
         }
     }
 
-    return false;
+    return grid;
 }
 
 bool World::isBlastStoppedAt(const Vector2& tilePosition, const Vector2& tileSize) const {

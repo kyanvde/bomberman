@@ -21,6 +21,7 @@ void runHighScoresTests(tests::TestRunner& runner);
 void runWorldScoreIntegrationTests(tests::TestRunner& runner);
 void runMovementCollisionTests(tests::TestRunner& runner);
 void runWorldLoaderExceptionTests(tests::TestRunner& runner);
+void runAISimulationTests(tests::TestRunner& runner);
 
 /**
  * @brief Entry point for the core_tests executable.
@@ -52,6 +53,7 @@ int main() {
     runWorldScoreIntegrationTests(runner);
     runMovementCollisionTests(runner);
     runWorldLoaderExceptionTests(runner);
+    runAISimulationTests(runner);
 
     return runner.summarize();
 }

@@ -5,6 +5,7 @@
 #include "AbstractRenderer.h"
 #include "EntityModel.h"
 #include "GameOutcome.h"
+#include "TileGrid.h"
 #include <cstddef>
 #include <memory>
 #include <optional>
@@ -110,6 +111,45 @@ class World {
      * @return The top-left position of the tile the entity's center falls within.
      */
     [[nodiscard]] Vector2 snapToTileTopLeft(const Vector2& position, const Vector2& size) const;
+
+    /**
+     * @brief Works out how far along one axis a mover may actually travel this tick.
+     *
+     * Taking either the whole step or none of it leaves a character stranded up to a full frame's
+     * travel short of whatever it is walking into, because the moment the next step would overlap,
+     * the entire step is refused. That gap is bigger than a tile boundary is forgiving: characters
+     * are exactly one tile in size, so a character that can never quite close the last fraction of
+     * a step is left permanently straddling two tiles, unable to turn and -- for a bot fleeing a
+     * blast -- unable to get its trailing half out of the danger. Clamping to the contact point
+     * instead lets it finish flush against the obstacle.
+     * @param moverIndex The index of the moving entity in the entities vector.
+     * @param position The mover's current position.
+     * @param size The mover's size.
+     * @param horizontal True to resolve along x, false along y.
+     * @param requested The distance the mover would travel if nothing were in the way.
+     * @return The largest portion of requested that keeps the mover clear.
+     */
+    [[nodiscard]] float resolveAxisStep(std::size_t moverIndex, const Vector2& position, const Vector2& size,
+                                        bool horizontal, float requested) const;
+
+    /**
+     * @brief Works out a "corner assist" nudge for a character whose axis-aligned move was
+     * blocked. Characters are exactly one tile in size, so once a character sits even slightly
+     * off-grid its box straddles two columns (or rows) and any perpendicular turn collides with
+     * whichever neighbour holds a wall -- which, with continuous movement, is almost always.
+     * Rather than requiring pixel-perfect alignment from the player, this slides the character
+     * toward the tile it is already mostly inside, but only when doing so would genuinely open up
+     * the blocked move.
+     * @param moverIndex The index of the moving entity in the entities vector.
+     * @param position The character's current position.
+     * @param size The character's size.
+     * @param direction The normalized direction the character is trying to move in.
+     * @param maxStep The furthest the character may travel this tick.
+     * @return The nudged position, or std::nullopt if no assist applies.
+     */
+    [[nodiscard]] std::optional<Vector2> cornerAssistPosition(std::size_t moverIndex, const Vector2& position,
+                                                              const Vector2& size, const Vector2& direction,
+                                                              float maxStep) const;
 
     /**
      * @brief Spawns a bomb centered on the tile occupied by the entity at the given vector index,
@@ -259,72 +299,59 @@ public:
     [[nodiscard]] bool hasPowerUpAt(const Vector2& tilePosition, const Vector2& tileSize) const;
 
     /**
-     * @brief Checks whether a destructible (as opposed to indestructible) wall currently overlaps
-     * the given tile. Used by AI controllers deciding whether it's worth placing a bomb next to a
-     * given neighboring tile.
-     * @param tilePosition The top-left corner of the tile to check.
-     * @param tileSize The size of the tile to check.
-     * @return True if a destructible wall overlaps the tile, false otherwise.
-     */
-    [[nodiscard]] bool isDestructibleWallAt(const Vector2& tilePosition, const Vector2& tileSize) const;
-
-    /**
-     * @brief Checks whether any entity's eventual blast would reach the given tile (see
-     * EntityModel::threatensTile). Used by AI controllers to flee imminent bomb danger.
-     * @param tilePosition The top-left corner of the tile to check.
-     * @param tileSize The size of the tile to check.
-     * @return True if the tile is currently threatened by some entity's blast, false otherwise.
-     */
-    [[nodiscard]] bool isTileDangerous(const Vector2& tilePosition, const Vector2& tileSize) const;
-
-    /**
      * @brief Retrieves the world's tile size.
      * @return The size of a single grid tile in world coordinates.
      */
     [[nodiscard]] const Vector2& getCellSize() const noexcept { return cellSize; }
 
     /**
-     * @brief Snaps a world position to the top-left corner of the tile it falls within, based on
-     * an entity's center point. Exposed read-only for AI controllers to reason about tile-aligned
-     * positions.
+     * @brief Retrieves the number of tile columns in the world grid.
+     */
+    [[nodiscard]] int getGridWidth() const noexcept;
+
+    /**
+     * @brief Retrieves the number of tile rows in the world grid.
+     */
+    [[nodiscard]] int getGridHeight() const noexcept;
+
+    /**
+     * @brief Converts a world position to the integer coordinates of the tile it falls within,
+     * based on the entity's center point.
      * @param position The entity's current (possibly mid-tile) position.
      * @param size The entity's size, used to find its center.
-     * @return The top-left position of the tile the entity's center falls within.
+     * @return The tile coordinates the entity's center falls within.
      */
-    [[nodiscard]] Vector2 tileOf(const Vector2& position, const Vector2& size) const {
-        return snapToTileTopLeft(position, size);
-    }
+    [[nodiscard]] GridCoord toGrid(const Vector2& position, const Vector2& size) const;
 
     /**
-     * @brief Finds the position of the power-up nearest to the given position, if any exist.
-     * @param fromPosition The position to measure distance from.
-     * @return The nearest power-up's position, or std::nullopt if none exist.
+     * @brief Converts tile coordinates back to the world position of that tile's top-left corner.
+     * @param coord The tile coordinates to convert.
+     * @return The tile's top-left position in world coordinates.
      */
-    [[nodiscard]] std::optional<Vector2> findNearestPowerUpTile(const Vector2& fromPosition) const;
+    [[nodiscard]] Vector2 toWorldPosition(const GridCoord& coord) const;
 
     /**
-     * @brief Finds the position of the destructible wall nearest to the given position, if any
-     * remain.
-     * @param fromPosition The position to measure distance from.
-     * @return The nearest destructible wall's position, or std::nullopt if none remain.
+     * @brief Lists every tile the given rectangle overlaps (up to four, for a tile-sized entity
+     * straddling a corner).
+     *
+     * Explosions catch anything whose rectangle overlaps a blast tile, not merely whatever is
+     * centred on one -- so a character that has only just crossed into a safe tile is still, in
+     * practice, half inside the one it came from. Navigation code needs this to tell whether a
+     * character is genuinely clear of a blast rather than only nominally standing on a safe tile.
+     * @param position The rectangle's top-left corner.
+     * @param size The rectangle's size.
+     * @return The coordinates of every tile the rectangle overlaps.
      */
-    [[nodiscard]] std::optional<Vector2> findNearestDestructibleWallTile(const Vector2& fromPosition) const;
+    [[nodiscard]] std::vector<GridCoord> tilesOverlapping(const Vector2& position, const Vector2& size) const;
 
     /**
-     * @brief Finds the position of the character of a different color nearest to the given
-     * position, if any exist.
-     * @param fromPosition The position to measure distance from.
-     * @param self The color to exclude from the search (the searching character's own color).
-     * @return The nearest enemy's position, or std::nullopt if none exist.
+     * @brief Builds a tile-indexed snapshot of everything an AI controller needs in order to
+     * navigate the world: blocked tiles, things worth reaching, and tiles inside a live blast.
+     * Filled in a single pass over the entities, so a controller can run a full search over the
+     * map without re-querying the world per tile.
+     * @return The snapshot, valid only for the moment it was taken.
      */
-    [[nodiscard]] std::optional<Vector2> findNearestEnemyPosition(const Vector2& fromPosition,
-                                                                  const CharacterColor& self) const;
-
-    /**
-     * @brief Checks whether any destructible wall remains anywhere in the world.
-     * @return True if at least one destructible wall exists, false otherwise.
-     */
-    [[nodiscard]] bool anyDestructibleWallsRemain() const;
+    [[nodiscard]] TileGrid buildTileGrid() const;
 
     /**
      * @brief Notifies whichever character has the given color that one of its bombs has just

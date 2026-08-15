@@ -37,6 +37,14 @@ public:
     [[nodiscard]] bool chance(double probability);
 
     /**
+     * @brief Reseeds the generator so subsequent draws repeat exactly. Intended for tests that need
+     * a reproducible world -- a simulation that fails only on some runs is nearly impossible to
+     * investigate. Normal play never calls this and keeps its std::random_device seeding.
+     * @param seed The seed to restart the generator from.
+     */
+    void setSeed(unsigned int seed) noexcept;
+
+    /**
      * @brief Deleted copy constructor to prevent copying of the Random instance.
      */
     Random(const Random&) = delete;

@@ -15,6 +15,7 @@ SET(SRC
         PowerUpType.h
         AIController.h
         BasicAIController.cpp
+        TileGrid.cpp
         GameOutcome.h
         GameEvent.h
         Score.cpp

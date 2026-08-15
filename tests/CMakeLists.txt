@@ -21,6 +21,7 @@ SET(TEST_SRC
     WorldScoreIntegrationTests.cpp
     MovementCollisionTests.cpp
     WorldLoaderExceptionTests.cpp
+    AISimulationTests.cpp
 )
 
 ADD_EXECUTABLE(core_tests ${TEST_SRC})

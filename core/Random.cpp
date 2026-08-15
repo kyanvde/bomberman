@@ -17,6 +17,8 @@ bool Random::chance(const double probability) {
     return dis(gen) < probability;
 }
 
+void Random::setSeed(const unsigned int seed) noexcept { gen.seed(seed); }
+
 Random::Random() noexcept : gen(std::random_device{}()) {}
 
 } // namespace core
