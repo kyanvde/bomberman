@@ -10,6 +10,9 @@ Bomberman battle mode, written in C++ using SFML.
 Bomberman is a game in which the Player competes against three computer-controlled characters to be the last man
 standing. They do this by using bombs to break blocks, gather power-ups and trap the other players!
 
+See [`docs/design-report.md`](docs/design-report.md) for the architecture overview, class diagrams, and design
+decisions behind this implementation.
+
 ## Project layout
 
 - `core/` — the game logic library (static, no SFML dependency). Entities, world simulation, collision detection,

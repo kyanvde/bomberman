@@ -1,7 +1,7 @@
 # Project-specific ignores
 build
 .DS_Store
-docs
+docs/html
 highscores.txt
 
 # Visual Studio Code
@@ -34,6 +34,8 @@ CMakeUserPresets.json
 # Source: https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
 # Covers JetBrains IDEs: IntelliJ, GoLand, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
+
+.idea
 
 # User-specific stuff
 .idea/**/workspace.xml
