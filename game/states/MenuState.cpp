@@ -99,10 +99,14 @@ void MenuState::layout(const sf::Vector2u& size) {
 
     // Scoreboard: each line is centered horizontally on its own, then stacked vertically, so lines
     // of different lengths (e.g. "TOP SCORES" vs "1ST PLACE 100") all line up on the same center
-    // axis instead of being left-aligned within one shared multi-line block.
+    // axis instead of being left-aligned within one shared multi-line block. The whole block is
+    // then centered vertically in the gap between the title and the play button, rather than
+    // anchoring its top line to a fixed fraction -- otherwise a full 6-line board (header + 5
+    // scores) stacks downward far enough to overlap the play button.
     const float lineSpacing = baseScoreboardLineSpacing * scale;
     const float scoreboardCenterX = static_cast<float>(size.x) * 0.5f;
-    const float scoreboardTop = static_cast<float>(size.y) * 0.53f;
+    const float scoreboardCenterY = static_cast<float>(size.y) * 0.5f;
+    const float scoreboardTop = scoreboardCenterY - static_cast<float>(scoreboardLines.size() - 1) * lineSpacing * 0.5f;
 
     for (std::size_t i = 0; i < scoreboardLines.size(); ++i) {
         sf::Text& lineText = scoreboardLines[i];
