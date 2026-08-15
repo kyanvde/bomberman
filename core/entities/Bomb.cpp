@@ -4,6 +4,7 @@
 #include "Collision.h"
 #include "World.h"
 
+#include <algorithm>
 #include <cmath>
 
 namespace core {
@@ -13,10 +14,15 @@ constexpr float bombFuseSeconds = 2.f;
 // Tolerance for comparing a tile's coordinate against the bomb's own, matching World's tile-query
 // margin convention.
 constexpr float tileAlignmentEpsilon = 0.0005f;
+
+// The full, fixed set of character colors this game ever has. Used to scan for bystanders on a
+// bomb's tile without needing World to expose "every character here" as its own query.
+constexpr CharacterColor allColors[] = {CharacterColor::White, CharacterColor::Blue, CharacterColor::Red,
+                                        CharacterColor::Black};
 } // namespace
 
 Bomb::Bomb(const Vector2& pos, const Vector2& size, const CharacterColor& owner, const int radius)
-    : EntityModel(pos, size), owner(owner), radius(radius), fuseRemaining(bombFuseSeconds) {
+    : EntityModel(pos, size), owner(owner), radius(radius), fuseRemaining(bombFuseSeconds), exemptColors{owner} {
     setAnimationType(AnimationType::BombTicking);
     Subject::notify();
 }
@@ -24,9 +30,22 @@ Bomb::Bomb(const Vector2& pos, const Vector2& size, const CharacterColor& owner,
 int Bomb::renderLayer() const noexcept { return 1; }
 
 void Bomb::onTick(World& world, const EntityId selfId, const float deltaTime) {
-    if (!armed && !world.isTileOccupiedByColor(getPosition(), getSize(), owner)) {
-        armed = true;
+    if (!bystandersScanned) {
+        for (const CharacterColor& color : allColors) {
+            if (color != owner && world.isTileOccupiedByColor(getPosition(), getSize(), color)) {
+                exemptColors.push_back(color);
+            }
+        }
+        bystandersScanned = true;
     }
+
+    // Any exempt color that has since left the tile loses its exemption permanently -- even if it
+    // steps back onto the tile later, it's blocked like anyone approaching from outside.
+    exemptColors.erase(std::remove_if(exemptColors.begin(), exemptColors.end(),
+                                      [&](const CharacterColor& color) {
+                                          return !world.isTileOccupiedByColor(getPosition(), getSize(), color);
+                                      }),
+                       exemptColors.end());
 
     fuseRemaining -= deltaTime;
     if (fuseRemaining <= 0.f) {
@@ -36,7 +55,8 @@ void Bomb::onTick(World& world, const EntityId selfId, const float deltaTime) {
 
 bool Bomb::blocksCharacterMovement(const Character& character, const Vector2& characterPosition,
                                    const Vector2& characterSize) const {
-    if (!armed && character.getColor() == owner) {
+    const bool exempt = std::find(exemptColors.begin(), exemptColors.end(), character.getColor()) != exemptColors.end();
+    if (exempt) {
         return false;
     }
 

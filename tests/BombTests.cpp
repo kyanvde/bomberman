@@ -132,4 +132,44 @@ void runBombTests(tests::TestRunner& runner) {
         world.placeBomb(ownerId);
         runner.check(world.hasEntity(EntityId{11}), "The character can place a new bomb once its slot is free again");
     }
+
+    // --- A bystander already standing on a bomb's tile when it's placed -- e.g. an enemy that
+    //     walked onto the player's tile and dropped one there, since characters don't block each
+    //     other's movement -- gets the same grace period the owner does, rather than being
+    //     trapped in place until the bomb explodes. ---
+    {
+        const std::string path = writeDeterministicWorldFile();
+        World world(std::make_shared<tests::TestFactory>(), path);
+        std::remove(path.c_str());
+
+        auto bystander = std::make_unique<Character>(tilePosition, tileSize, CharacterColor::Blue);
+        Character* bystanderPtr = bystander.get();
+        world.addEntity(std::move(bystander));
+
+        auto outsider = std::make_unique<Character>(Vector2(0.6f, 0.6f), tileSize, CharacterColor::Red);
+        Character* outsiderPtr = outsider.get();
+        world.addEntity(std::move(outsider));
+
+        // The owner (White) is never actually placed in the world here -- only the bomb, dropped
+        // by an enemy directly onto the bystander's tile.
+        auto bomb = std::make_unique<Bomb>(tilePosition, tileSize, CharacterColor::White, 1);
+        const Bomb* bombPtr = bomb.get();
+        world.addEntity(std::move(bomb));
+
+        world.update(0.016f); // lets the bomb's first onTick scan for bystanders on its tile
+
+        runner.check(!bombPtr->blocksCharacterMovement(*bystanderPtr, tilePosition, tileSize),
+                     "A bystander caught under a freshly placed bomb is not blocked by it");
+        runner.check(bombPtr->blocksCharacterMovement(*outsiderPtr, tilePosition, tileSize),
+                     "A character that was never on the bomb's tile is still blocked by it, as normal");
+
+        // The bystander steps off, then back on: once gone, the exemption is permanent -- exactly
+        // like the owner's -- so stepping back doesn't restore it.
+        bystanderPtr->setPosition(Vector2(0.6f, 0.f));
+        world.update(0.016f);
+        bystanderPtr->setPosition(tilePosition);
+
+        runner.check(bombPtr->blocksCharacterMovement(*bystanderPtr, tilePosition, tileSize),
+                     "Once a bystander leaves the tile, the bomb blocks it again, even if it steps back");
+    }
 }

@@ -4,13 +4,15 @@
 #include "CharacterColor.h"
 #include "EntityModel.h"
 
+#include <vector>
+
 namespace core {
 
 /**
  * @brief The Bomb class represents a bomb entity in the game world.
  * It inherits from EntityModel and provides specific behavior for bomb entities: a countdown
- * fuse, a blast radius, and collision rules that let its owner walk through it until they
- * leave its tile, after which it blocks everyone (including its owner).
+ * fuse, a blast radius, and collision rules that let anyone standing on its tile the moment it's
+ * placed walk off freely, after which it blocks them (including its own owner) like anyone else.
  */
 class Bomb final : public EntityModel {
     /**
@@ -30,10 +32,24 @@ class Bomb final : public EntityModel {
     float fuseRemaining;
 
     /**
-     * @brief Whether the owner has left this bomb's tile since it was placed. An unarmed bomb
-     * does not block its owner's movement; an armed bomb blocks everyone.
+     * @brief Colors currently exempt from being blocked by this bomb: the owner from
+     * construction, plus (once the first onTick has run) anyone else who happened to already be
+     * standing on its tile when it was placed. Characters don't block each other's movement, so
+     * an enemy can walk onto another character's tile and drop a bomb there -- without this,
+     * whoever it landed on would have no grace period at all and be trapped in place until the
+     * bomb explodes. Each color is dropped from this list, permanently, the moment it leaves the
+     * tile -- exactly mirroring the owner's own original arming rule, just generalized to
+     * whoever else the bomb happened to land on.
      */
-    bool armed = false;
+    std::vector<CharacterColor> exemptColors;
+
+    /**
+     * @brief Whether the one-time bystander scan (see exemptColors) has run yet. Bystanders can
+     * only be discovered via a World query, which isn't available at construction time, so this
+     * defers that scan to the bomb's first onTick; the owner's own exemption is already in place
+     * from construction and unaffected by this.
+     */
+    bool bystandersScanned = false;
 
 public:
     /**
@@ -60,8 +76,10 @@ public:
     [[nodiscard]] int getRadius() const noexcept { return radius; }
 
     /**
-     * @brief Counts down the fuse and checks whether the owner has left this bomb's tile. Once
-     * the fuse expires, triggers this bomb's own explosion via World::detonateBomb.
+     * @brief On the first call, finds any bystanders already standing on this bomb's tile and
+     * grants them the same exemption as the owner. Every call then drops any exempt color that
+     * has since left the tile. Finally counts down the fuse; once it expires, triggers this
+     * bomb's own explosion via World::detonateBomb.
      * @param world The world this bomb belongs to.
      * @param selfId This bomb's own identifier.
      * @param deltaTime The time elapsed since the previous tick, in seconds.
@@ -70,7 +88,7 @@ public:
 
     /**
      * @brief Checks if this bomb blocks the movement of a character at a given position and size.
-     * Does not block its own owner until it becomes armed (the owner has left its tile).
+     * Does not block a character whose color is still exempt (see exemptColors).
      * @param character The character to check for collision with the bomb.
      * @param characterPosition The position of the character in world coordinates.
      * @param characterSize The size of the character in world coordinates.
