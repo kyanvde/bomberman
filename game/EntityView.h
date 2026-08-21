@@ -6,10 +6,6 @@
 #include "Observer.h"
 
 #include <functional>
-#include <iostream>
-#include <utility>
-
-#include "Stopwatch.h"
 
 namespace game {
 
