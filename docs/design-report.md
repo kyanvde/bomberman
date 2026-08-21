@@ -51,7 +51,7 @@ so the logic library genuinely compiles and links without SFML installed, not ju
 | `Game` | [`game/Game.h`](../game/Game.h) | Owns the window and `StateManager`; `run()` is the main loop (`processEvents → update → render`). No game logic — it forwards to whichever `State` is active. |
 | `Stopwatch` | [`core/Stopwatch.h`](../core/Stopwatch.h) | `std::chrono::high_resolution_clock`-based, Meyers' singleton. `tick()` computes `deltaTime`; no `sf::Clock` anywhere, no busy-wait. |
 | `World` | [`core/World.h`](../core/World.h) | Owns all entities (`std::vector<std::unique_ptr<EntityModel>>`), the Entity Controller in MVC terms — creation/removal, collision, bomb detonation, outcome. |
-| `Camera` | [`core/Camera.h`](../core/Camera.h) | Pure arithmetic projection from `[-1, 1]` world space to pixel space (`projectPosition`/`projectSize`); no SFML types touched. |
+| `Camera` | [`core/Camera.h`](../core/Camera.h) | Pure arithmetic projection from `[-1, 1]` world space to pixel space (`projectPosition`/`projectSize`), scaling both axes uniformly and letterboxing so the projection is never resolution- or aspect-ratio-dependent; no SFML types touched. |
 | `Score` | [`core/Score.h`](../core/Score.h) | An `Observer`; reacts to `GameEvent`s fired by `World`. Time-alive is driven explicitly via `Score::tick(deltaTime)` from `GameState`, using `Stopwatch`'s delta — see §4.3. |
 | `Random` | [`core/Random.h`](../core/Random.h) | `std::mt19937` stored as a data member (not reconstructed per call), Meyers' singleton, seeded once from `std::random_device`. `chance(probability)` and `setSeed()` (test-only reproducibility) build on top of it. |
 
@@ -278,6 +278,16 @@ established once in `WorldLoader` from the world file's grid dimensions
 gets converted to pixels, via plain arithmetic — no `sf::View`, no SFML transform utilities. This
 means `core` genuinely has no notion of window resolution, and collision/AI/scoring logic is
 identical regardless of what size window the player picks.
+
+The world is always a square `[-1, 1] x [-1, 1]` region, but the window it's drawn into is whatever
+aspect ratio the player resizes it to. Scaling each axis independently to fill that rectangle (an
+earlier version of `Camera` did exactly this) stretches every sprite by a different amount
+depending on the window's current width-to-height ratio — the resolution-dependent look the
+normalized coordinate system is meant to prevent in the first place, just moved one layer up into
+the projection step instead of the world model. `Camera` now scales both axes by the same factor
+(the viewport's smaller dimension) and centers the result in the larger one, leaving even
+letterbox/pillarbox bars rather than distorting anything; `CameraTests.cpp` checks this explicitly
+against a non-square viewport.
 
 ### 4.5 Tile-grid snapshot for AI pathfinding
 

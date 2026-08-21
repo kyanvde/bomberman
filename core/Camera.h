@@ -8,12 +8,35 @@ namespace core {
 /**
  * @brief The Camera class represents a camera in the game world.
  * It provides methods to project world coordinates to screen coordinates based on the viewport size.
+ *
+ * The world is always a square [-1, 1] x [-1, 1] region, but the viewport it's projected into
+ * rarely has a matching aspect ratio (the window can be resized to anything). Scaling each axis
+ * independently to fill the viewport would stretch every sprite by a different amount depending on
+ * the window's current width-to-height ratio -- exactly the resolution-dependent look the
+ * assignment's normalized coordinate system is meant to prevent. Instead, both axes are scaled by
+ * the same factor (the viewport's smaller dimension), and the result is centered in the other axis,
+ * leaving even letterbox/pillarbox bars rather than distorting anything.
  */
 class Camera {
     /**
      * @brief The size of the viewport in screen coordinates.
      */
     Vector2 viewportSize;
+
+    /**
+     * @brief The single scale factor applied to both axes, and the offset that centers the
+     * projected [-1, 1] square within the viewport's larger dimension.
+     */
+    struct Projection {
+        float scale;
+        float offsetX;
+        float offsetY;
+    };
+
+    /**
+     * @brief Computes the current uniform scale factor and centering offsets from viewportSize.
+     */
+    [[nodiscard]] Projection projection() const noexcept;
 
 public:
     /**
