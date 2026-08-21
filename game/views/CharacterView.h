@@ -26,7 +26,7 @@ public:
     /**
      * @brief How long each death animation frame is shown, in seconds.
      */
-    static constexpr float deathFrameDuration = 1.f;
+    static constexpr float deathFrameDuration = 0.2f;
 
     /**
      * @brief The death animation's total playtime, in seconds. Exposed so GameState can hold the
