@@ -7,6 +7,7 @@ SET(BOMBERMAN_SOURCES main.cpp
     ConcreteFactory.cpp
     ConcreteRenderer.cpp
 	views/CharacterView.cpp
+	views/PowerUpView.cpp
 )
 
 ADD_EXECUTABLE(bomberman ${BOMBERMAN_SOURCES})

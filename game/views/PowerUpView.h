@@ -17,7 +17,7 @@ public:
      * @param model A reference to the EntityModel that this view represents.
      * @param sprite The sprite frame used for rendering the power-up entity.
      */
-    PowerUpView(const core::EntityModel& model, const core::SpriteFrame& sprite) : EntityView(model, sprite) {}
+    PowerUpView(const core::EntityModel& model, const core::SpriteFrame& sprite);
 };
 
 } // namespace game

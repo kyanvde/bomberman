@@ -74,18 +74,16 @@ std::unique_ptr<core::EntityModel> ConcreteFactory::createPowerUp(const core::Ve
                                                                   const core::PowerUpType type) {
     std::unique_ptr<core::EntityModel> powerUp = std::make_unique<core::PowerUp>(position, size, type);
 
-    // Placeholder frames -- arbitrary distinct spritesheet cells until the correct icon for each
-    // power-up type is picked from the spritesheet.
     core::Vector2 typePosition;
     switch (type) {
     case core::PowerUpType::Fire:
-        typePosition = core::Vector2(1.f, 1.f);
+        typePosition = core::Vector2(12.f, 2.f);
         break;
     case core::PowerUpType::ExtraBomb:
-        typePosition = core::Vector2(2.f, 1.f);
+        typePosition = core::Vector2(12.f, 0.f);
         break;
     case core::PowerUpType::Skates:
-        typePosition = core::Vector2(3.f, 1.f);
+        typePosition = core::Vector2(12.f, 4.f);
         break;
     }
 
@@ -103,9 +101,7 @@ std::unique_ptr<core::EntityModel> ConcreteFactory::createBomb(const core::Vecto
 std::unique_ptr<core::EntityModel> ConcreteFactory::createExplosion(const core::Vector2& position,
                                                                     const core::Vector2& size) {
     std::unique_ptr<core::EntityModel> explosion = std::make_unique<core::Explosion>(position, size);
-    // Placeholder frame -- reuses the destructible-wall rubble sprite until a dedicated explosion
-    // frame is picked from the spritesheet (see the grow/fade animation work in a later step).
-    explosion->attach(std::make_shared<ExplosionView>(*explosion, frameFor(core::Vector2(1.f, 0.f))));
+    explosion->attach(std::make_shared<ExplosionView>(*explosion, frameFor(core::Vector2(7.f, 0.f))));
     return explosion;
 }
 

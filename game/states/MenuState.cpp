@@ -10,12 +10,9 @@
 
 namespace game {
 namespace {
-// Matches GameState.cpp's highScoresPath -- where the round's final score is recorded, and where
-// this menu reads the top-5 list from.
-constexpr const char* highScoresPath = "highscores.txt";
 
-// The ordinal suffix for a 1-based rank (1st, 2nd, 3rd, 4th, 5th, ...). Only ranks 1-3 get a
-// distinct suffix; everything else is "TH" -- more than enough for a top-5 board.
+constexpr auto highScoresPath = "highscores.txt";
+
 const char* ordinalSuffix(const std::size_t rank) {
     switch (rank) {
         case 1: return "ST";
@@ -31,11 +28,11 @@ std::vector<std::string> formatScoreboard(const std::vector<int>& scores) {
     }
 
     std::vector<std::string> lines;
-    lines.push_back("TOP SCORES");
+    lines.emplace_back("TOP SCORES");
     for (std::size_t i = 0; i < scores.size(); ++i) {
         std::ostringstream line;
         line << (i + 1) << ordinalSuffix(i + 1) << " PLACE " << scores[i];
-        lines.push_back(line.str());
+        lines.emplace_back(line.str());
     }
     return lines;
 }
