@@ -8,6 +8,7 @@
 #include "HighScores.h"
 #include "StateManager.h"
 #include "Stopwatch.h"
+#include "views/CharacterView.h"
 
 #include <stdexcept>
 
@@ -56,36 +57,54 @@ void GameState::onResize(const sf::Vector2u&, const sf::Vector2u& newSize) {
 }
 
 void GameState::update() {
-    core::Vector2 direction(0.f, 0.f);
-
-    for (const auto& key : heldKeys) {
-        if (key == sf::Keyboard::Left || key == sf::Keyboard::A) {
-            direction.x -= 1.f;
-        } else if (key == sf::Keyboard::Right || key == sf::Keyboard::D) {
-            direction.x += 1.f;
-        } else if (key == sf::Keyboard::Up || key == sf::Keyboard::W) {
-            direction.y -= 1.f;
-        } else if (key == sf::Keyboard::Down || key == sf::Keyboard::S) {
-            direction.y += 1.f;
-        }
-    }
-
     const float deltaTime = core::Stopwatch::getInstance().getDeltaTime();
+
+    // Keep ticking the world even once the outcome is decided, so the last character's death
+    // animation actually plays out on screen instead of being cut off by an instant transition to
+    // GameOverState.
     world.update(deltaTime);
-    world.moveCharacter(playerId, direction, deltaTime);
-    score->tick(deltaTime);
+
+    if (!outcomeDecided) {
+        core::Vector2 direction(0.f, 0.f);
+
+        for (const auto& key : heldKeys) {
+            if (key == sf::Keyboard::Left || key == sf::Keyboard::A) {
+                direction.x -= 1.f;
+            } else if (key == sf::Keyboard::Right || key == sf::Keyboard::D) {
+                direction.x += 1.f;
+            } else if (key == sf::Keyboard::Up || key == sf::Keyboard::W) {
+                direction.y -= 1.f;
+            } else if (key == sf::Keyboard::Down || key == sf::Keyboard::S) {
+                direction.y += 1.f;
+            }
+        }
+
+        world.moveCharacter(playerId, direction, deltaTime);
+
+        // Time-alive should stop accruing once the round is decided -- not keep climbing through
+        // the grace period below, which exists purely to let the death animation finish playing.
+        score->tick(deltaTime);
+    }
 
     scoreText.setString("SCORE " + std::to_string(score->getPoints()));
 
-    if (const core::GameOutcome outcome = world.getOutcome(); outcome != core::GameOutcome::InProgress) {
-        const bool playerWon = outcome == core::GameOutcome::PlayerWon;
-        score->update(core::GameEvent{playerWon ? core::GameEventType::GameWon : core::GameEventType::GameLost,
-                                      core::CharacterColor::White});
+    if (!outcomeDecided) {
+        if (const core::GameOutcome outcome = world.getOutcome(); outcome != core::GameOutcome::InProgress) {
+            outcomeDecided = true;
+            outcomeWasWin = outcome == core::GameOutcome::PlayerWon;
 
-        core::HighScores highScores(highScoresPath);
-        highScores.record(score->getPoints());
+            score->update(core::GameEvent{outcomeWasWin ? core::GameEventType::GameWon : core::GameEventType::GameLost,
+                                          core::CharacterColor::White});
 
-        stateManager.pushState(std::make_unique<GameOverState>(window, stateManager, playerWon, score->getPoints()));
+            core::HighScores highScores(highScoresPath);
+            highScores.record(score->getPoints());
+        }
+        return;
+    }
+
+    outcomeElapsed += deltaTime;
+    if (outcomeElapsed >= CharacterView::deathAnimationDuration) {
+        stateManager.pushState(std::make_unique<GameOverState>(window, stateManager, outcomeWasWin, score->getPoints()));
     }
 }
 

@@ -53,6 +53,26 @@ class GameState final : public State {
      */
     sf::Text scoreText;
 
+    /**
+     * @brief Whether the round's outcome (win or loss) has been decided yet. Once true, the world
+     * keeps ticking -- so the last character's death animation can actually finish playing on
+     * screen -- but player input and further outcome checks are no longer applied.
+     */
+    bool outcomeDecided = false;
+
+    /**
+     * @brief Whether the Player won, valid only once outcomeDecided is true. Cached at the moment
+     * the outcome is decided, so GameOverState is constructed with the same result once the grace
+     * period below has elapsed.
+     */
+    bool outcomeWasWin = false;
+
+    /**
+     * @brief How long the outcome has been decided for, in seconds. Once this reaches
+     * CharacterView::deathAnimationDuration, GameOverState is pushed.
+     */
+    float outcomeElapsed = 0.f;
+
 public:
     /**
      * @brief Processes an event and handles it within the game state.

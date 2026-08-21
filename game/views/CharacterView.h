@@ -19,6 +19,23 @@ class CharacterView : public EntityView {
 
 public:
     /**
+     * @brief How many frames the death animation plays before holding on its last frame.
+     */
+    static constexpr std::size_t deathFrameCount = 7;
+
+    /**
+     * @brief How long each death animation frame is shown, in seconds.
+     */
+    static constexpr float deathFrameDuration = 1.f;
+
+    /**
+     * @brief The death animation's total playtime, in seconds. Exposed so GameState can hold the
+     * win/lose screen off the last dying character's death animation actually finishing, rather
+     * than the two independently drifting out of sync over time.
+     */
+    static constexpr float deathAnimationDuration = static_cast<float>(deathFrameCount) * deathFrameDuration;
+
+    /**
      * @brief Constructs a new CharacterView object with the specified EntityModel and sprite frame.
      * @param model A reference to the EntityModel that this view represents.
      * @param sprite The sprite frame used for rendering the character entity.
