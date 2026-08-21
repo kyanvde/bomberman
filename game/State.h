@@ -30,13 +30,12 @@ public:
      * @param window A shared pointer to the SFML RenderWindow used for rendering the game.
      * @param stateManager A reference to the StateManager responsible for managing the different states of the game.
      */
-    State(const std::shared_ptr<sf::RenderWindow>& window, StateManager& stateManager)
-        : window(window), stateManager(stateManager) {}
+    State(const std::shared_ptr<sf::RenderWindow>& window, StateManager& stateManager);
 
     /**
      * @brief Virtual destructor for the State class.
      */
-    virtual ~State() = default;
+    virtual ~State();
 
     /**
      * @brief Processes an event and handles it within the state.
@@ -49,7 +48,7 @@ public:
      * @param previousSize The previous size of the window before resizing.
      * @param newSize The new size of the window after resizing.
      */
-    virtual void onResize(const sf::Vector2u&, const sf::Vector2u&) {}
+    virtual void onResize(const sf::Vector2u&, const sf::Vector2u&);
 
     /**
      * @brief Updates the state, allowing it to perform game logic and state transitions.

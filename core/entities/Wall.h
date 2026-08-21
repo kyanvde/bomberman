@@ -29,18 +29,18 @@ public:
      * @brief Checks whether this wall can be destroyed by an explosion.
      * @return True if the wall is destructible, false otherwise.
      */
-    [[nodiscard]] bool isDestructible() const noexcept { return destructible; }
+    [[nodiscard]] bool isDestructible() const noexcept;
 
     /**
      * @brief Both destructible and indestructible walls stop an explosion from propagating past
      * them.
      */
-    [[nodiscard]] bool blocksExplosion() const noexcept override { return true; }
+    [[nodiscard]] bool blocksExplosion() const noexcept override;
 
     /**
      * @brief Only a destructible wall is destroyed when an explosion reaches it.
      */
-    [[nodiscard]] bool isDestructibleByExplosion() const noexcept override { return destructible; }
+    [[nodiscard]] bool isDestructibleByExplosion() const noexcept override;
 
     /**
      * @brief Checks if the wall blocks the movement of a character at a given position and size.

@@ -58,8 +58,7 @@ struct SpriteFrame {
      * @param spacing The spacing between sprites in the spritesheet (default is (0, 0)).
      */
     SpriteFrame(std::string texturePath, const Vector2& cellSize, const Vector2& cell,
-                const Vector2& margin = Vector2(), const Vector2& spacing = Vector2())
-        : texturePath(std::move(texturePath)), cellSize(cellSize), cell(cell), margin(margin), spacing(spacing) {}
+                const Vector2& margin = Vector2(), const Vector2& spacing = Vector2());
 };
 
 /**
@@ -71,7 +70,7 @@ public:
     /**
      * @brief Virtual destructor for the AbstractRenderer class.
      */
-    virtual ~AbstractRenderer() = default;
+    virtual ~AbstractRenderer();
 
     /**
      * @brief Draws a sprite at the specified position and size using the provided SpriteFrame.

@@ -18,13 +18,9 @@ struct GridCoord {
     int y = 0;
 };
 
-[[nodiscard]] inline bool operator==(const GridCoord& left, const GridCoord& right) noexcept {
-    return left.x == right.x && left.y == right.y;
-}
+[[nodiscard]] bool operator==(const GridCoord& left, const GridCoord& right) noexcept;
 
-[[nodiscard]] inline bool operator!=(const GridCoord& left, const GridCoord& right) noexcept {
-    return !(left == right);
-}
+[[nodiscard]] bool operator!=(const GridCoord& left, const GridCoord& right) noexcept;
 
 /**
  * @brief Where a single living character stands, for navigation purposes.

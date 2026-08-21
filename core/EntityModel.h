@@ -52,10 +52,7 @@ protected:
      * @brief Sets the activate animation type of the entity.
      * @param newAnimationType The new AnimationType of the entity.
      */
-    void setAnimationType(const AnimationType newAnimationType) {
-        this->animationType = newAnimationType;
-        notify();
-    }
+    void setAnimationType(AnimationType newAnimationType);
 
 public:
     /**
@@ -63,51 +60,48 @@ public:
      * @param pos The position of the entity in world coordinates.
      * @param size The size of the entity in world coordinates.
      */
-    EntityModel(const Vector2& pos, const Vector2& size) : position(pos), size(size) {}
+    EntityModel(const Vector2& pos, const Vector2& size);
 
     /**
      * @brief Virtual destructor for the EntityModel class.
      */
-    ~EntityModel() override = default;
+    ~EntityModel() override;
 
     /**
      * @brief Retrieves the position of the entity.
      * @return A constant reference to the Vector2 representing the entity's position.
      */
-    [[nodiscard]] const Vector2& getPosition() const noexcept { return position; }
+    [[nodiscard]] const Vector2& getPosition() const noexcept;
 
     /**
      * @brief Retrieves the entity's stable identifier.
      * @return The EntityId assigned to this entity when it was added to the World.
      */
-    [[nodiscard]] EntityId getId() const noexcept { return id; }
+    [[nodiscard]] EntityId getId() const noexcept;
 
     /**
      * @brief Sets the entity's stable identifier. Called once by World::addEntity.
      * @param newId The identifier assigned to this entity.
      */
-    void setId(const EntityId newId) noexcept { id = newId; }
+    void setId(EntityId newId) noexcept;
 
     /**
      * @brief Retrieves the size of the entity.
      * @return A constant reference to the Vector2 representing the entity's size.
      */
-    [[nodiscard]] const Vector2& getSize() const noexcept { return size; }
+    [[nodiscard]] const Vector2& getSize() const noexcept;
 
     /**
      * @brief Sets the position of the entity and notifies observers of the change.
      * @param newPosition The new position of the entity in world coordinates.
      */
-    void setPosition(const Vector2& newPosition) {
-        position = newPosition;
-        notify();
-    }
+    void setPosition(const Vector2& newPosition);
 
     /**
      * @brief Determines if the entity is controlled by the player.
      * @return True if the entity is player-controlled, false otherwise.
      */
-    [[nodiscard]] virtual bool isPlayerControlled() const noexcept { return false; }
+    [[nodiscard]] virtual bool isPlayerControlled() const noexcept;
 
     /**
      * @brief Retrieves this entity's character color, if it is a character. Only Character
@@ -116,7 +110,7 @@ public:
      * generic EntityModel for its color without downcasting to a concrete entity type.
      * @return The entity's CharacterColor, or std::nullopt if it isn't a character.
      */
-    [[nodiscard]] virtual std::optional<CharacterColor> getCharacterColor() const noexcept { return std::nullopt; }
+    [[nodiscard]] virtual std::optional<CharacterColor> getCharacterColor() const noexcept;
 
     /**
      * @brief Determines if this entity is a character of the given color. Implemented in terms
@@ -124,9 +118,7 @@ public:
      * @param color The color to compare against.
      * @return True if this entity is a Character of the given color, false otherwise.
      */
-    [[nodiscard]] bool isCharacterOfColor(const CharacterColor& color) const noexcept {
-        return getCharacterColor() == color;
-    }
+    [[nodiscard]] bool isCharacterOfColor(const CharacterColor& color) const noexcept;
 
     /**
      * @brief Determines whether this entity currently has a free bomb slot. Always false except
@@ -134,32 +126,32 @@ public:
      * bombs are currently active.
      * @return True if this entity can place another bomb right now, false otherwise.
      */
-    [[nodiscard]] virtual bool canPlaceBomb() const noexcept { return false; }
+    [[nodiscard]] virtual bool canPlaceBomb() const noexcept;
 
     /**
      * @brief Retrieves this entity's current bomb blast radius. Meaningless for entities that
      * cannot place bombs; only Character overrides it meaningfully.
      * @return The blast radius, in tiles, that a bomb placed by this entity should have.
      */
-    [[nodiscard]] virtual int getBombRadius() const noexcept { return 1; }
+    [[nodiscard]] virtual int getBombRadius() const noexcept;
 
     /**
      * @brief Notifies this entity that it has just placed a bomb, so it can track how many of
      * its bombs are currently active. Default implementation does nothing.
      */
-    virtual void onBombPlaced() {}
+    virtual void onBombPlaced();
 
     /**
      * @brief Notifies this entity that one of its previously placed bombs has just exploded (or
      * otherwise been removed), freeing up a bomb slot. Default implementation does nothing.
      */
-    virtual void onBombExploded() {}
+    virtual void onBombExploded();
 
     /**
      * @brief Returns the rendering layer for this entity.
      * Entities with a higher layer are drawn later.
      */
-    [[nodiscard]] virtual int renderLayer() const noexcept { return 0; }
+    [[nodiscard]] virtual int renderLayer() const noexcept;
 
     /**
      * @brief Determines if the entity blocks the movement of another entity.
@@ -169,9 +161,7 @@ public:
      * @return True if this entity blocks the movement of the mover, false otherwise.
      */
     [[nodiscard]] virtual bool blocksMovementOf(const EntityModel& mover, const Vector2& moverPosition,
-                                                const Vector2& moverSize) const {
-        return mover.isBlockedBy(*this, moverPosition, moverSize);
-    }
+                                                const Vector2& moverSize) const;
 
     /**
      * @brief Determines if this entity blocks the movement of another entity based on their positions and sizes.
@@ -180,7 +170,7 @@ public:
      * @param otherSize The size of the other entity.
      * @return True if this entity blocks the movement of the other entity, false otherwise.
      */
-    [[nodiscard]] virtual bool isBlockedBy(const EntityModel&, const Vector2&, const Vector2&) const { return false; }
+    [[nodiscard]] virtual bool isBlockedBy(const EntityModel&, const Vector2&, const Vector2&) const;
 
     /**
      * @brief Determines if this entity blocks the movement of a character based on their positions and sizes.
@@ -189,22 +179,20 @@ public:
      * @param characterSize The size of the character.
      * @return True if this entity blocks the movement of the character, false otherwise.
      */
-    [[nodiscard]] virtual bool blocksCharacterMovement(const Character&, const Vector2&, const Vector2&) const {
-        return false;
-    }
+    [[nodiscard]] virtual bool blocksCharacterMovement(const Character&, const Vector2&, const Vector2&) const;
 
     /**
      * @brief Called when movement in a given direction is attempted, so the entity
      * can update its animation state accordingly. Default implementation does nothing.
      * @param direction The attempted movement direction (not necessarily normalized to a successful move).
      */
-    virtual void onMovementAttempt(const Vector2&) {}
+    virtual void onMovementAttempt(const Vector2&);
 
     /**
      * @brief Returns the active animation type of the entity.
      * @return The active AnimationType of the entity.
      */
-    [[nodiscard]] AnimationType getAnimationType() const { return animationType; }
+    [[nodiscard]] AnimationType getAnimationType() const;
 
     /**
      * @brief Called once per simulation tick so the entity can perform its own time-based
@@ -216,7 +204,7 @@ public:
      * @param selfId This entity's own identifier, for convenience when calling back into world.
      * @param deltaTime The time elapsed since the previous tick, in seconds.
      */
-    virtual void onTick(World&, EntityId, float) {}
+    virtual void onTick(World&, EntityId, float);
 
     /**
      * @brief Determines whether this entity blocks an explosion from propagating past it (the
@@ -225,42 +213,42 @@ public:
      * walls.
      * @return True if an explosion cannot propagate past this entity, false otherwise.
      */
-    [[nodiscard]] virtual bool blocksExplosion() const noexcept { return false; }
+    [[nodiscard]] virtual bool blocksExplosion() const noexcept;
 
     /**
      * @brief Determines whether this entity is destroyed when an explosion reaches it. Always
      * false except for a destructible Wall.
      * @return True if this entity should be destroyed by an explosion that reaches it.
      */
-    [[nodiscard]] virtual bool isDestructibleByExplosion() const noexcept { return false; }
+    [[nodiscard]] virtual bool isDestructibleByExplosion() const noexcept;
 
     /**
      * @brief Determines whether this entity dies when an explosion reaches it. Always false
      * except for a Character that is still alive.
      * @return True if this entity should die from an explosion that reaches it.
      */
-    [[nodiscard]] virtual bool isKilledByExplosion() const noexcept { return false; }
+    [[nodiscard]] virtual bool isKilledByExplosion() const noexcept;
 
     /**
      * @brief Called when this entity is killed by an explosion (isKilledByExplosion() was true).
      * Default implementation does nothing; only Character overrides it meaningfully, becoming an
      * inert "corpse" rather than being removed from the world.
      */
-    virtual void onExplosionKill() {}
+    virtual void onExplosionKill();
 
     /**
      * @brief Determines whether this entity is currently alive. Always true except for a
      * Character that has been killed by an explosion.
      * @return True if this entity is alive, false otherwise.
      */
-    [[nodiscard]] virtual bool isAlive() const noexcept { return true; }
+    [[nodiscard]] virtual bool isAlive() const noexcept;
 
     /**
      * @brief Determines whether this entity is a bomb, so an explosion reaching it should
      * chain-trigger its own detonation. Always false except for Bomb.
      * @return True if this entity is a bomb, false otherwise.
      */
-    [[nodiscard]] virtual bool isBomb() const noexcept { return false; }
+    [[nodiscard]] virtual bool isBomb() const noexcept;
 
     /**
      * @brief Determines whether this entity's own eventual explosion would reach the given tile,
@@ -270,7 +258,7 @@ public:
      * @param tileSize The size of the tile to check.
      * @return True if this entity threatens the given tile, false otherwise.
      */
-    [[nodiscard]] virtual bool threatensTile(const Vector2&, const Vector2&) const noexcept { return false; }
+    [[nodiscard]] virtual bool threatensTile(const Vector2&, const Vector2&) const noexcept;
 
     /**
      * @brief Reports how far through its own transient visual lifetime this entity is, from 0
@@ -279,21 +267,21 @@ public:
      * animation in ExplosionView.
      * @return The lifetime fraction, in [0, 1].
      */
-    [[nodiscard]] virtual float getLifetimeFraction() const noexcept { return 0.f; }
+    [[nodiscard]] virtual float getLifetimeFraction() const noexcept;
 
     /**
      * @brief Determines whether this entity is a power-up, so it should be destroyed (without
      * being picked up) when an explosion reaches it. Always false except for PowerUp.
      * @return True if this entity is a power-up, false otherwise.
      */
-    [[nodiscard]] virtual bool isPowerUp() const noexcept { return false; }
+    [[nodiscard]] virtual bool isPowerUp() const noexcept;
 
     /**
      * @brief Determines whether this entity is grass (open, walkable ground). Always false except
      * for Grass.
      * @return True if this entity is grass, false otherwise.
      */
-    [[nodiscard]] virtual bool isGrass() const noexcept { return false; }
+    [[nodiscard]] virtual bool isGrass() const noexcept;
 
     /**
      * @brief Retrieves this entity's power-up type, if it is a power-up. Only PowerUp overrides
@@ -301,14 +289,14 @@ public:
      * asked what kind of power-up it is (e.g. by a character picking it up) without downcasting.
      * @return The entity's PowerUpType, or std::nullopt if it isn't a power-up.
      */
-    [[nodiscard]] virtual std::optional<PowerUpType> getPowerUpType() const noexcept { return std::nullopt; }
+    [[nodiscard]] virtual std::optional<PowerUpType> getPowerUpType() const noexcept;
 
     /**
      * @brief Applies a power-up's permanent stat boost to this entity. Default implementation
      * does nothing; only Character overrides it meaningfully.
      * @param type Which permanent stat boost to apply.
      */
-    virtual void applyPowerUp(PowerUpType) {}
+    virtual void applyPowerUp(PowerUpType);
 
     /**
      * @brief Retrieves this entity's current movement speed multiplier, applied on top of the
@@ -316,7 +304,7 @@ public:
      * power-up has been picked up.
      * @return The speed multiplier to apply to this entity's movement.
      */
-    [[nodiscard]] virtual float getSpeedMultiplier() const noexcept { return 1.f; }
+    [[nodiscard]] virtual float getSpeedMultiplier() const noexcept;
 
     /**
      * @brief Tells this entity to detonate immediately, if it is a bomb caught in another
@@ -327,7 +315,7 @@ public:
      * @param world The world this entity belongs to.
      * @param selfId This entity's own identifier.
      */
-    virtual void detonate(World&, EntityId) {}
+    virtual void detonate(World&, EntityId);
 };
 
 } // namespace core

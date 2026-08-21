@@ -2,6 +2,8 @@
 
 namespace core {
 
+Subject::~Subject() = default;
+
 void Subject::attach(const std::shared_ptr<Observer>& observer) {
     if (!observer) {
         return;

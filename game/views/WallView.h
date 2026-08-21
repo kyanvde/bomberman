@@ -16,7 +16,7 @@ public:
      * @param model A reference to the EntityModel that this view represents.
      * @param sprite The sprite frame used for rendering the wall entity.
      */
-    WallView(const core::EntityModel& model, const core::SpriteFrame& sprite) : EntityView(model, sprite) {}
+    WallView(const core::EntityModel& model, const core::SpriteFrame& sprite);
 };
 
 } // namespace game

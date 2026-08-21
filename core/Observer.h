@@ -15,7 +15,7 @@ public:
     /**
      * @brief Virtual destructor for the Observer class.
      */
-    virtual ~Observer() = default;
+    virtual ~Observer();
 
     /**
      * @brief Updates the observer based on changes in the subject.
@@ -33,7 +33,7 @@ public:
      * meaningless override just to satisfy the interface.
      * @param renderer A reference to the Renderer used for rendering.
      */
-    virtual void render(AbstractRenderer&) const {}
+    virtual void render(AbstractRenderer&) const;
 };
 
 } // namespace core

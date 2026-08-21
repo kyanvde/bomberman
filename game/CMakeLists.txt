@@ -1,6 +1,8 @@
 SET(BOMBERMAN_SOURCES main.cpp
 	Game.cpp
 	StateManager.cpp
+	State.cpp
+	EntityView.cpp
     states/MenuState.cpp
     states/GameState.cpp
     states/GameOverState.cpp
@@ -8,6 +10,10 @@ SET(BOMBERMAN_SOURCES main.cpp
     ConcreteRenderer.cpp
 	views/CharacterView.cpp
 	views/PowerUpView.cpp
+	views/WallView.cpp
+	views/GrassView.cpp
+	views/BombView.cpp
+	views/ExplosionView.cpp
 )
 
 ADD_EXECUTABLE(bomberman ${BOMBERMAN_SOURCES})

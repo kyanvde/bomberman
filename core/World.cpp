@@ -64,6 +64,14 @@ void World::addEntity(std::unique_ptr<EntityModel> entity) {
     entities.push_back(std::move(entity));
 }
 
+std::optional<EntityId> World::getPlayerId() const noexcept { return playerId; }
+
+bool World::hasEntity(const EntityId entityId) const { return indexOf(entityId).has_value(); }
+
+void World::setCellSize(const Vector2& size) { cellSize = size; }
+
+const Vector2& World::getCellSize() const noexcept { return cellSize; }
+
 std::optional<std::size_t> World::indexOf(const EntityId entityId) const {
     for (std::size_t i = 0; i < entities.size(); ++i) {
         if (entities[i] && entities[i]->getId() == entityId) {

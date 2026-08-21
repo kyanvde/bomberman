@@ -67,13 +67,13 @@ public:
      * @brief Retrieves the color of the character that placed this bomb.
      * @return The owner's CharacterColor.
      */
-    [[nodiscard]] CharacterColor getOwner() const noexcept { return owner; }
+    [[nodiscard]] CharacterColor getOwner() const noexcept;
 
     /**
      * @brief Retrieves this bomb's blast radius.
      * @return The blast radius, in tiles, in each direction.
      */
-    [[nodiscard]] int getRadius() const noexcept { return radius; }
+    [[nodiscard]] int getRadius() const noexcept;
 
     /**
      * @brief On the first call, finds any bystanders already standing on this bomb's tile and
@@ -100,7 +100,7 @@ public:
     /**
      * @brief A bomb caught in another explosion's blast should itself chain-detonate.
      */
-    [[nodiscard]] bool isBomb() const noexcept override { return true; }
+    [[nodiscard]] bool isBomb() const noexcept override;
 
     /**
      * @brief Checks whether this bomb's eventual cross-shaped blast (own tile plus up to radius

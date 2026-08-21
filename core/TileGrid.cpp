@@ -5,6 +5,12 @@
 
 namespace core {
 
+bool operator==(const GridCoord& left, const GridCoord& right) noexcept {
+    return left.x == right.x && left.y == right.y;
+}
+
+bool operator!=(const GridCoord& left, const GridCoord& right) noexcept { return !(left == right); }
+
 bool TileGrid::inside(const GridCoord& coord) const noexcept {
     return coord.x >= 0 && coord.y >= 0 && coord.x < width && coord.y < height;
 }

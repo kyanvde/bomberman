@@ -53,7 +53,7 @@ private:
     /**
      * @brief Constructs a new Stopwatch object and initializes the last time point.
      */
-    Stopwatch() noexcept = default;
+    Stopwatch() noexcept;
 
     /**
      * @brief The last recorded time point used to calculate delta time.

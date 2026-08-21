@@ -72,54 +72,50 @@ public:
      * @brief Retrieves the character's color.
      * @return The CharacterColor this character was constructed with.
      */
-    [[nodiscard]] CharacterColor getColor() const noexcept { return color; }
+    [[nodiscard]] CharacterColor getColor() const noexcept;
 
     /**
      * @brief Checks if the character is player-controlled.
      * @return True if this character is the White (human-controlled) character.
      */
-    [[nodiscard]] bool isPlayerControlled() const noexcept override { return color == CharacterColor::White; }
+    [[nodiscard]] bool isPlayerControlled() const noexcept override;
 
     /**
      * @brief Retrieves this character's own color.
      * @return This character's CharacterColor, wrapped in an optional as required by the base
      * class interface.
      */
-    [[nodiscard]] std::optional<CharacterColor> getCharacterColor() const noexcept override { return color; }
+    [[nodiscard]] std::optional<CharacterColor> getCharacterColor() const noexcept override;
 
     /**
      * @brief Checks whether this character currently has a free bomb slot. A dead character can
      * never place a bomb.
      * @return True if the character is alive and activeBombs is below maxBombs, false otherwise.
      */
-    [[nodiscard]] bool canPlaceBomb() const noexcept override { return alive && activeBombs < maxBombs; }
+    [[nodiscard]] bool canPlaceBomb() const noexcept override;
 
     /**
      * @brief Retrieves this character's current bomb blast radius.
      * @return The blast radius, in tiles, that this character's next bomb should have.
      */
-    [[nodiscard]] int getBombRadius() const noexcept override { return bombRadius; }
+    [[nodiscard]] int getBombRadius() const noexcept override;
 
     /**
      * @brief Records that this character has just placed a bomb.
      */
-    void onBombPlaced() override { ++activeBombs; }
+    void onBombPlaced() override;
 
     /**
      * @brief Records that one of this character's bombs has just exploded (or otherwise been
      * removed), freeing up a bomb slot.
      */
-    void onBombExploded() override {
-        if (activeBombs > 0) {
-            --activeBombs;
-        }
-    }
+    void onBombExploded() override;
 
     /**
      * @brief A character dies when an explosion reaches it, unless it's already dead (a corpse
      * caught in a further blast doesn't die again).
      */
-    [[nodiscard]] bool isKilledByExplosion() const noexcept override { return alive; }
+    [[nodiscard]] bool isKilledByExplosion() const noexcept override;
 
     /**
      * @brief Kills this character: it becomes an inert corpse -- no longer alive, bot-driven, or
@@ -130,7 +126,7 @@ public:
     /**
      * @brief Checks whether this character is still alive.
      */
-    [[nodiscard]] bool isAlive() const noexcept override { return alive; }
+    [[nodiscard]] bool isAlive() const noexcept override;
 
     /**
      * @brief Applies a power-up's permanent stat boost: Fire increases blast radius, ExtraBomb
@@ -143,7 +139,7 @@ public:
      * @brief Retrieves this character's current movement speed multiplier.
      * @return The speed multiplier, starting at 1 and permanently increased by Skates power-ups.
      */
-    [[nodiscard]] float getSpeedMultiplier() const noexcept override { return speedMultiplier; }
+    [[nodiscard]] float getSpeedMultiplier() const noexcept override;
 
     /**
      * @brief Characters should render above the static world tiles.

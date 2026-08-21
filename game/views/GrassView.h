@@ -16,7 +16,7 @@ public:
      * @param model A reference to the EntityModel that this view represents.
      * @param sprite The sprite frame used for rendering the grass entity.
      */
-    GrassView(const core::EntityModel& model, const core::SpriteFrame& sprite) : EntityView(model, sprite) {}
+    GrassView(const core::EntityModel& model, const core::SpriteFrame& sprite);
 };
 
 } // namespace game

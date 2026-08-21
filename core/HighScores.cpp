@@ -27,6 +27,8 @@ HighScores::HighScores(std::string path) : path(std::move(path)) {
     sortAndTrim();
 }
 
+const std::vector<int>& HighScores::getScores() const noexcept { return scores; }
+
 void HighScores::sortAndTrim() {
     std::sort(scores.begin(), scores.end(), std::greater<>());
     if (scores.size() > maxEntries) {

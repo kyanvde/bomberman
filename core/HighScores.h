@@ -32,7 +32,7 @@ public:
      * @brief Retrieves the current top-5 list, highest first.
      * @return The current scores.
      */
-    [[nodiscard]] const std::vector<int>& getScores() const noexcept { return scores; }
+    [[nodiscard]] const std::vector<int>& getScores() const noexcept;
 
     /**
      * @brief Inserts a new score, re-sorts and truncates to the top 5, and re-saves the file.

@@ -26,7 +26,7 @@ struct Decision {
  */
 class AIController {
 public:
-    virtual ~AIController() = default;
+    virtual ~AIController();
 
     /**
      * @brief Decides what the controlled character should do this tick.

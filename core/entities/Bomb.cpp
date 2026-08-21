@@ -29,6 +29,12 @@ Bomb::Bomb(const Vector2& pos, const Vector2& size, const CharacterColor& owner,
 
 int Bomb::renderLayer() const noexcept { return 1; }
 
+CharacterColor Bomb::getOwner() const noexcept { return owner; }
+
+int Bomb::getRadius() const noexcept { return radius; }
+
+bool Bomb::isBomb() const noexcept { return true; }
+
 void Bomb::onTick(World& world, const EntityId selfId, const float deltaTime) {
     if (!bystandersScanned) {
         for (const CharacterColor& color : allColors) {

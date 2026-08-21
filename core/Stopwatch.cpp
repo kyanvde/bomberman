@@ -2,6 +2,8 @@
 
 namespace core {
 
+Stopwatch::Stopwatch() noexcept = default;
+
 Stopwatch& Stopwatch::getInstance() noexcept {
     static Stopwatch instance;
     return instance;

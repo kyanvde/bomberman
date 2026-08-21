@@ -29,6 +29,30 @@ std::unique_ptr<AIController> makeAIControllerFor(const CharacterColor color) {
 Character::Character(const Vector2& pos, const Vector2& size, const CharacterColor& color)
     : EntityModel(pos, size), color(color), aiController(makeAIControllerFor(color)) {}
 
+CharacterColor Character::getColor() const noexcept { return color; }
+
+bool Character::isPlayerControlled() const noexcept { return color == CharacterColor::White; }
+
+std::optional<CharacterColor> Character::getCharacterColor() const noexcept { return color; }
+
+bool Character::canPlaceBomb() const noexcept { return alive && activeBombs < maxBombs; }
+
+int Character::getBombRadius() const noexcept { return bombRadius; }
+
+void Character::onBombPlaced() { ++activeBombs; }
+
+void Character::onBombExploded() {
+    if (activeBombs > 0) {
+        --activeBombs;
+    }
+}
+
+bool Character::isKilledByExplosion() const noexcept { return alive; }
+
+bool Character::isAlive() const noexcept { return alive; }
+
+float Character::getSpeedMultiplier() const noexcept { return speedMultiplier; }
+
 void Character::applyPowerUp(const PowerUpType type) {
     switch (type) {
     case PowerUpType::Fire:

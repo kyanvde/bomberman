@@ -76,7 +76,7 @@ public:
     /**
      * @brief Virtual destructor for the AbstractFactory class.
      */
-    virtual ~AbstractFactory() = default;
+    virtual ~AbstractFactory();
 };
 
 } // namespace core

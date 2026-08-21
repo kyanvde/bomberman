@@ -215,14 +215,14 @@ public:
      * @brief Retrieves the identifier of the player entity, if it has been added to the world.
      * @return The player's EntityId, or std::nullopt if no player-controlled entity was loaded.
      */
-    [[nodiscard]] std::optional<EntityId> getPlayerId() const noexcept { return playerId; }
+    [[nodiscard]] std::optional<EntityId> getPlayerId() const noexcept;
 
     /**
      * @brief Checks whether an entity with the given identifier currently exists in the world.
      * @param entityId The identifier to look up.
      * @return True if such an entity exists, false otherwise.
      */
-    [[nodiscard]] bool hasEntity(const EntityId entityId) const { return indexOf(entityId).has_value(); }
+    [[nodiscard]] bool hasEntity(EntityId entityId) const;
 
     /**
      * @brief Marks the entity with the given identifier for removal. The entity is not erased
@@ -261,7 +261,7 @@ public:
      * @brief Sets the world's tile size. Called once by WorldLoader after parsing the world file.
      * @param size The size of a single tile in world coordinates.
      */
-    void setCellSize(const Vector2& size) { cellSize = size; }
+    void setCellSize(const Vector2& size);
 
     /**
      * @brief Spawns a bomb centered on the tile occupied by the character with the given
@@ -314,7 +314,7 @@ public:
      * @brief Retrieves the world's tile size.
      * @return The size of a single grid tile in world coordinates.
      */
-    [[nodiscard]] const Vector2& getCellSize() const noexcept { return cellSize; }
+    [[nodiscard]] const Vector2& getCellSize() const noexcept;
 
     /**
      * @brief Retrieves the number of tile columns in the world grid.

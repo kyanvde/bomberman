@@ -51,29 +51,20 @@ public:
      * @param model A reference to the EntityModel that this view represents.
      * @param sprite The sprite frame used for rendering the entity.
      */
-    EntityView(const core::EntityModel& model, core::SpriteFrame sprite)
-        : model(model), position(model.getPosition()), size(model.getSize()), sprite(std::move(sprite)) {}
+    EntityView(const core::EntityModel& model, core::SpriteFrame sprite);
 
     /**
      * @brief Updates the position and size of the entity view based on the associated EntityModel.
      * This method is called when the observed EntityModel changes. A view has nothing to do with
      * the event's payload (that's Score's concern) -- it always just re-syncs from the model.
      */
-    void update(const core::GameEvent& = {}) override {
-        position = model.get().getPosition();
-        size = model.get().getSize();
-
-        if (const auto it = animations.find(model.get().getAnimationType()); it != animations.end()) {
-            it->second.update(core::Stopwatch::getInstance().getDeltaTime());
-            sprite = it->second.getCurrentFrame();
-        }
-    }
+    void update(const core::GameEvent& = {}) override;
 
     /**
      * @brief Renders the entity view using the specified renderer.
      * @param renderer The renderer used to draw the entity on the screen.
      */
-    void render(core::AbstractRenderer& renderer) const override { renderer.drawSprite(position, size, sprite); }
+    void render(core::AbstractRenderer& renderer) const override;
 };
 
 } // namespace game

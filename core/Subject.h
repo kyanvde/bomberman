@@ -22,7 +22,7 @@ public:
     /**
      * @brief Virtual destructor for the Subject class.
      */
-    virtual ~Subject() = default;
+    virtual ~Subject();
 
     /**
      * @brief Attaches an observer to the subject.

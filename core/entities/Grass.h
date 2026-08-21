@@ -21,7 +21,7 @@ public:
     /**
      * @brief Identifies this entity as grass (open, walkable ground).
      */
-    [[nodiscard]] bool isGrass() const noexcept override { return true; }
+    [[nodiscard]] bool isGrass() const noexcept override;
 };
 
 }; // namespace core

@@ -13,13 +13,20 @@ SET(SRC
 		Animation.cpp
         CharacterColor.h
         PowerUpType.h
-        AIController.h
+        AIController.cpp
         BasicAIController.cpp
         TileGrid.cpp
         GameOutcome.h
         GameEvent.h
         Score.cpp
         HighScores.cpp
+        Vector2.cpp
+        Collision.cpp
+        Camera.cpp
+        AbstractFactory.cpp
+        AbstractRenderer.cpp
+        Observer.cpp
+        EntityModel.cpp
 )
 
 ADD_LIBRARY(core STATIC ${SRC})
