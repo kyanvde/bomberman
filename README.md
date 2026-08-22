@@ -27,37 +27,6 @@ world simulation, collision, scoring, AI, persistence — using only normalized 
 pixels. `game` is the SFML *representation*: the window/main loop, input handling, views, and the concrete
 factory/renderer that instantiate `core`'s abstractions. `game` depends on `core`; `core` has no idea `game` exists.
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1f2a44', 'primaryTextColor': '#f5f5f5', 'primaryBorderColor': '#4f6df5', 'lineColor': '#8a97b3', 'fontFamily': 'Segoe UI, sans-serif'}}}%%
-flowchart LR
-    subgraph GAME["🎮 game — SFML representation"]
-        direction TB
-        Game --> StateManager --> State
-        State --> MenuState & GameState & GameOverState
-        GameState --> ConcreteFactory
-        GameState --> ConcreteRenderer
-        ConcreteFactory --> Views["EntityView subclasses"]
-    end
-
-    subgraph CORE["⚙️ core — logic library, no SFML"]
-        direction TB
-        World --> Entities["EntityModel subclasses"]
-        World --> Score
-        World --> AbstractFactory
-        Entities --> AIController
-    end
-
-    ConcreteFactory -. implements .-> AbstractFactory
-    ConcreteRenderer -. implements .-> AbstractRenderer
-    Views -. observes .-> Entities
-    GameState --> World
-
-    classDef gameNode fill:#234a3d,stroke:#3ecf8e,color:#f5f5f5
-    classDef coreNode fill:#1f2a44,stroke:#4f6df5,color:#f5f5f5
-    class Game,StateManager,State,MenuState,GameState,GameOverState,ConcreteFactory,ConcreteRenderer,Views gameNode
-    class World,Entities,Score,AbstractFactory,AIController coreNode
-```
-
 **Required classes:** `Game` owns the window/main loop and forwards to whichever `State` is active — no game logic
 of its own. `Stopwatch` and `Random` are `std::chrono`/`std::mt19937`-based Meyers' singletons (no `sf::Clock`, no
 legacy `rand`/`srand`, no busy-waiting). `World` is the Entity Controller — entity creation/removal, collision, bomb
