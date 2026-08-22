@@ -1,0 +1,27 @@
+var classcore_1_1_world =
+[
+    [ "World", "classcore_1_1_world.html#af22f3740f02dc7c671a9b63cef59c387", null ],
+    [ "addEntity", "classcore_1_1_world.html#abe17838c596c9f52f565fd1c53ac73b4", null ],
+    [ "buildTileGrid", "classcore_1_1_world.html#aa3c5bfbc5bdd435d9ac624095424271c", null ],
+    [ "detonateBomb", "classcore_1_1_world.html#a1fed65ab22dc1e7a201d172f6d9830a6", null ],
+    [ "getCellSize", "classcore_1_1_world.html#a07b477249d6136dc7f793e8791a84931", null ],
+    [ "getGridHeight", "classcore_1_1_world.html#adccaebeca7720f11bab1bc21a04740d5", null ],
+    [ "getGridWidth", "classcore_1_1_world.html#a363f38f5758d7061b020bb0d8efa240b", null ],
+    [ "getOutcome", "classcore_1_1_world.html#a47c57edfd4a7473e09f0be5d7fff4801", null ],
+    [ "getPlayerId", "classcore_1_1_world.html#affe292deccff068d706fd6e0a1ce01d7", null ],
+    [ "hasEntity", "classcore_1_1_world.html#a0d6b9e6e314898d73322cde364544c8f", null ],
+    [ "hasGrassAt", "classcore_1_1_world.html#ae4695eb7406fb0ef8d2c646e7be91006", null ],
+    [ "hasPowerUpAt", "classcore_1_1_world.html#abfd231a3113794f686d97cedf4c9ba06", null ],
+    [ "isTileOccupiedByColor", "classcore_1_1_world.html#a141a63f01a341d52987a86193267bf0d", null ],
+    [ "isWallAt", "classcore_1_1_world.html#af10723e62d8607950dab612b4bf71cde", null ],
+    [ "markForRemoval", "classcore_1_1_world.html#a8e03ac2ac6a9ee51c7159a721895a6b8", null ],
+    [ "moveCharacter", "classcore_1_1_world.html#a3a9eb3b8e4df038fa6cf9676d77a4cb8", null ],
+    [ "notifyBombExploded", "classcore_1_1_world.html#ab54f71cf1e0d3470d472f28e5ef12ab4", null ],
+    [ "placeBomb", "classcore_1_1_world.html#a35f5bbec03817128bde3e794cf2161e1", null ],
+    [ "render", "classcore_1_1_world.html#ae65ca45979a85b90d33913a9ae2f8cd6", null ],
+    [ "setCellSize", "classcore_1_1_world.html#acbb91e56b6bb87fb9be17ce342b1199a", null ],
+    [ "tilesOverlapping", "classcore_1_1_world.html#a298da36a712854bad4f11185bbdd526e", null ],
+    [ "toGrid", "classcore_1_1_world.html#a1ee727439711ea720736dd3c24356c13", null ],
+    [ "toWorldPosition", "classcore_1_1_world.html#aa01cdc5cb5b3c73630d44dfb48b1949d", null ],
+    [ "update", "classcore_1_1_world.html#a411827f14621877667e62216e5baaf33", null ]
+];

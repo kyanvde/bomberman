@@ -1,5 +1,7 @@
 #include "EntityView.h"
 
+#include "Stopwatch.h"
+
 namespace game {
 
 EntityView::EntityView(const core::EntityModel& model, core::SpriteFrame sprite)

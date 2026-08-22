@@ -1,7 +1,6 @@
 # Project-specific ignores
 build
 .DS_Store
-docs/html
 highscores.txt
 
 # Visual Studio Code

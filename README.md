@@ -105,7 +105,7 @@ search can never accidentally mutate the world it's reasoning about.
   noticeably differently without any duplicated decision logic.
 - **Two additional design patterns** beyond the required set — **Strategy** for AI decision-making, and **double
   dispatch** for type-safe collision resolution without `dynamic_cast` — each adopted because it was the natural
-  fit for a real design problem, not added purely for the bonus.
+  fit for a real design problem.
 
 ## Building
 
