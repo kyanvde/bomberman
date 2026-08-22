@@ -68,52 +68,6 @@ a file.
 
 **Design patterns:**
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1f2a44', 'primaryTextColor': '#f5f5f5', 'primaryBorderColor': '#4f6df5', 'lineColor': '#8a97b3', 'fontFamily': 'Segoe UI, sans-serif'}}}%%
-classDiagram
-    class EntityModel {
-        <<abstract, Model>>
-        +onTick(World&, EntityId, float)
-        +blocksCharacterMovement(...)
-    }
-    class Character { -aiController: AIController* }
-    class Wall
-    class Grass
-    class PowerUp
-    class Bomb
-    class Explosion
-
-    class Subject { +notify(GameEvent) }
-    class Observer { <<interface>> +update(GameEvent) }
-    class EntityView { <<View>> +render(AbstractRenderer&) }
-    class Score { <<Observer>> +update(GameEvent) }
-
-    class AbstractFactory { <<interface>> +createCharacter(...) +createBomb(...) }
-    class ConcreteFactory { <<Factory>> }
-    class AIController { <<Strategy>> +decide(World&, EntityModel&) }
-
-    Subject <|-- EntityModel
-    EntityModel <|-- Character
-    EntityModel <|-- Wall
-    EntityModel <|-- Grass
-    EntityModel <|-- PowerUp
-    EntityModel <|-- Bomb
-    EntityModel <|-- Explosion
-    Character *-- "0..1" AIController
-    Observer <|.. EntityView
-    Observer <|.. Score
-    EntityModel o-- "*" Observer : observers
-    AbstractFactory <|.. ConcreteFactory
-    ConcreteFactory ..> EntityView : creates + attaches
-
-    classDef modelStyle fill:#1f2a44,stroke:#4f6df5,color:#f5f5f5
-    classDef viewStyle fill:#234a3d,stroke:#3ecf8e,color:#f5f5f5
-    classDef patternStyle fill:#3a2a55,stroke:#a675f5,color:#f5f5f5
-    class EntityModel,Character,Wall,Grass,PowerUp,Bomb,Explosion modelStyle
-    class EntityView,ConcreteFactory viewStyle
-    class Subject,Observer,Score,AbstractFactory,AIController patternStyle
-```
-
 - **MVC** — `World` is the Entity Controller; each `EntityModel` subclass is a pure-data/logic Model; each matching
   `EntityView` (`game/views/*.h`) is the View, refreshed purely by observing its model.
 - **Observer**, for both required purposes on the same channel: `EntityView`s re-sync position/animation on every
@@ -122,11 +76,18 @@ classDiagram
 - **Abstract Factory** — `World` only ever holds an `AbstractFactory` interface; `ConcreteFactory` attaches the
   correct `EntityView` inside each `create*()` call, so `World` never touches representation code.
 - **Singleton** — `Stopwatch` and `Random`, as required.
-- **State** (bonus) — `MenuState`/`GameState`/`GameOverState` are pushed/popped on a `StateManager` stack instead of
-  a hand-rolled enum + switch in `Game::update()`.
+- **State** — the assignment's own description of `Game` delegates responsibility to "the StateManager or concrete
+  States"; `MenuState`/`GameState`/`GameOverState` are pushed/popped on a `StateManager` stack instead of a
+  hand-rolled enum + switch in `Game::update()`.
 - **Strategy** (bonus) — `Character` holds an optional `AIController`; `BasicAIController::decide()` returns a
   `Decision` applied through the exact same `World::moveCharacter`/`placeBomb` the human player's input uses, so bot
   and player movement share one code path.
+- **Double dispatch** (bonus) — collision resolution needs to know both the mover's and the obstacle's concrete
+  type without `dynamic_cast`. `obstacle.blocksMovementOf(mover, ...)` calls back into `mover.isBlockedBy(obstacle,
+  ...)`, which (for a `Character`) calls back again into `obstacle.blocksCharacterMovement(character, ...)` — each
+  hop a virtual call, so the final overload resolved depends on both objects' real types. This is the same
+  technique the assignment's own bonus section points at when it suggests a Visitor for resolving generic
+  `EntityModel`s to their concrete type.
 
 A few decisions worth calling out: cross-entity questions (*"does this block an explosion?", "is this a bomb to
 chain-detonate?"*) are answered by small default-`false` predicate virtuals on `EntityModel` rather than
@@ -142,9 +103,9 @@ search can never accidentally mutate the world it's reasoning about.
 - **Per-bot personalities** — the three AI-controlled characters share one `BasicAIController` implementation but
   are tuned differently (aggression radius, power-up search radius) via constructor parameters, so they behave
   noticeably differently without any duplicated decision logic.
-- **Two additional design patterns** beyond the required set — **State** for the menu/gameplay/game-over screen
-  flow, and **Strategy** for AI decision-making — each adopted because it was the natural fit for a real design
-  problem, not added purely for the bonus.
+- **Two additional design patterns** beyond the required set — **Strategy** for AI decision-making, and **double
+  dispatch** for type-safe collision resolution without `dynamic_cast` — each adopted because it was the natural
+  fit for a real design problem, not added purely for the bonus.
 
 ## Building
 
