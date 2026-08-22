@@ -1,0 +1,5 @@
+<map id="game::ConcreteFactory" name="game::ConcreteFactory">
+<area shape="rect" id="Node000001" title="The ConcreteFactory class is a concrete implementation of the core::AbstractFactory interface...." alt="" coords="5,251,153,448"/>
+<area shape="rect" id="Node000002" href="$classcore_1_1_abstract_factory.html" title="The AbstractFactory class defines the interface for creating various game entities...." alt="" coords="11,5,148,203"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="80,215,82,251,77,250,79,221"/>
+</map>

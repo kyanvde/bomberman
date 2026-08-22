@@ -1,0 +1,7 @@
+<map id="game::ExplosionView" name="game::ExplosionView">
+<area shape="rect" id="Node000001" title="The ExplosionView class represents the visual representation of an explosion entity in the game...." alt="" coords="5,411,142,501"/>
+<area shape="rect" id="Node000002" href="$classgame_1_1_entity_view.html" title="The EntityView class represents the visual representation of an entity in the game...." alt="" coords="17,165,130,363"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,375,76,412,71,410,73,380"/>
+<area shape="rect" id="Node000003" href="$classcore_1_1_observer.html" title="The Observer class represents the observer in the Observer design pattern. It defines the interface f..." alt="" coords="25,5,122,117"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="74,130,76,166,71,165,73,135"/>
+</map>

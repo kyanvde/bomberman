@@ -1,0 +1,5 @@
+<map id="game::State" name="game::State">
+<area shape="rect" id="Node000001" title="The State class is an abstract base class that represents a state in the game. It provides an interfa..." alt="" coords="15,275,127,451"/>
+<area shape="rect" id="Node000002" href="$classgame_1_1_state_manager.html" title="The StateManager class is responsible for managing the different states of the game...." alt="" coords="5,5,137,203"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="72,200,74,258,69,257,71,205"/>
+</map>

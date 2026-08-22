@@ -1,0 +1,5 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" href="$classcore_1_1_abstract_renderer.html" title="The AbstractRenderer class is an abstract base class that defines the interface for rendering sprites..." alt="" coords="5,5,162,32"/>
+<area shape="rect" id="Node000001" href="$classgame_1_1_concrete_renderer.html" title="The ConcreteRenderer class is a concrete implementation of the core::Renderer interface using SFML fo..." alt="" coords="210,5,377,32"/>
+<area shape="poly" id="edge2_Node000000_Node000001" title=" " alt="" coords="177,16,212,19,207,19,177,21"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="core::Wall" name="core::Wall">
+<area shape="rect" id="Node000001" title="The Wall class represents a wall entity in the game world. It inherits from EntityModel and provides ..." alt="" coords="5,603,193,757"/>
+<area shape="rect" id="Node000002" href="$classcore_1_1_entity_model.html" title="The EntityModel class represents a generic entity in the game world. It serves as a base class for sp..." alt="" coords="27,187,171,555"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,567,102,603,97,602,98,572"/>
+<area shape="rect" id="Node000003" href="$classcore_1_1_subject.html" title="The Subject class represents the subject in the Observer design pattern. It maintains a list of obser..." alt="" coords="56,5,143,139"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="100,151,102,187,97,187,99,156"/>
+</map>

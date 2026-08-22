@@ -1,0 +1,5 @@
+<map id="core::Decision" name="core::Decision">
+<area shape="rect" id="Node000001" title="What an AIController wants to do this tick: move in a direction (a zero vector means stay in place) a..." alt="" coords="5,253,100,323"/>
+<area shape="rect" id="Node000002" href="$structcore_1_1_vector2.html" title="The Vector2 struct represents a 2D vector with x and y components. It provides basic vector operation..." alt="" coords="9,5,96,181"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="54,179,55,237,50,236,51,183"/>
+</map>

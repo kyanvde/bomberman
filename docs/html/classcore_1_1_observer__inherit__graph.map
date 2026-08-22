@@ -1,0 +1,19 @@
+<map id="core::Observer" name="core::Observer">
+<area shape="rect" id="Node000001" title="The Observer class represents the observer in the Observer design pattern. It defines the interface f..." alt="" coords="362,5,458,117"/>
+<area shape="rect" id="Node000002" href="$classcore_1_1_score.html" title="The Score class tracks the human&#45;controlled Player&#39;s score for the current round. It is an Observer,..." alt="" coords="305,208,392,320"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="391,129,368,209,363,207,387,134"/>
+<area shape="rect" id="Node000003" href="$classgame_1_1_entity_view.html" title="The EntityView class represents the visual representation of an entity in the game...." alt="" coords="416,165,530,363"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="433,129,445,166,440,165,431,134"/>
+<area shape="rect" id="Node000004" href="$classgame_1_1_bomb_view.html" title="The BombView class represents the visual representation of a bomb entity in the game...." alt="" coords="5,432,119,501"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="406,361,367,382,332,392,299,394,268,394,205,394,171,400,133,413,99,434,96,430,130,408,169,395,204,389,268,389,299,389,331,386,365,377,401,363"/>
+<area shape="rect" id="Node000005" href="$classgame_1_1_character_view.html" title="The CharacterView class represents the visual representation of a character entity in the game...." alt="" coords="143,411,306,523"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="407,361,407,365,384,382,365,392,319,413,307,420,305,415,317,408,362,387,381,377,403,361,403,364"/>
+<area shape="rect" id="Node000006" href="$classgame_1_1_explosion_view.html" title="The ExplosionView class represents the visual representation of an explosion entity in the game...." alt="" coords="330,421,466,512"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="433,375,416,423,413,420,429,378"/>
+<area shape="rect" id="Node000007" href="$classgame_1_1_grass_view.html" title="The GrassView class represents the visual representation of a grass entity in the game...." alt="" coords="490,432,605,501"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="516,374,538,433,533,431,513,379"/>
+<area shape="rect" id="Node000008" href="$classgame_1_1_power_up_view.html" title="The PowerUpView class represents the visual representation of a power&#45;up entity in the game...." alt="" coords="629,432,762,501"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="542,324,661,432,656,432,540,329"/>
+<area shape="rect" id="Node000009" href="$classgame_1_1_wall_view.html" title="The WallView class represents the visual representation of a wall entity in the game...." alt="" coords="786,432,890,501"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="544,291,656,341,717,373,776,408,805,433,800,431,773,413,714,378,653,346,543,296"/>
+</map>

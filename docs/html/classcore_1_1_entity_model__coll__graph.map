@@ -1,0 +1,7 @@
+<map id="core::EntityModel" name="core::EntityModel">
+<area shape="rect" id="Node000001" title="The EntityModel class represents a generic entity in the game world. It serves as a base class for sp..." alt="" coords="33,275,177,600"/>
+<area shape="rect" id="Node000002" href="$classcore_1_1_subject.html" title="The Subject class represents the subject in the Observer design pattern. It maintains a list of obser..." alt="" coords="5,27,93,160"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="63,172,81,275,76,275,62,177"/>
+<area shape="rect" id="Node000003" href="$structcore_1_1_vector2.html" title="The Vector2 struct represents a 2D vector with x and y components. It provides basic vector operation..." alt="" coords="117,5,205,181"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="148,179,137,258,132,257,146,184"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="game::GameState" name="game::GameState">
+<area shape="rect" id="Node000001" title="The GameState class represents the main game state of the application. It handles user input,..." alt="" coords="5,251,122,405"/>
+<area shape="rect" id="Node000002" href="$classgame_1_1_state.html" title="The State class is an abstract base class that represents a state in the game. It provides an interfa..." alt="" coords="8,5,120,203"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="64,215,66,251,61,251,63,220"/>
+</map>

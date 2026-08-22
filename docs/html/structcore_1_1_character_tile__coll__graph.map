@@ -1,0 +1,5 @@
+<map id="core::CharacterTile" name="core::CharacterTile">
+<area shape="rect" id="Node000001" title="Where a single living character stands, for navigation purposes." alt="" coords="5,168,127,237"/>
+<area shape="rect" id="Node000002" href="$structcore_1_1_grid_coord.html" title="Integer coordinates of a single tile within the world grid, with (0, 0) at the top&#45;left corner...." alt="" coords="15,5,118,96"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="68,94,69,151,64,151,65,98"/>
+</map>

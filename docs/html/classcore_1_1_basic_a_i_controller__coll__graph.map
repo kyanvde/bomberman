@@ -1,0 +1,5 @@
+<map id="core::BasicAIController" name="core::BasicAIController">
+<area shape="rect" id="Node000001" title="A baseline AIController satisfying the assignment&#39;s minimum bot behaviors, in priority order: flee im..." alt="" coords="5,144,151,235"/>
+<area shape="rect" id="Node000002" href="$classcore_1_1_a_i_controller.html" title="The AIController class is the strategy interface for computer&#45;controlled characters...." alt="" coords="22,5,134,96"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="79,108,81,145,76,144,77,113"/>
+</map>

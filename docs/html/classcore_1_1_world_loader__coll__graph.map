@@ -1,0 +1,3 @@
+<map id="core::WorldLoader" name="core::WorldLoader">
+<area shape="rect" id="Node000001" title="The WorldLoader class is responsible for loading a game world from a file. It provides a static metho..." alt="" coords="5,5,121,75"/>
+</map>

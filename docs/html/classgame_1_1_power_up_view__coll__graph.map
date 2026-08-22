@@ -1,0 +1,12 @@
+<map id="game::PowerUpView" name="game::PowerUpView">
+<area shape="rect" id="Node000001" title="The PowerUpView class represents the visual representation of a power&#45;up entity in the game...." alt="" coords="83,684,216,753"/>
+<area shape="rect" id="Node000002" href="$classgame_1_1_entity_view.html" title="The EntityView class represents the visual representation of an entity in the game...." alt="" coords="93,501,206,635"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="151,647,152,685,147,683,148,651"/>
+<area shape="rect" id="Node000003" href="$classcore_1_1_observer.html" title="The Observer class represents the observer in the Observer design pattern. It defines the interface f..." alt="" coords="5,317,102,429"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="88,440,120,501,114,502,87,445"/>
+<area shape="rect" id="Node000004" href="$structcore_1_1_vector2.html" title="The Vector2 struct represents a 2D vector with x and y components. It provides basic vector operation..." alt="" coords="151,5,239,181"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="181,179,164,318,154,485,149,484,159,317,179,184"/>
+<area shape="rect" id="Node000005" href="$structcore_1_1_sprite_frame.html" title="The SpriteFrame struct represents a single frame of a sprite in a spritesheet. It contains informatio..." alt="" coords="234,317,348,429"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="226,179,269,301,264,301,224,184"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="252,427,210,490,205,486,249,431"/>
+</map>

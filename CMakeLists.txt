@@ -16,7 +16,9 @@ enable_testing()
 ADD_SUBDIRECTORY(tests)
 
 # Documentation
-find_package(Doxygen)
+# The dot component (Graphviz) is optional: with it, Doxygen renders the class-structure and
+# inheritance diagrams; without it, documentation still generates, just as text-only listings.
+find_package(Doxygen OPTIONAL_COMPONENTS dot)
 
 if(Doxygen_FOUND)
     set(DOXYGEN_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/docs")
@@ -27,6 +29,16 @@ if(Doxygen_FOUND)
 
     set(DOXYGEN_GENERATE_HTML YES)
     set(DOXYGEN_GENERATE_LATEX NO)
+
+    # UML-style class diagrams, plus a graphical inheritance hierarchy for the whole project.
+    # UML_LIMIT_NUM_FIELDS keeps the boxes readable: EntityModel alone has ~40 members, which
+    # would otherwise render as one unreadably tall box.
+    set(DOXYGEN_UML_LOOK YES)
+    set(DOXYGEN_UML_LIMIT_NUM_FIELDS 10)
+    set(DOXYGEN_CLASS_GRAPH YES)
+    set(DOXYGEN_COLLABORATION_GRAPH YES)
+    set(DOXYGEN_GRAPHICAL_HIERARCHY YES)
+    set(DOXYGEN_DOT_IMAGE_FORMAT svg)
 
     doxygen_add_docs(
             documentation

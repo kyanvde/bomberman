@@ -1,0 +1,7 @@
+<map id="core::Grass" name="core::Grass">
+<area shape="rect" id="Node000001" title="The Grass class represents a grass entity in the game world. It inherits from EntityModel and provide..." alt="" coords="38,603,117,693"/>
+<area shape="rect" id="Node000002" href="$classcore_1_1_entity_model.html" title="The EntityModel class represents a generic entity in the game world. It serves as a base class for sp..." alt="" coords="5,187,149,555"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="78,567,80,604,75,603,76,572"/>
+<area shape="rect" id="Node000003" href="$classcore_1_1_subject.html" title="The Subject class represents the subject in the Observer design pattern. It maintains a list of obser..." alt="" coords="34,5,121,139"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="78,151,80,187,75,187,77,156"/>
+</map>

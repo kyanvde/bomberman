@@ -1,0 +1,17 @@
+<map id="core::Subject" name="core::Subject">
+<area shape="rect" id="Node000001" title="The Subject class represents the subject in the Observer design pattern. It maintains a list of obser..." alt="" coords="484,5,571,139"/>
+<area shape="rect" id="Node000002" href="$classcore_1_1_entity_model.html" title="The EntityModel class represents a generic entity in the game world. It serves as a base class for sp..." alt="" coords="455,187,599,555"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="528,151,530,188,525,186,526,156"/>
+<area shape="rect" id="Node000003" href="$classcore_1_1_bomb.html" title="The Bomb class represents a bomb entity in the game world. It inherits from EntityModel and provides ..." alt="" coords="5,624,193,864"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="441,425,328,504,266,553,208,605,187,626,183,623,204,601,262,549,325,500,445,421"/>
+<area shape="rect" id="Node000004" href="$classcore_1_1_character.html" title="The Character class represents a character entity in the game world. It inherits from EntityModel and..." alt="" coords="218,603,365,885"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="449,492,379,604,367,624,363,620,374,601,445,495"/>
+<area shape="rect" id="Node000005" href="$classcore_1_1_explosion.html" title="The Explosion class represents a single affected tile of a bomb blast in the game world...." alt="" coords="389,677,532,811"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="494,568,475,679,470,676,490,572"/>
+<area shape="rect" id="Node000006" href="$classcore_1_1_grass.html" title="The Grass class represents a grass entity in the game world. It inherits from EntityModel and provide..." alt="" coords="556,699,635,789"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="565,567,590,700,585,698,562,571"/>
+<area shape="rect" id="Node000007" href="$classcore_1_1_power_up.html" title="The PowerUp class represents a power&#45;up entity in the game world. It inherits from EntityModel and pr..." alt="" coords="659,677,791,811"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="608,518,693,678,687,677,605,523"/>
+<area shape="rect" id="Node000008" href="$classcore_1_1_wall.html" title="The Wall class represents a wall entity in the game world. It inherits from EntityModel and provides ..." alt="" coords="815,667,1003,821"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="612,431,708,509,805,601,859,667,854,666,801,604,705,513,611,436"/>
+</map>

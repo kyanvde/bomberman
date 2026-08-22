@@ -1,0 +1,5 @@
+<map id="game::GameOverState" name="game::GameOverState">
+<area shape="rect" id="Node000001" title="The GameOverState class represents the end&#45;of&#45;round screen shown after the Player has won or lost...." alt="" coords="5,251,150,405"/>
+<area shape="rect" id="Node000002" href="$classgame_1_1_state.html" title="The State class is an abstract base class that represents a state in the game. It provides an interfa..." alt="" coords="22,5,134,203"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="78,215,80,251,75,251,77,220"/>
+</map>

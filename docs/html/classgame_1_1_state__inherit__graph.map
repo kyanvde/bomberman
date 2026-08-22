@@ -1,0 +1,9 @@
+<map id="game::State" name="game::State">
+<area shape="rect" id="Node000001" title="The State class is an abstract base class that represents a state in the game. It provides an interfa..." alt="" coords="176,5,288,203"/>
+<area shape="rect" id="Node000002" href="$classgame_1_1_game_over_state.html" title="The GameOverState class represents the end&#45;of&#45;round screen shown after the Player has won or lost...." alt="" coords="5,251,150,405"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="170,195,133,253,128,249,166,200"/>
+<area shape="rect" id="Node000003" href="$classgame_1_1_game_state.html" title="The GameState class represents the main game state of the application. It handles user input,..." alt="" coords="174,251,291,405"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="234,215,235,252,230,250,231,220"/>
+<area shape="rect" id="Node000004" href="$classgame_1_1_menu_state.html" title="The MenuState class represents the main menu state of the game. It handles user input,..." alt="" coords="314,251,428,405"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="297,204,326,251,321,250,295,209"/>
+</map>

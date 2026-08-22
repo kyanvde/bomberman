@@ -1,0 +1,3 @@
+<map id="core::GridCoord" name="core::GridCoord">
+<area shape="rect" id="Node000001" title="Integer coordinates of a single tile within the world grid, with (0, 0) at the top&#45;left corner...." alt="" coords="5,5,108,96"/>
+</map>

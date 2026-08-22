@@ -1,0 +1,5 @@
+<map id="core::AbstractRenderer" name="core::AbstractRenderer">
+<area shape="rect" id="Node000001" title="The AbstractRenderer class is an abstract base class that defines the interface for rendering sprites..." alt="" coords="11,5,156,96"/>
+<area shape="rect" id="Node000002" href="$classgame_1_1_concrete_renderer.html" title="The ConcreteRenderer class is a concrete implementation of the core::Renderer interface using SFML fo..." alt="" coords="5,144,162,256"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="85,108,86,145,81,143,83,113"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="game::PowerUpView" name="game::PowerUpView">
+<area shape="rect" id="Node000001" title="The PowerUpView class represents the visual representation of a power&#45;up entity in the game...." alt="" coords="5,411,139,480"/>
+<area shape="rect" id="Node000002" href="$classgame_1_1_entity_view.html" title="The EntityView class represents the visual representation of an entity in the game...." alt="" coords="15,165,129,363"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="74,375,75,411,70,410,71,380"/>
+<area shape="rect" id="Node000003" href="$classcore_1_1_observer.html" title="The Observer class represents the observer in the Observer design pattern. It defines the interface f..." alt="" coords="24,5,120,117"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="72,130,75,166,70,165,72,135"/>
+</map>
